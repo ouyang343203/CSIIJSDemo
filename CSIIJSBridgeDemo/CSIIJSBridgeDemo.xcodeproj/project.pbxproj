@@ -1,0 +1,383 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E22CF28F26945A2E008FCA37 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF28E26945A2E008FCA37 /* AppDelegate.m */; };
+		E22CF29526945A2E008FCA37 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF29426945A2E008FCA37 /* ViewController.m */; };
+		E22CF29826945A2E008FCA37 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E22CF29626945A2E008FCA37 /* Main.storyboard */; };
+		E22CF29A26945A2E008FCA37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E22CF29926945A2E008FCA37 /* Assets.xcassets */; };
+		E22CF29D26945A2E008FCA37 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E22CF29B26945A2E008FCA37 /* LaunchScreen.storyboard */; };
+		E22CF2A026945A2E008FCA37 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF29F26945A2E008FCA37 /* main.m */; };
+		E22CF2AA26959080008FCA37 /* rootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF2A926959080008FCA37 /* rootViewController.m */; };
+		E25B849527F309130002B013 /* 发球机.html in Resources */ = {isa = PBXBuildFile; fileRef = E25B849427F309130002B013 /* 发球机.html */; };
+		E27A291E283B94DE004AEAB9 /* CSIIJSBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E29D58D227D5A756008CA926 /* CSIIJSBridge.framework */; };
+		E48CE30626D4D373004F1E54 /* pluginDown 2.html in Resources */ = {isa = PBXBuildFile; fileRef = E48CE30426D4D373004F1E54 /* pluginDown 2.html */; };
+		E48CE30726D4D373004F1E54 /* pluginDown.html in Resources */ = {isa = PBXBuildFile; fileRef = E48CE30526D4D373004F1E54 /* pluginDown.html */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E22CF28A26945A2E008FCA37 /* CSIIJSBridgeDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CSIIJSBridgeDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E22CF28D26945A2E008FCA37 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E22CF28E26945A2E008FCA37 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E22CF29326945A2E008FCA37 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		E22CF29426945A2E008FCA37 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		E22CF29726945A2E008FCA37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E22CF29926945A2E008FCA37 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E22CF29C26945A2E008FCA37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E22CF29E26945A2E008FCA37 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E22CF29F26945A2E008FCA37 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E22CF2A826959080008FCA37 /* rootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rootViewController.h; sourceTree = "<group>"; };
+		E22CF2A926959080008FCA37 /* rootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rootViewController.m; sourceTree = "<group>"; };
+		E25B849427F309130002B013 /* 发球机.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "发球机.html"; sourceTree = "<group>"; };
+		E29D58D227D5A756008CA926 /* CSIIJSBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CSIIJSBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4273D0026E8BCD300FAB9EB /* GlobalMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalMacro.h; sourceTree = "<group>"; };
+		E48CE30426D4D373004F1E54 /* pluginDown 2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "pluginDown 2.html"; sourceTree = "<group>"; };
+		E48CE30526D4D373004F1E54 /* pluginDown.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = pluginDown.html; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E22CF28726945A2E008FCA37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E27A291E283B94DE004AEAB9 /* CSIIJSBridge.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E22CF28126945A2E008FCA37 = {
+			isa = PBXGroup;
+			children = (
+				E22CF28C26945A2E008FCA37 /* CSIIJSBridgeDemo */,
+				E22CF28B26945A2E008FCA37 /* Products */,
+				E2A03949269BEE7700937F5D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E22CF28B26945A2E008FCA37 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E22CF28A26945A2E008FCA37 /* CSIIJSBridgeDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E22CF28C26945A2E008FCA37 /* CSIIJSBridgeDemo */ = {
+			isa = PBXGroup;
+			children = (
+				E25B849427F309130002B013 /* 发球机.html */,
+				E4273D0026E8BCD300FAB9EB /* GlobalMacro.h */,
+				E48CE30426D4D373004F1E54 /* pluginDown 2.html */,
+				E48CE30526D4D373004F1E54 /* pluginDown.html */,
+				E22CF28D26945A2E008FCA37 /* AppDelegate.h */,
+				E22CF28E26945A2E008FCA37 /* AppDelegate.m */,
+				E22CF29326945A2E008FCA37 /* ViewController.h */,
+				E22CF29426945A2E008FCA37 /* ViewController.m */,
+				E22CF2A826959080008FCA37 /* rootViewController.h */,
+				E22CF2A926959080008FCA37 /* rootViewController.m */,
+				E22CF29626945A2E008FCA37 /* Main.storyboard */,
+				E22CF29926945A2E008FCA37 /* Assets.xcassets */,
+				E22CF29B26945A2E008FCA37 /* LaunchScreen.storyboard */,
+				E22CF29E26945A2E008FCA37 /* Info.plist */,
+				E22CF29F26945A2E008FCA37 /* main.m */,
+			);
+			path = CSIIJSBridgeDemo;
+			sourceTree = "<group>";
+		};
+		E2A03949269BEE7700937F5D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E29D58D227D5A756008CA926 /* CSIIJSBridge.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E22CF28926945A2E008FCA37 /* CSIIJSBridgeDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E22CF2A326945A2E008FCA37 /* Build configuration list for PBXNativeTarget "CSIIJSBridgeDemo" */;
+			buildPhases = (
+				E22CF28626945A2E008FCA37 /* Sources */,
+				E22CF28726945A2E008FCA37 /* Frameworks */,
+				E22CF28826945A2E008FCA37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSIIJSBridgeDemo;
+			productName = CSIIJSBridgeDemo;
+			productReference = E22CF28A26945A2E008FCA37 /* CSIIJSBridgeDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E22CF28226945A2E008FCA37 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					E22CF28926945A2E008FCA37 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+				};
+			};
+			buildConfigurationList = E22CF28526945A2E008FCA37 /* Build configuration list for PBXProject "CSIIJSBridgeDemo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E22CF28126945A2E008FCA37;
+			productRefGroup = E22CF28B26945A2E008FCA37 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E22CF28926945A2E008FCA37 /* CSIIJSBridgeDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E22CF28826945A2E008FCA37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E22CF29D26945A2E008FCA37 /* LaunchScreen.storyboard in Resources */,
+				E48CE30626D4D373004F1E54 /* pluginDown 2.html in Resources */,
+				E25B849527F309130002B013 /* 发球机.html in Resources */,
+				E22CF29A26945A2E008FCA37 /* Assets.xcassets in Resources */,
+				E22CF29826945A2E008FCA37 /* Main.storyboard in Resources */,
+				E48CE30726D4D373004F1E54 /* pluginDown.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E22CF28626945A2E008FCA37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E22CF29526945A2E008FCA37 /* ViewController.m in Sources */,
+				E22CF28F26945A2E008FCA37 /* AppDelegate.m in Sources */,
+				E22CF2AA26959080008FCA37 /* rootViewController.m in Sources */,
+				E22CF2A026945A2E008FCA37 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E22CF29626945A2E008FCA37 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E22CF29726945A2E008FCA37 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E22CF29B26945A2E008FCA37 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E22CF29C26945A2E008FCA37 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E22CF2A126945A2E008FCA37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		E22CF2A226945A2E008FCA37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E22CF2A426945A2E008FCA37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NY2VV4UVY5;
+				INFOPLIST_FILE = CSIIJSBridgeDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csii.BallMachine;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E22CF2A526945A2E008FCA37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NY2VV4UVY5;
+				INFOPLIST_FILE = CSIIJSBridgeDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csii.BallMachine;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E22CF28526945A2E008FCA37 /* Build configuration list for PBXProject "CSIIJSBridgeDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E22CF2A126945A2E008FCA37 /* Debug */,
+				E22CF2A226945A2E008FCA37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E22CF2A326945A2E008FCA37 /* Build configuration list for PBXNativeTarget "CSIIJSBridgeDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E22CF2A426945A2E008FCA37 /* Debug */,
+				E22CF2A526945A2E008FCA37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E22CF28226945A2E008FCA37 /* Project object */;
+}

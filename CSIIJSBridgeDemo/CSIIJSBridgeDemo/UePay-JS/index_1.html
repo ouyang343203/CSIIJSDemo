@@ -1,0 +1,118 @@
+<!-- UePay客戶端JSBridge示例，更多函數使用方法請參考 README.md 文獻說明。-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>UePay客戶端JSBridge示例</title>
+    <link rel="stylesheet" type="text/css" href="./index.css">
+</head>
+
+<body>
+<div class="wrap">
+
+    <div class="content">
+
+        <div class="title">模擬喚醒UePay客戶端支付</div>
+
+        <div class="detail">
+            <div id="getUserAgent" class="btn">獲取UserAgent</div>
+            <div id="getLocation" class="btn">獲取定位</div>
+            <div id="payment" class="btn">立即支付</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    
+
+        // 監聽 獲取定位 事件
+        var btnUserAgent = document.getElementById('getUserAgent');
+        btnUserAgent.onclick = function (evt) {
+            getUserAgent();
+        }
+
+        // 監聽 獲取定位 事件
+        var btnLocation = document.getElementById('getLocation');
+        btnLocation.onclick = function (evt) {
+            getLocation();
+        }
+
+        // 監聽 立即支付 事件
+        var btnPayment = document.getElementById('payment');
+        btnPayment.onclick = function (evt) {
+            payment();
+        }
+
+        function getUserAgent() {
+            var u_agent = navigator.userAgent;
+            alert(u_agent);
+        }
+
+        // 喚醒客戶端支付
+        function payment() {
+
+           // 服務端通過 極易付下單接口 獲取喚醒客戶端支付參數
+            var req = { "appId": "000030053310001", "timeStamp": 1581992793, "nonceStr": "43229cfd7e9c2b2f16a6f942da4b1e16", "prepayid": "UEPAY2020021810500882940194", "signType": "MD5", "paySign": "EC1DEEB32CAEE9AC3AAB9789E249D9EA" };
+
+            UePayJSBridge.callHandler(
+                "sendPayReq",
+                req,
+                function (res) {
+                    console.log("res:" + res);
+                    alert("res: " + res);
+                }
+            );
+        }
+
+        // 獲取定位
+        function getLocation() {
+            var req = {
+                "type": "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            }
+            UePayJSBridge.callHandler(
+                'getLocation',
+                req,
+                (res) => {
+                    var obj = JSON.parse(res);
+                    if (obj.ret_code === '00') { // 成功
+                        var latitude = obj.latitude; // 纬度，浮点数，范围为90 ~ -90
+                        var longitude = obj.longitude; // 经度，浮点数，范围为180 ~ -180。
+                        var speed = obj.speed; // 速度，以米/每秒计
+                        var accuracy = obj.accuracy; // 位置精度
+
+                        var result = obj.ret_msg + "、: \r\n " + "latitude:" + latitude + ",\r\n longitude:" + longitude + ",\r\n speed:" + speed + ",\r\n accuracy:" + accuracy;
+                        alert(result);
+                    }
+                    if (obj.ret_code === '01') { // 失敗
+                        alert(obj.ret_msg);
+                    }
+                }
+            )
+        }
+
+
+        // 此方式用於打開頁面默認需要調用JS對象函數的情況（自動觸發調用）
+        function onBridgeReady() {
+            getLocation();
+        }
+
+
+        // 打開HTML頁面，添加客戶端JS注入完成的回調事件監聽
+        if (typeof UePayJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('UePayJSBridgeReady', onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('UePayJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+    </script>
+
+</body>
+
+</html>

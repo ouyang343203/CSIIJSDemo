@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发球机</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 400px;
+            height: 30px;
+            background-color: pink;
+        }
+    </style>
+<script type="text/javascript">
+function setupWebViewJavascriptBridge(callback) {
+
+    //ios使用
+    if (window.WebViewJavascriptBridge)
+     { return callback(WebViewJavascriptBridge); 
+     }
+     if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+            window.WVJBCallbacks = [callback];
+            var WVJBIframe = document.createElement('iframe');
+            WVJBIframe.style.display = 'none';
+            WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+            
+            document.documentElement.appendChild(WVJBIframe);
+            setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+}
+setupWebViewJavascriptBridge(function(bridge){
+    window.CSIIJsBridge = window.WebViewJavascriptBridge;
+
+})
+ /**
+     * @method 调用原生
+     * @param {String} method 方法名
+     * @param {Object} params 传给app的参数
+     * */
+    const callhandler = function (method, params, callback) {
+        setupWebViewJavascriptBridge(function (bridge) {
+            bridge.callHandler(method, params, callback)
+        })
+    }
+
+    // APP调js方法 （参数分别为:js提供的方法名  回调）
+    const registerHandler = function(method, callback) {
+        setupWebViewJavascriptBridge((bridge) => {
+            bridge.registerHandler(method, (data, responseCallback) => {
+                callback(data, responseCallback)
+            })
+        })
+    }
+    function onFoundDevice () {
+        registerHandler('onFoundDevice',function(data){
+            console.log(data,'onFoundDevice')
+        })
+    }
+    onFoundDevice();
+function openBluetool()
+{
+     CSIIJsBridge.callHandler('openBluetoothAdapter', {blabla: 'blabla'}, function (response) {
+       console.log('JS got response', response)
+   });
+
+}
+function register()
+{
+
+   CSIIJsBridge.callHandler('registerStateChangeListener', {blabla: 'blabla'}, function (response) {
+       
+
+    console.log('JS got response', response)
+   });
+}
+function scanLeDevice()
+{
+    CSIIJsBridge.callHandler('scanLeDevice', {blabla: 'blabla'}, function (response) {
+      addlabel(response);
+    console.log('JS got response', response)
+   });
+}
+function connect()
+{
+    CSIIJsBridge.callHandler('connect', {name: '2DF3A4B4DEF7',address:'C6BA6D9F-B272-FCF3-5F4A-9D29F740EA4B'}, function (response) {
+        alert(response);
+    console.log('JS got response', response)
+   });
+}
+function writeCharacteristic()
+{
+
+    CSIIJsBridge.callHandler('writeCharacteristic', {data: 'ce35441d230f4bf3f267ba90e05d40b4',address:'C6BA6D9F-B272-FCF3-5F4A-9D29F740EA4B',serviceId:'FFF0',characteristicId:'FFF1'}, function (response) {
+        alert(response);
+        alert(response.data);
+    console.log('JS got response', response)
+   });
+}
+function writeCharacteristic2()
+{
+    CSIIJsBridge.callHandler('writeCharacteristic', {data: 'd0fa549e9909498f',address:'C6BA6D9F-B272-FCF3-5F4A-9D29F740EA4B',serviceId:'FFF0',characteristicId:'FFF1'}, function (response) {
+      
+        alert(response.data);
+    console.log('JS got response', response)
+   });
+}
+setupWebViewJavascriptBridge(function(bridge){
+
+  
+})
+     function addlabel(data)
+     {
+       var str =  JSON.parse(data);
+       var lable = document.getElementById("scanLeDevice");
+       var para = document.createElement("p");
+       var txt1 = document.createTextNode(str.code);
+        para.appendChild(txt1);
+        lable.appendChild(para);;
+    }
+    
+</script>
+</head>
+<body>
+      <div id="openBluetool" onclick="openBluetool()">初始化蓝牙</div><br>
+      <div id="register"onclick="register()" >获取本机蓝牙适配器状态</div><br>
+      <div id="scanLeDevice" onclick="scanLeDevice()">搜索蓝牙设备</div><br>
+      <div id="connect" onclick="connect()">连接蓝牙</div><br>
+      <p>点点滴滴</p>
+      <div id="writeCharacteristic" onclick="writeCharacteristic()">开启发球机</div><br>
+      <div id="writeCharacteristic" onclick="writeCharacteristic2()">开启发球机</div><br>
+
+</body>
+</html>

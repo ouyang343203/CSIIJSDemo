@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        *{font-size: 50px;}
+       .btn{height: 80px;width: 80%;padding: 0px 30px; background-color: #1375dd;border: solid 1px #0071e7;border-radius: 5px; font-size: 1em;color: white;} 
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+            
+    function setupWebViewJavascriptBridge(callback) 
+      {   
+         if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+	     if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+	     window.WVJBCallbacks = [callback];
+	     var WVJBIframe = document.createElement('iframe');
+	     WVJBIframe.style.display = 'none';
+	     WVJBIframe.src = 'https://__bridge_loaded__';
+	     document.documentElement.appendChild(WVJBIframe);
+	     setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+      }
+      setupWebViewJavascriptBridge(function(CSIIJsBridge) 
+      {
+        window.CSIIJsBridge = window.WebViewJavascriptBridge;
+        var uniqueId = 1
+        function log(message, data) 
+        {
+            var log = document.getElementById('log')
+            var el = document.createElement('div')
+             el.className = 'logLine'
+             el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+            if (log.children.length) 
+               {
+                log.insertBefore(el, log.children[0])
+               }else 
+                {
+                log.appendChild(el)
+                }
+                // function initBaill(CSIIJsBridge)
+        }
+        //蓝牙适配器初始化
+        function initBlutool(CSIIJsBridge)
+       {
+               alert('蓝牙适配器初始化');
+        window.CSIIJsBridge.callHandler('openBluetoothAdapter', {}, function(response) {
+                alert("123455");;
+               })
+       }
+      })
+
+      function initBaill(CSIIJsBridge)
+      {
+        openBluetoothAdapter(CSIIJsBridge)//1，初始化蓝牙适配器
+        getBluetoothAdapterState(CSIIJsBridge)//2.获取蓝牙状态
+        onBluetoothDeviceFound(CSIIJsBridge)//3.搜索蓝牙
+        createBLEConnection(CSIIJsBridge)//4.连接蓝牙
+        writeBLECharacteristicValue(CSIIJsBridge)//5写入数据
+        stopBluetoothDevicesDiscovery(CSIIJsBridge)//6停止搜索蓝牙
+        getBLEDeviceServices(CSIIJsBridge)//7获取所有的服务
+        getBLEDeviceCharacteristics(CSIIJsBridge)//8获取所有特性
+        characteristicChangedListener(CSIIJsBridge)
+        disconnect(CSIIJsBridge)
+        registerConnectStatusListener(CSIIJsBridge)
+        characterWriteStatusListener(CSIIJsBridge)
+
+   
+      }
+      //1.初始化蓝牙适配器
+      function openBluetoothAdapter(CSIIJsBridge)
+      {
+        CSIIJsBridge.callHandler('openBluetoothAdapter', {}, function(response) {
+                alert("123455");;
+               })
+      }
+      //2.获取蓝牙状态（判断蓝牙是否可用）
+      function getBluetoothAdapterState(CSIIJsBridge)
+      {
+        //getBluetoothAdapterState
+        CSIIJsBridge.callHandler('registerStateChangeListener', {}, function(response) {
+                alert("123455");;
+               })
+      }
+      //3.搜索蓝牙
+      function onBluetoothDeviceFound(CSIIJsBridge)
+      {
+        CSIIJsBridge.callHandler('scanLeDevice', {}, function(response) {
+                alert("123455");;
+               })
+      }
+      //4.连接蓝牙
+      function createBLEConnection(CSIIJsBridge)
+      {
+        var data = {
+          "name":"2DF3A4B4DEF7",
+        "address":"56074FD9-B9BB-63F0-2B8C-C67922F25EEB"
+         }
+        CSIIJsBridge.callHandler('connect',data , function(response) {
+                alert("123455");;
+               })
+      }
+      //5.写入数据
+      function writeBLECharacteristicValue(CSIIJsBridge)
+      {
+        var data = {
+          "data":"487c81e62b03d6df7ceedda634788af3",
+          "address":"56074FD9-B9BB-63F0-2B8C-C67922F25EEB",
+          "serviceId":"FFF0",
+          "characteristicId":"FFF1"
+        }
+        CSIIJsBridge.callHandler('writeCharacteristic',data , function(response) {
+                alert("123455");;
+               })
+      }
+      //6.停止搜索蓝牙
+       function stopBluetoothDevicesDiscovery(CSIIJsBridge)
+       {
+        CSIIJsBridge.callHandler('stopBluetoothDevicesDiscovery',{} , function(response) {
+                alert("123455");;
+               })
+       }
+       //7.获取蓝牙的所有服务
+       function getBLEDeviceServices(CSIIJsBridge)
+       {
+         var data = {
+             "deviceId":"56074FD9-B9BB-63F0-2B8C-C67922F25EEB"
+         }
+        CSIIJsBridge.callHandler('getBLEDeviceServices',data , function(response) {
+                alert("123455");;
+               })
+       }
+         //8.获取蓝牙的特性
+       function getBLEDeviceCharacteristics(CSIIJsBridge)
+       {
+        var data = 
+               {
+                "deviceId":"56074FD9-B9BB-63F0-2B8C-C67922F25EEB",
+                "serviceId":"FFF0",
+               }
+        CSIIJsBridge.callHandler('readCharacteristic',data , function(response) {
+                alert("123455");;
+               })
+       }
+       //9.监听特性值的变化
+       function characteristicChangedListener(CSIIJsBridge)
+       {
+
+        CSIIJsBridge.callHandler('characteristicChangedListener',{} , function(response) {
+                alert("123455");;
+               })
+       }
+       //10.断开蓝牙连接
+       function disconnect(CSIIJsBridge)
+       {
+        CSIIJsBridge.callHandler('disconnect',{} , function(response) {
+                alert("123455");;
+               })
+       }
+       //11.监听连接状态
+       function registerConnectStatusListener(CSIIJsBridge)
+       {
+        CSIIJsBridge.callHandler('registerConnectStatusListener',{} , function(response) {
+                alert("123455");;
+               })
+       }
+       //12.监听特征值写入状态
+       function characterWriteStatusListener(CSIIJsBridge)
+       {
+        CSIIJsBridge.callHandler('characterWriteStatusListener',{} , function(response) {
+                alert("123455");;
+               })
+        
+       }
+  
+       //获取蓝牙状态
+       function getBlutoolState()
+       {
+        alert('获取蓝牙状态');
+        window.CSIIJsBridge.callHandler('registerStateChangeListener', {}, function(response) {
+                alert("123455");;
+               })
+       }
+       //搜索蓝牙
+       function searchBlutool()
+       {
+        alert('搜索蓝牙');
+        window.CSIIJsBridge.callHandler('scanLeDevice', {}, function(response) {
+                alert("123455");;
+               })
+       }
+       //链接蓝牙
+       function contentBlutool()
+       {
+        alert('链接蓝牙');
+        var data = {
+          "name":"2DF3A4B4DEF7",
+        "deviceId":"56074FD9-B9BB-63F0-2B8C-C67922F25EEB"
+         }
+        window.CSIIJsBridge.callHandler('connect',data , function(response) {
+                alert("123455");;
+               })
+       }
+       //写蓝牙数据
+       function whiteBlutool()
+       {
+        alert('写蓝牙数据');
+        var data = {
+          "data":"487c81e62b03d6df7ceedda634788af3",
+          "deviceId":"56074FD9-B9BB-63F0-2B8C-C67922F25EEB",
+          "serviceId":"FFF0",
+          "characteristicId":"FFF1"
+        }
+        window.CSIIJsBridge.callHandler('writeCharacteristic',data , function(response) {
+                alert("123455");;
+               })
+       }
+       
+    </script>
+    
+    <input type="button" onclick="initBlutool()" value="初始化蓝牙适配器"><br>
+
+    <!-- <button class="initBlutool" id="initBlutool">初始化蓝牙适配器</button><br> -->
+    <p class="blutoolState"></p>
+    <button  onclick="getBlutoolState()">获取蓝牙状态</button><br>
+    <button  onclick="searchBlutool()">搜索蓝牙</button><br>
+    <div class="searchBlutoolData"></div>
+    <button onclick="contentBlutool()">连接蓝牙</button><br>
+    <button onclick="whiteBlutool()">写入数据</button><br>
+</body>
+
+</html>

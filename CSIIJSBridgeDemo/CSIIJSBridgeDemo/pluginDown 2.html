@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      
+        <title>下载demo</title>
+        <style>
+              *{
+                font-size: 50px;
+             }
+             .btn{
+                 height: 80px;width: 80%;padding: 0px 30px; background-color: #1375dd;border: solid 1px #0071e7;border-radius: 5px; font-size: 1em;color: white;
+                 } 
+        </style>
+    </head>
+
+    <body>
+        <script type="text/javascript">
+        // window.location.reload(); 
+      function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+	if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+	window.WVJBCallbacks = [callback];
+	var WVJBIframe = document.createElement('iframe');
+	WVJBIframe.style.display = 'none';
+	WVJBIframe.src = 'https://__bridge_loaded__';
+	document.documentElement.appendChild(WVJBIframe);
+	setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+
+       }
+        /*与OC交互的所有JS方法都要放在此处注册，才能调用通过JS调用OC或者让OC调用这里的JS*/
+        setupWebViewJavascriptBridge(function(CSIIJsBridge) { 
+        var uniqueId = 1
+        function log(message, data) {
+          var log = document.getElementById('log')
+          var el = document.createElement('div')
+          el.className = 'logLine'
+          el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+          if (log.children.length) {
+              log.insertBefore(el, log.children[0])
+          } else {
+          log.appendChild(el)
+          }
+        }  
+           document.getElementById('OpenWXwebView').onclick = function (e) 
+           {
+            OpenNewView();
+      
+           }
+           document.getElementById('closeVC').onclick = function (e)
+           {
+            closeVC();
+           }
+           document.getElementById('putKey').onclick = function (e)
+           {
+            putKey();
+           }
+           document.getElementById('getKey').onclick = function (e)
+           {
+            getKey();
+           }
+           document.getElementById('delKey').onclick = function (e)
+           {
+            delKey();
+           }
+           document.getElementById('storageParams').onclick = function (e)
+           {
+            storageParams();
+           }
+         /*JS给ObjC提供公开的API，ObjC端通过注册，就可以在JS端调用此API时，得到回调。ObjC端可以在处理完成后，反馈给JS，这样写就是在载入页面完成时就先调用*/                          
+     })
+        function OpenNewView()
+        {
+            var data = 
+            {
+               name:"test",
+               versionNumber:"0",
+               projectId:"972BF2811A76421BB37D5E93167EC536",
+               area:"广东省深圳市",
+               //http://192.168.80.8/gidc-api/app/issue/resource/getTheNewestIssueStaticPackageDetailByCondition
+               postUrl:"http://192.168.80.8/gidc-api/app/issue/resource/getTheNewestIssueStaticPackageDetailByCondition",
+               navagation:{
+                titleStr:"第一页",
+                titleColor:"0x111110",
+                titlefont:"21",
+                naviBarColor:"0x101010",
+                left_text:"返回上一页"
+               },
+               pagedata:{
+                   title:"页面数据",
+                   userName:"李辉",
+                   password:"123456"
+               }
+            }
+            window.WebViewJavascriptBridge.callHandler('openWindow', data, function(response) {
+                alert("123455");;
+               })
+          
+        }
+        function closeVC()
+        {
+            window.WebViewJavascriptBridge.callHandler('closeVC', {'blogURL': 'https://github.com/maying1992'}, function(response) {
+                alert("123455");;
+               })
+        }
+        function putKey()
+        {
+            window.WebViewJavascriptBridge.callHandler('putKey', {'blogURL': 'https://github.com/maying1992'}, function(response) {
+                alert("123455");;
+               })
+        }
+        function getKey()
+        {
+            window.WebViewJavascriptBridge.callHandler('getKey', 'blogURL', function(response) {
+                alert("123455");;
+               })
+        }
+        function delKey()
+        {
+            window.WebViewJavascriptBridge.callHandler('delKey', 'blogURL', function(response) {
+                alert("123455");;
+               })
+        }
+        function storageParams()
+        {
+            window.WebViewJavascriptBridge.callHandler('storageParams', {'blogURL': 'https://github.com/maying1992'}, function(response) {
+                alert("123455");;
+               })
+        }
+        </script>
+        <br/>
+        <div id="title"></div><br/>
+        <div id="left_btn"></div><br/>
+        <div id="right_btn"></div><br/>
+        <div>
+            <button class="btn" type="button" id="OpenWXwebView">打开新页面</button>
+        </div>
+        <br/>
+        <div>
+            <button class="btn" type="button" id="closeVC">关闭界面</button>
+        </div>
+        <br/>
+        <div>
+            <button class="btn" type="button" id="putKey">统一存储本地key</button>
+        </div>
+        <br/>
+        <div>
+            <button class="btn" type="button" id="getKey">统一存储获取key</button>
+        </div>
+         <br/>
+         <div>
+             <button class="btn" type="button" id="delKey">统一存储删除key</button>
+         </div>
+         <br/>
+         <div>
+             <button class="btn" type="button" id="storageParams">获取界面参数</button>
+         </div>
+         <br/>
+    </body>
+</html>

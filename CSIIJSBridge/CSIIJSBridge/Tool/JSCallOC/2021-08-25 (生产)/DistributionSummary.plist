@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>立橋銀行.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>44FC5708B554E67E64E5E867F4CCC5095B43A3CD</string>
+				<key>dateExpires</key>
+				<string>2022/3/22</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>NY2VV4UVY5.com.bank.liqiao</string>
+				<key>aps-environment</key>
+				<string>development</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>NY2VV4UVY5</string>
+				<key>get-task-allow</key>
+				<true/>
+			</dict>
+			<key>name</key>
+			<string>liqiaobank.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>768a3d73-dfb8-4566-9b9d-6bfe90189941</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: com.bank.liqiao</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>NY2VV4UVY5</string>
+				<key>name</key>
+				<string>BANCO WELL LINK, S.A.</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
