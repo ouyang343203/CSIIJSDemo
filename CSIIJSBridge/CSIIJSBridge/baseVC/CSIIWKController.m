@@ -206,7 +206,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 
 -(void)loadUrl:(NSString*)url {
     if (url) {
-      //  url = @"http://172.30.100.13:8080";
+        url = @"http://172.30.100.13:8080";
         NSURL *webUrl = [NSURL URLWithString:url];
         [self.wkWebView loadRequest:[NSURLRequest requestWithURL:webUrl]];
         [self.wkWebView reload];
