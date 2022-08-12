@@ -145,7 +145,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
                 NSLog(@"msg = %@",response[@"msg"]);
                 NSString *resourceUrl = nil;
                 if (self.domainName) {
-                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"resourceUrl"]];
+                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"resourceUrl"]];//下载地址
                 }
                 NSString *versionName = data[@"versionName"];
                 [PluginUpdateManager shareManager].pathUrl = data[@"packageRootUrl"];

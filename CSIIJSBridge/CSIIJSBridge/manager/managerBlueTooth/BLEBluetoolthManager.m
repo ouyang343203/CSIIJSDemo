@@ -41,36 +41,34 @@
     return manager;
 }
 #pragma mark --------1.初始化蓝牙模块----------
-//1.初始化蓝牙模块
--(void)openBluetoothAdapter:(NSDictionary*)parameter
-{
+//1.初始化BabyBluetooth 蓝牙库蓝牙模块
+-(void)openBluetoothAdapter:(NSDictionary*)parameter {
    self.centerManager = [BabyBluetooth shareBabyBluetooth];
    [self.centerManager cancelAllPeripheralsConnection];
 }
+
 #pragma mark ----------2.获取蓝牙状态------------
 //2.获取蓝牙状态（是否开启或者关闭）
--(void)getBluetoothAdapterState:(BluetoothStateCallback)stateCallBack
-{
+-(void)getBluetoothAdapterState:(BluetoothStateCallback)stateCallBack {
     [self centralManagerStateDelegate];
     //初始化蓝牙中心
     [[BluetoothManager manager]initBluetooth:^(id  _Nonnull resultState) {
         stateCallBack(resultState);
     }];
-    
 }
+
 #pragma mark ----------3.搜索蓝牙设备------------c
 //3.搜索蓝牙设备
--(void)onBluetoothDeviceFound:(NSDictionary*)parameter callBack:(BluetoothSearchResultCallback)searchResultcallBack
-{
+-(void)onBluetoothDeviceFound:(NSDictionary*)parameter callBack:(BluetoothSearchResultCallback)searchResultcallBack {
     if (self.centerManager) {
         self.centerManager.scanForPeripherals().begin(30);
     }
     self.searchResultcallBack = searchResultcallBack;
     [self setScanForPeripherals];//设置扫描到设备的委托
 }
+
 #pragma mark ----------4.连接指定蓝牙设备------------
--(void)createBLEConnection:(NSString*)parameter callBack:(BluetoothBLEConnectCallback)ConnectCallback
-{
+-(void)createBLEConnection:(NSString*)parameter callBack:(BluetoothBLEConnectCallback)ConnectCallback {
     self.contentCallBack = ConnectCallback;
     self.serviceID = parameter;
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
@@ -82,9 +80,9 @@
             ConnectCallback(data);
         }
 }
+
 #pragma mark -------5.数据写入--------------
--(void)writeBLECharacteristicValue:(NSDictionary*)parameter callBack:(BluetoothWriteBLECallback)writeCallBack
-{
+-(void)writeBLECharacteristicValue:(NSDictionary*)parameter callBack:(BluetoothWriteBLECallback)writeCallBack {
     self.wiriteBLECallBlack = writeCallBack;
     NSString *dataStr = parameter[@"data"];
     NSString *address = parameter[@"mac"];
@@ -123,14 +121,14 @@
     }
     
 }
+
 //6.停止搜索蓝牙
--(void)stopBluetoothDevicesDiscovery
-{
+-(void)stopBluetoothDevicesDiscovery {
     [self.centerManager cancelScan];
 }
+
 //7.获取蓝牙低功耗设备所有服务(需要已经通过 createBLEConnection 建立连接)
--(void)getBLEDeviceServices:(NSString*)parameter callBack:(BluetoothServicesCallback)serviceCallBack
-{
+-(void)getBLEDeviceServices:(NSString*)parameter callBack:(BluetoothServicesCallback)serviceCallBack {
     NSMutableArray *serverces = [NSMutableArray array];
     NSMutableDictionary *serverceDic = [NSMutableDictionary dictionary];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
@@ -145,11 +143,10 @@
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":serverces}];
     NSLog(@"======%@",data);
     serviceCallBack(data);
-    
 }
+
 //8.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)
--(void)getBLEDeviceCharacteristics:(NSDictionary*)parameter callBack:(BluetoothCharacteristicsCallback)characteristics
-{
+-(void)getBLEDeviceCharacteristics:(NSDictionary*)parameter callBack:(BluetoothCharacteristicsCallback)characteristics {
     NSString *identifier = parameter[@"mac"];
     NSString *serviceId = parameter[@"serviceUuid"];
     NSMutableArray *charcterArray = [NSMutableArray array];
@@ -177,9 +174,9 @@
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":charcterArray}];
     characteristics(data);
 }
+
 #pragma mark ----------9.订阅特性的通知-----------
--(void)notifyBLECharacteristicValueChange:(NSDictionary*)parameter callBack:(BluetoothNotifyCharacteristicCallBlock)characteristicCallBack
-{
+-(void)notifyBLECharacteristicValueChange:(NSDictionary*)parameter callBack:(BluetoothNotifyCharacteristicCallBlock)characteristicCallBack {
     self.characteristicCallBack = characteristicCallBack;
     NSString *identifier = parameter[@"address"];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:identifier];
@@ -198,25 +195,24 @@
             }];
         }
     }
-  
 }
+
 #pragma mark --------10-断开所有连接----------
--(void)cancelAllPeripheralsConnection
-{
+-(void)cancelAllPeripheralsConnection {
     [self.centerManager cancelScan];
     [self.centerManager cancelAllPeripheralsConnection];
 }
+
 #pragma mark ----------11.断开蓝牙连接--------
--(void)closeBLEConnection:(NSDictionary*)parameter
-{
+-(void)closeBLEConnection:(NSDictionary*)parameter{
     [self.centerManager cancelScan];
     NSString *identifier = parameter[@"address"];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:identifier];
     [self.centerManager cancelPeripheralConnection:peripheral];
 }
+
 #pragma mark --------------1.1监听蓝牙的状态蓝牙状态代理-------------
--(void)centralManagerStateDelegate
-{
+-(void)centralManagerStateDelegate {
 //    __weak typeof(self) weakSelf = self;
     [self.centerManager setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
 
@@ -244,13 +240,11 @@
               break;
           }
         //可以调用H5返回给H5
-
     }];
-    
 }
+
 #pragma mark -------2.1-设置搜索蓝牙代理--------
--(void)setScanForPeripherals
-{
+-(void)setScanForPeripherals {
     id bridBridge = [CSIIHybridBridge shareManager].bridge;
       bridBridge = (CSIIWKHybridBridge*)bridBridge;
     __weak typeof(self) weakSelf = self;
@@ -270,9 +264,9 @@
         }
     }];
 }
+
 #pragma mark -----连接成功和失败回调---------
--(void)didConnectPeripheral
-{
+-(void)didConnectPeripheral{
     __weak typeof(self) weakSelf = self;
     id bridBridge = [CSIIHybridBridge shareManager].bridge;
        bridBridge = (CSIIWKHybridBridge*)bridBridge;
@@ -436,22 +430,21 @@
     return hexStr;
 }
  
--(NSMutableDictionary*)deviceDic
-{
+-(NSMutableDictionary*)deviceDic {
     if (_deviceDic == nil) {
         _deviceDic = [NSMutableDictionary dictionary];
     }
     return _deviceDic;
 }
--(NSMutableArray*)serverceArray
-{
+
+-(NSMutableArray*)serverceArray {
     if (_serverceArray == nil) {
         _serverceArray = [NSMutableArray array];
     }
     return _serverceArray;
 }
--(NSMutableArray*)characteristicArray
-{
+
+-(NSMutableArray*)characteristicArray{
     if (_characteristicArray == nil) {
         _characteristicArray = [NSMutableArray array];
     }
