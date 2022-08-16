@@ -12,6 +12,9 @@
 #import "CSIIWKHybridBridge.h"
 #import "CSIICheckObject.h"
 #import <AudioToolbox/AudioToolbox.h>
+
+#define channelOnPeropheralView @"peripheralView"
+
 @interface BLEBluetoolthManager()
 @property (nonatomic, copy)  BluetoothStateCallback stateCallBack;//蓝牙状态回调
 @property (nonatomic, copy)  BluetoothSearchResultCallback searchResultcallBack;//获取到蓝牙的回调
@@ -28,6 +31,7 @@
 @property (nonatomic,strong) NSMutableArray *characteristicArray;//设备的所有特性
 @property (nonatomic,strong) NSString *serviceID;
 @property (nonatomic,strong) NSBlockOperation *operation;
+@property (nonatomic,strong) NSMutableArray *peripheralDataArray;
 
 @end
 @implementation BLEBluetoolthManager
@@ -72,6 +76,7 @@
     self.contentCallBack = ConnectCallback;
     self.serviceID = parameter;
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
+    NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
         if ([parameter isEqualToString:peripheral.identifier.UUIDString]&&peripheral!=nil ) {
             self.centerManager.scanForPeripherals().connectToPeripherals().begin();
             [self didConnectPeripheral];
@@ -243,10 +248,8 @@
     }];
 }
 
-#pragma mark -------2.1-设置搜索蓝牙代理--------
+#pragma mark -------2.1-设置搜索蓝牙代理 找到Peripherals的委托--------
 -(void)setScanForPeripherals {
-    id bridBridge = [CSIIHybridBridge shareManager].bridge;
-      bridBridge = (CSIIWKHybridBridge*)bridBridge;
     __weak typeof(self) weakSelf = self;
     [self.centerManager setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
         if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil) {
@@ -329,6 +332,7 @@
         NSLog(@"设备：%@--断开连接",peripheral.name);
     }];
     
+    ///设置查找服务回叫
     [self.centerManager setBlockOnDiscoverServices:^(CBPeripheral *peripheral, NSError *error) {
         CBService * __nullable findService = nil;
         for (CBService *service in peripheral.services)
@@ -336,6 +340,7 @@
             NSLog(@"UUID:%@",service.UUID);
             if ([[service UUID] isEqual:[CBUUID UUIDWithString:@"FFF0"]])
             {
+                NSLog(@"UUID:%@",service.UUID);
                 findService = service;
             }
         }
@@ -397,9 +402,10 @@
         NSData *data = characteristic.value;
         NSString *dataString;
         if (data!=nil) {
-           dataString =  [TypeConversion convertDataToHexStr:data];
+           dataString =  [TypeConversion convertDataToHexStr:data];//字符串转成16进制字符串
             NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":dataString}];
             if (weakSelf.characteristicCallBack) {
+                NSLog(@"获取到特征值变化数据：%@",charData);
                 weakSelf.characteristicCallBack(charData);
             }
         }else{
@@ -449,6 +455,13 @@
         _characteristicArray = [NSMutableArray array];
     }
     return _characteristicArray;
+}
+
+-(NSMutableArray*)peripheralDataArray{
+    if (_peripheralDataArray == nil) {
+        _peripheralDataArray = [NSMutableArray array];
+    }
+    return _peripheralDataArray;
 }
 
 @end

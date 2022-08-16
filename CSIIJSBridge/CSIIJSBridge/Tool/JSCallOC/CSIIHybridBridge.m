@@ -19,6 +19,10 @@
 #import "AFNWorkManager.h"
 #import "DataManager.h"
 #import "BLEBluetoolthManager.h"
+#import "reachabilityManager.h"
+#import "LQAFNetworkManager.h"
+
+#define  KputKey  @"putKey"
 
 @interface CSIIHybridBridge()<UIDocumentInteractionControllerDelegate,DateTimePickerViewDelegate>
 
@@ -277,9 +281,7 @@
 #pragma mark 调用手机拨号
 - (void)callPhone {
         [self.bridge registerHandler:@"callPhone" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
         NSString *phoneStr = data[@"telephone"];
-
         if (phoneStr.length) {
             
             NSString *string = [NSString stringWithFormat:@"telprompt://%@",phoneStr];
@@ -301,7 +303,6 @@
     [self.bridge registerHandler:@"toMain" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         CSIIWKController *webStr = (CSIIWKController *)[[CSIIGloballTool shareManager]findCurrentShowingViewController];
-        
         webStr.navigationController.tabBarController.selectedIndex = 0;
         if (webStr.navigationController.viewControllers.count) {
             webStr.navigationController.navigationBarHidden = YES;
@@ -628,6 +629,7 @@
     __weak typeof(self) weakSelf = self;
     //1.初始化蓝牙设备。
     [self.bridge registerHandler:@"openBluetoothAdapter" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         NSDictionary *diction = data;
         [[BLEBluetoolthManager shareBabyBluetooth] openBluetoothAdapter:diction];
         NSDictionary *diction1 = @{@"code":@"0",
@@ -637,31 +639,33 @@
     
     //2,获取本机蓝牙适配器状态(监听蓝牙打开和关闭状态)
     [self.bridge registerHandler:@"registerStateChangeListener" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         [[BLEBluetoolthManager shareBabyBluetooth] getBluetoothAdapterState:^(id  _Nonnull resultState) {
             responseCallback(resultState);
             //备用监听按钮
         }];
-        
     }];
-    //3.搜索蓝牙设备
+    //3.搜索扫描蓝牙设备
     [self.bridge registerHandler:@"scanLeDevice" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         NSDictionary *data_dic = (NSDictionary*)data;
         NSDictionary *diction = @{@"code":@"0",
                                   @"errMsg":@""};
         [[BLEBluetoolthManager shareBabyBluetooth] cancelAllPeripheralsConnection];
         responseCallback([CSIICheckObject dictionaryChangeJson:diction]);
         //设置扫描到设备的委托
-        [[BLEBluetoolthManager shareBabyBluetooth] onBluetoothDeviceFound:data_dic callBack:^(id  _Nonnull searchResult) {
+        [[BLEBluetoolthManager shareBabyBluetooth] onBluetoothDeviceFound:data_dic callBack:^(id  _Nonnull searchResult) {//扫描获取到的外围设备
             [self.bridge callHandler:@"onFoundDevice" data:[CSIICheckObject dictionaryChangeJson:searchResult] responseCallback:^(id responseData) {
+                NSLog(@"%@",responseData);
+                
             }];
         }];
     }];
+    
     //复接口监听扫描到设备事件(备用)
     //4.连接蓝牙设备
     [self.bridge registerHandler:@"connect" handler:^(id data, WVJBResponseCallback responseCallback) {
-//        NSDictionary *Dic = @{@"code":@"0",
-//                              @"errMsg":@"",@"connet":@"连接回掉"};
-//        responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
+        
         NSString *dataStr = data;
         NSLog(@"设备名称%@",dataStr);
         [[BLEBluetoolthManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
@@ -674,6 +678,7 @@
     }];
     //5.向蓝牙低功耗设备特征值中写入二进制数据
     [self.bridge registerHandler:@"writeCharacteristic" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         NSDictionary *diction = (NSDictionary*)data;
         NSLog(@"向蓝牙低功耗设备特征值中写入二进制数据 ---data =====%@",diction);
     
@@ -681,12 +686,15 @@
         // 打印当前线程
         [[BLEBluetoolthManager shareBabyBluetooth] writeBLECharacteristicValue:diction callBack:^(id  _Nonnull writeValueResult) {
             NSLog(@"writeValueResult =====%@",writeValueResult);
+            //==回传写入成功的和失败的状态
+            [self.bridge callHandler:@"characterWriteStatusListener" data:@"0" responseCallback:^(id responseData){}];
             if (index ==0) {
                 responseCallback(writeValueResult);
                 index+=1;
             }
         }];
     }];
+    
     //6.停止蓝牙搜索(建立连接后需要断开搜索)
     [self.bridge registerHandler:@"stopLeScan" handler:^(id data, WVJBResponseCallback responseCallback) {
         
@@ -697,6 +705,7 @@
     }];
     //7.获取蓝牙低功耗设备所有服务(需要已经通过 createBLEConnection 建立连接)
     [self.bridge registerHandler:@"getBLEDeviceServices" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         NSString * dataStr = data;
         [[BLEBluetoolthManager shareBabyBluetooth] getBLEDeviceServices:dataStr callBack:^(id  _Nonnull servicesResult) {
             responseCallback(servicesResult);
@@ -704,33 +713,33 @@
     }];
     //8.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)
     [self.bridge registerHandler:@"getBLEDeviceCharacteristics" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         NSDictionary *diction = (NSDictionary*)data;
         [[BLEBluetoolthManager shareBabyBluetooth] getBLEDeviceCharacteristics:diction callBack:^(id  _Nonnull characteristicsResult) {
             responseCallback(characteristicsResult);
         }];
      
     }];
-    //开启特征值变化
+    
+    //9.开启特征值变化
     [self.bridge registerHandler:@"startNotifyCharacteristicValueChange" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
         NSDictionary *diction = (NSDictionary*)data;
-        
-//        NSDictionary *Dic = @{@"code":@"0",
-//                             @"errMsg":@""};
-//        responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
-        
         [[BLEBluetoolthManager shareBabyBluetooth] notifyBLECharacteristicValueChange:diction callBack:^(id  _Nonnull notifyCharacteristicResult) {
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);
             [weakSelf.bridge callHandler:@"notifyCharacteristicValueChange" data:notifyCharacteristicResult responseCallback:^(id responseData) {}];
+        
         }];
     }];
+    
     //10.断开所有蓝牙连接(关闭蓝牙连接)
-//    [self.bridge registerHandler:@"disconnect" handler:^(id data, WVJBResponseCallback responseCallback) {
-//        [[BLEBluetoolthManager shareBabyBluetooth] cancelAllPeripheralsConnection];
-//        NSDictionary *Dic = @{@"code":@"0",
-//                             @"errMsg":@""};
-//        responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
-//
-//    }];
+    [self.bridge registerHandler:@"disconnect" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [[BLEBluetoolthManager shareBabyBluetooth] cancelAllPeripheralsConnection];
+        NSDictionary *Dic = @{@"code":@"0",
+                             @"errMsg":@""};
+        responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
+
+    }];
     //11.断开当前蓝牙连接
     [self.bridge registerHandler:@"disCurrentconnect" handler:^(id data, WVJBResponseCallback responseCallback) {
         NSDictionary *diction = (NSDictionary*)data;
@@ -739,6 +748,69 @@
                              @"errMsg":@""};
         responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
     }];
+    
+    //================================
+    //12.打开蓝牙
+    [self.bridge registerHandler:@"openBluetooth" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [[BLEBluetoolthManager shareBabyBluetooth] getBluetoothAdapterState:^(id  _Nonnull resultState) {
+            responseCallback(resultState);
+            //备用监听按钮
+        }];
+    }];
+    
+    //13.关闭蓝牙连接
+    [self.bridge registerHandler:@"closeBluetooth" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [[BLEBluetoolthManager shareBabyBluetooth] getBluetoothAdapterState:^(id  _Nonnull resultState) {
+            responseCallback(resultState);
+            //备用监听按钮
+        }];
+    }];
+    
+    //14.询问蓝牙是否打开
+    [self.bridge registerHandler:@"isBluetoothOpened" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [[BLEBluetoolthManager shareBabyBluetooth] getBluetoothAdapterState:^(id  _Nonnull resultState) {
+            responseCallback(resultState);
+            //备用监听按钮
+        }];
+    }];
+    
+    //15.存储键值对
+    [self.bridge registerHandler:@"putKey" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSDictionary *putKeydic = (NSDictionary*)data;
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        [ud setObject:putKeydic forKey:KputKey];
+        [ud synchronize];
+    }];
+    
+    //16.获取存储键值对
+    [self.bridge registerHandler:@"getKey" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSLog(@"获取存储键值对:%@",data);
+        NSString*getKey = data;
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSDictionary *putKeydic = (NSDictionary*)[ud objectForKey:KputKey];
+        responseCallback(putKeydic[getKey]);
+    }];
+    
+    //17.删除键值对
+    [self.bridge registerHandler:@"delKey" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSLog(@"删除键值对:%@",data);
+        NSString*getKey = data;
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        [ud removeObjectForKey:getKey];
+        [ud synchronize];
+        responseCallback(@"");
+    }];
+    
+   /*暂时不用
+    //18.获取系统版本号
+    [self.bridge registerHandler:@"getVersionName" handler:^(id data, WVJBResponseCallback responseCallback) {
+        responseCallback(kAppVersion);
+    }];
+    
+    //19.检测app版本
+    [self.bridge registerHandler:@"checkVersion" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [self loadcheckVersionData];
+    }];*/
 }
 
 #pragma mark - Public Method -- 公开方法
@@ -752,16 +824,7 @@
 #pragma mark - Setter/Getter -- Getter尽量写出懒加载形式
 
 
-
-
 #pragma mark ---设置蓝牙接口
-
-
-
-
-
-
-
 
 #pragma mark 点击了右上角按钮
 - (void)rightAction:(UIButton *)btn {
@@ -771,5 +834,36 @@
     }];
 }
 
+- (void)loadcheckVersionData{
+    //MBProgressHUD *hud = [[MBProgressHUD alloc] init];
+    [[reachabilityManager manager]monitoringNetWork:^(bool result) {
+        NSLog(@"result = %d",result);
+        if (result) {
+            [[LQAFNetworkManager manager] requestPostWithUrl:nil params:nil success:^(id response) {
+                NSDictionary *data = (NSDictionary*)response[@"data"];
+                //NSString *arrayAppStore = data[@"versionNumber"];
+                NSString *versionLocal= kAppVersion;
+                NSString *versionAppStore = data[@"versionName"];
+                NSArray  *arrayAppStore = [versionAppStore componentsSeparatedByString:@"."];
+                NSArray *arrayLocal = [versionLocal componentsSeparatedByString:@"."];
+                NSInteger shortCount = arrayAppStore.count<arrayLocal.count?arrayAppStore.count:arrayLocal.count;
+                
+                for (NSInteger i = 0; i < shortCount; i++) {
+                    if ([arrayAppStore[i] integerValue] > [arrayLocal[i] integerValue]) {
+                        // App Store版本高，需要升级
+                    }
+                }
+                // 在相同位数下没有得到结果，那么位数多的版本高
+                if (arrayAppStore.count > arrayLocal.count) {
+                    //需要升级
+                }
+            } failure:^(NSError *error) {
+                NSLog(@"error = %@",error);
+            }];
+        }else{
+            //[hud hideAnimated:YES];
+        }
+    }];
+}
 
 @end

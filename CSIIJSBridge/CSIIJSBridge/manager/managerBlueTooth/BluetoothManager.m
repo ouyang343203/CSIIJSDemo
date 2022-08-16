@@ -29,22 +29,21 @@
     return manager;
 }
 //1.初始化蓝牙功能
--(void)initBluetooth:(BluetoothStateCallback)state;
-{
+-(void)initBluetooth:(BluetoothStateCallback)state {
     _centerManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue() options:nil];
     _deviceDic = [NSMutableDictionary dictionary];
     self.stateCallBack = state;
     
 }
+
 //2.搜索蓝牙设备
--(void)scanForPeripheralsWithServices:(id <BluetoothDelegate>)delegate
-{
+-(void)scanForPeripheralsWithServices:(id <BluetoothDelegate>)delegate {
     [_centerManager scanForPeripheralsWithServices:nil options:nil];
     self.delegate = delegate;
 }
+
 //3.连接蓝牙
--(void)createBLEConnection:(id)parameter bluetoothDelegage:(id<BluetoothDelegate>)delegate callBack:(createBLECallback) connettioncalBack;
-{
+-(void)createBLEConnection:(id)parameter bluetoothDelegage:(id<BluetoothDelegate>)delegate callBack:(createBLECallback) connettioncalBack {
     NSDictionary *diction = (NSDictionary*)parameter;
     CBPeripheral *peripheral = [CBPeripheral init];
     self.delegate = delegate;
@@ -58,9 +57,9 @@
         connettioncalBack(@{@"code":@"10000"});
     }
 }
+
 // 4.获取蓝牙低功耗设备所有服务
--(void)getBLEDeviceServices:(NSDictionary*)parameter
-{
+-(void)getBLEDeviceServices:(NSDictionary*)parameter {
     NSDictionary *diction = (NSDictionary*)parameter;
     CBPeripheral *peripheral = [CBPeripheral init];
     [peripheral setValue:diction[@"deviceId"] forKey:@"identifier"];
@@ -71,13 +70,11 @@
     }
 }
 //5.获取蓝牙低功耗设备某个服务中所有特征
--(void)getBLEDeviceCharacteristics:(NSDictionary*)parameter;
-{
+-(void)getBLEDeviceCharacteristics:(NSDictionary*)parameter {
     
 }
 //4.停止搜寻附近
--(void)stopBluetoothDevicesDiscovery:(stopBluetoothSearchCallback)bluetoothState;
-{
+-(void)stopBluetoothDevicesDiscovery:(stopBluetoothSearchCallback)bluetoothState {
     if (_centerManager == nil) {
         bluetoothState(@{@"code":@"10000"});
     }else
@@ -93,9 +90,9 @@
       
     }
 }
+
 //写入蓝牙设备
--(void)writeBLECharacteristicValue:(NSDictionary*)parameter
-{
+-(void)writeBLECharacteristicValue:(NSDictionary*)parameter {
     NSString *deviceID = parameter[@"deviceId"];
     NSString *serviceId = parameter[@"serviceId"];
     NSString *characteristicId = parameter[@"characteristicId"];
@@ -112,10 +109,9 @@
     
      NSData *data = [NSKeyedArchiver archivedDataWithRootObject:valueArray];
     [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
-    
 }
--(void)connectDeviceWithPeripheral:(id)parameter
-{
+
+-(void)connectDeviceWithPeripheral:(id)parameter {
     NSDictionary *diction = (NSDictionary*)parameter;
     
     id pheral = diction.allValues[0];
@@ -126,8 +122,7 @@
 }
 
 //只要中心管理者初始化 就会触发此代理方法 判断手机蓝牙状态
--(void)centralManagerDidUpdateState:(CBCentralManager *)central
-{
+-(void)centralManagerDidUpdateState:(CBCentralManager *)central {
     switch (central.state) {
         case CBCentralManagerStateUnknown:
           NSLog(@"CBCentralManagerStateUnknown");
@@ -163,8 +158,7 @@
 }
 
 #pragma mark -------发现外围设备----------
--(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI
-{
+-(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
     if (![_deviceDic objectForKey:[peripheral name]])
     {
         if (peripheral!=nil) {
@@ -178,6 +172,7 @@
         }
     }
 }
+
 #pragma mark --连接成功------
 // 中心管理者连接外设成功
 - (void)centralManager:(CBCentralManager *)central // 中心管理者
@@ -187,10 +182,10 @@
     self.peripheral = peripheral;
   [peripheral discoverServices:nil];
 }
+
 #pragma mark -----连接失败
 //外设连接失败10003（连接失败）、10004（没有找到制定服务）、10005（没有找到指定特征）、10006（当前已经断开）100013(连接 deviceId 为空或者是格式不正确)
-- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
-{
+- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     if (self.delegate&&[self.delegate respondsToSelector:@selector(JG_didFailToConnectPeripheral:)]) {
       
         
@@ -198,15 +193,15 @@
     }
   NSLog(@"%s, line = %d, %@=连接失败", __FUNCTION__, __LINE__, peripheral.name);
 }
+
 #pragma mark ------丢失连接-------
 // 丢失连接
-- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
-{
+- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
   NSLog(@"%s, line = %d, %@=断开连接", __FUNCTION__, __LINE__, peripheral.name);
 }
-#pragma mark ----------发现服务回调---------
-- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error{
 
+#pragma mark ----------发现服务回调---------
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
     CBService * __nullable findService = nil;
     // 遍历服务
     for (CBService *service in peripheral.services)
@@ -222,8 +217,9 @@
     if (findService)
         [peripheral discoverCharacteristics:NULL forService:findService];
 }
+
 #pragma mark --------发现特征回调用---------
-- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error{
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     for (CBCharacteristic *characteristic in service.characteristics) {
         NSLog(@"c.properties:%lu",(unsigned long)characteristic.properties) ;
         NSLog(@"c.properties:%lu",(unsigned long)characteristic.UUID);
@@ -235,10 +231,10 @@
             // 将指令写入蓝牙
                 [self.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
         }
+        
         /**
          */
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
     }
 }
-
 @end
