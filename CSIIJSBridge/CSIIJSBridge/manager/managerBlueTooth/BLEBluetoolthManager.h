@@ -27,7 +27,7 @@ typedef void (^BluetoothWriteStatusCallBlock)(id writeStatusResult);//监听特�
 -(void)getBluetoothAdapterState:(BluetoothStateCallback)stateCallBack;
 //3.搜索设备
 -(void)onBluetoothDeviceFound:(NSDictionary*)parameter callBack:(BluetoothSearchResultCallback)searchResultcallBack;
-//4. 连接蓝牙设备
+//4.连接蓝牙设备
 -(void)createBLEConnection:(NSString*)parameter callBack:(BluetoothBLEConnectCallback)ConnectCallBack;
 //5.向蓝牙低功耗设备特征值中写入二进制数据
 -(void)writeBLECharacteristicValue:(NSDictionary*)parameter callBack:(BluetoothWriteBLECallback)writeCallBack;
@@ -37,7 +37,6 @@ typedef void (^BluetoothWriteStatusCallBlock)(id writeStatusResult);//监听特�
 -(void)getBLEDeviceServices:(NSString*)parameter callBack:(BluetoothServicesCallback)serviceCallBack;
 //8.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)
 -(void)getBLEDeviceCharacteristics:(NSDictionary*)parameter callBack:(BluetoothCharacteristicsCallback)characteristics;
-
 //9.监听特征值变化(添加特征值变化的通知NotifyValue)
 -(void)notifyBLECharacteristicValueChange:(NSDictionary*)parameter callBack:(BluetoothNotifyCharacteristicCallBlock)characteristicCallBack;
 // 10.断开所有蓝牙连接

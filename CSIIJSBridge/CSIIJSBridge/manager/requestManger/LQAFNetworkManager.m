@@ -42,6 +42,78 @@
     [self getdownloadfileUrl:url params:params success:success failure:failure];
 }
 
+-(void)requestGetWithUrl:(NSString*)url
+                  success:(void(^)(id response))success
+                 failure:(void(^)(NSError *error))failure {
+
+    url = [url stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *httpLink= url;
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"GET" URLString:httpLink parameters:nil error:nil];
+    [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setTimeoutInterval:15];
+    
+    __block NSURLSessionDataTask *dataTask = nil;
+    dataTask = [[LQAFNetworkManager manager] dataTaskWithRequest:request uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSDictionary *reponseDic = responseObject;
+        NSLog(@"responseObject ==%@",responseObject);
+        if (error) {
+              failure(error);
+        }else{
+            if ([reponseDic[@"status"] isEqualToString:@"000000"]||[reponseDic[@"code"] isEqualToString:@"200"])
+            {
+                success(responseObject);
+            }
+        }
+        
+    }];
+    
+    [dataTask resume];
+}
+
+
+-(void)requestPostStrparamsWithUrl:(NSString*)url
+                    params:(NSString*)params
+                   success:(void(^)(id response))success
+                   failure:(void(^)(NSError *error))failure
+{
+
+//    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:params];
+//    NSData *body = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+    url = [url stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *httpLink= url;
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:httpLink parameters:params error:nil];
+    [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [request setHTTPBody:body];
+    [request setTimeoutInterval:15];
+    
+    __block NSURLSessionDataTask *dataTask = nil;
+    dataTask = [[LQAFNetworkManager manager] dataTaskWithRequest:request uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSDictionary *reponseDic = responseObject;
+        NSLog(@"responseObject ==%@",responseObject);
+        if (error) {
+              failure(error);
+        }else{
+            if ([reponseDic[@"status"] isEqualToString:@"000000"]||[reponseDic[@"code"] isEqualToString:@"200"])
+            {
+                success(responseObject);
+            }
+        }
+        
+    }];
+    
+    [dataTask resume];
+}
+
 -(void)getdownloadfileUrl:(NSString*)url
                     params:(NSDictionary*)params
                    success:(void(^)(id response))success
@@ -78,8 +150,9 @@
     }];
     
     [dataTask resume];
-  
 }
+
+
 -(void)downlaodTaskWithUrl:(NSString*)url
                   Progress:(MBProgressHUD*)progress
                packageName:(NSString*)packageName

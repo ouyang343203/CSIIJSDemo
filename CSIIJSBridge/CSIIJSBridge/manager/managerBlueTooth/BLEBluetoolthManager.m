@@ -93,7 +93,7 @@
     NSString *address = parameter[@"mac"];
     NSString *serviceId = parameter[@"serviceUuid"];
     NSString *characteristicId  = parameter[@"characteristicUuid"];
-    CBPeripheral * peripheral = [_deviceDic objectForKey:address];
+    CBPeripheral *peripheral = [_deviceDic objectForKey:address];
     NSString *data_10002 = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10002",@"errMsg":@"没有找到指定设备"}];
     if (peripheral == nil) {writeCallBack(data_10002); return;}
     NSArray<CBService*>*newServices = peripheral.services;
@@ -122,9 +122,8 @@
     if (findService && findCharcteritic) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [peripheral writeValue: [TypeConversion hexString:dataStr] forCharacteristic:findCharcteritic type:CBCharacteristicWriteWithResponse];
-            });
+        });
     }
-    
 }
 
 //6.停止搜索蓝牙
@@ -137,12 +136,11 @@
     NSMutableArray *serverces = [NSMutableArray array];
     NSMutableDictionary *serverceDic = [NSMutableDictionary dictionary];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
-          NSArray<CBService*>*newServices = peripheral.services;
+    NSArray<CBService*>*newServices = peripheral.services;
     for (CBService *service in newServices) {
         [serverceDic setValue:service.UUID.UUIDString forKey:@"uuid"];
         [serverceDic setValue:@(service.isPrimary) forKey:@"type"];
         [serverces addObject:serverceDic];
-        
         [peripheral discoverCharacteristics:NULL forService:service];
     }
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":serverces}];
@@ -218,9 +216,7 @@
 
 #pragma mark --------------1.1监听蓝牙的状态蓝牙状态代理-------------
 -(void)centralManagerStateDelegate {
-//    __weak typeof(self) weakSelf = self;
     [self.centerManager setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
-
         NSString *data = nil;
         switch (central.state) {
             case CBCentralManagerStateUnknown:
@@ -244,18 +240,18 @@
             default:
               break;
           }
-        //可以调用H5返回给H5
     }];
 }
 
 #pragma mark -------2.1-设置搜索蓝牙代理 找到Peripherals的委托--------
 -(void)setScanForPeripherals {
     __weak typeof(self) weakSelf = self;
+    //开始扫描设备
     [self.centerManager setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
+        
         if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil) {
-            
             [weakSelf.deviceDic setObject:peripheral forKey:[[peripheral identifier] UUIDString]];
-            
+            NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
                                  NSDictionary *data = @{
                                    @"code":@"0",
                                    @"errMsg":@"",

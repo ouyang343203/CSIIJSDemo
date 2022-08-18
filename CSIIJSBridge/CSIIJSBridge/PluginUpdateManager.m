@@ -127,7 +127,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
 
 #pragma mark - Private Method -- 私有方法
 -(void)jumpDownlaodjumpWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
-    MBProgressHUD *hud = [[MBProgressHUD alloc] init];
+    /*MBProgressHUD *hud = [[MBProgressHUD alloc] init];
     [hud.label setText:@"加载中..."];
     [hud showAnimated:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (20 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -196,6 +196,9 @@ projectId:972BF2811A76421BB37D5E93167EC536
 //            }
         }
     }];
+     */
+    
+    [PluginUpdateManager h5_PackagepushViewControllerAppName:nil withVersionName:nil];
 }
 
 /**
@@ -210,7 +213,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
  */
 +(void)h5_PackagepushViewControllerAppName:(NSString*)appName
                            withVersionName:(NSString*)versionName {
-    NSString *pathUrl = [PluginUpdateManager shareManager].pathUrl;
+   /* NSString *pathUrl = [PluginUpdateManager shareManager].pathUrl;
     NSString *rootUrl =  [DataStorageManager getRootUrl];
     if (kStringIsEmpty(pathUrl)) {
         pathUrl = rootUrl;
@@ -247,7 +250,14 @@ projectId:972BF2811A76421BB37D5E93167EC536
         [[[CSIIGloballTool shareManager]findCurrentShowingViewController] presentViewController:webCV animated:YES completion:nil];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:JGCSIIJumpSuccessfulNotification object:nil];
-    [new_wxWebCV loadNativeHFive:filePath];
+    [new_wxWebCV loadNativeHFive:filePath];*/
+    
+    id webCV  = [[CSIIGloballTool shareManager] findCurrentShowingViewController];
+    CSIIWKController *wxWebCV = (CSIIWKController*)webCV;
+    CSIIWKController *new_wxWebCV = [[CSIIWKController alloc] init];
+    UINavigationController *native = [[CSIIGloballTool shareManager] navigationControllerFromView:wxWebCV.view];
+    [new_wxWebCV loadNativeHFive:nil];
+    [native pushViewController:new_wxWebCV animated:YES];
 }
 
 +(void)h5_urlPushViewControllerUrl:(NSString*)url{

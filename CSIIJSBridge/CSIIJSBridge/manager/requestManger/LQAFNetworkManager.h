@@ -14,10 +14,22 @@
 
 + (instancetype)manager;
 
+//post请求请求参数是字典
 -(void)requestPostWithUrl:(NSString*)url
                    params:(NSDictionary*)params
                   success:(void(^)(id response))success
                   failure:(void(^)(NSError *error))failure;
+
+//get请求
+-(void)requestGetWithUrl:(NSString*)url
+                  success:(void(^)(id response))success
+                  failure:(void(^)(NSError *error))failure;
+
+//post请求请求参数是string
+-(void)requestPostStrparamsWithUrl:(NSString*)url
+                    params:(NSString*)params
+                   success:(void(^)(id response))success
+                        failure:(void(^)(NSError *error))failure;
 
 //下载zip文件
 -(void)downlaodTaskWithUrl:(NSString*)url
