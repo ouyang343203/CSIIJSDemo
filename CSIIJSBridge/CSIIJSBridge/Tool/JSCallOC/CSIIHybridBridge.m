@@ -32,7 +32,6 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
 @property (nonatomic, strong) PhotoAlertView *photoView;
 @property (nonatomic, strong) WVJBResponseCallback responseCallback;
-@property (nonatomic, strong) WVJBResponseCallback bluetoothCallback;
 
 @end
 @implementation CSIIHybridBridge
