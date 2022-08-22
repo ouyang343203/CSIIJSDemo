@@ -127,7 +127,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
 
 #pragma mark - Private Method -- 私有方法
 -(void)jumpDownlaodjumpWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
-    /*MBProgressHUD *hud = [[MBProgressHUD alloc] init];
+   /* MBProgressHUD *hud = [[MBProgressHUD alloc] init];
     [hud.label setText:@"加载中..."];
     [hud showAnimated:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (20 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -145,7 +145,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
                 NSLog(@"msg = %@",response[@"msg"]);
                 NSString *resourceUrl = nil;
                 if (self.domainName) {
-                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"resourceUrl"]];//下载地址
+                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"resourceUrl"]];
                 }
                 NSString *versionName = data[@"versionName"];
                 [PluginUpdateManager shareManager].pathUrl = data[@"packageRootUrl"];
@@ -195,9 +195,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
 //                }];
 //            }
         }
-    }];
-     */
-    
+    }];*/
     [PluginUpdateManager h5_PackagepushViewControllerAppName:nil withVersionName:nil];
 }
 

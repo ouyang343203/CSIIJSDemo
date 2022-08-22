@@ -24,7 +24,6 @@
 @property (nonatomic, copy)  BluetoothConnectStatusCallBlock connectStatusCallBack;//连接状态的变化
 @property (nonatomic, copy)  BluetoothWriteStatusCallBlock  writeStatusCallBlock;//监听特征值写入状态
 @property (nonatomic,strong) BabyBluetooth *centerManager;
-@property (nonatomic,strong) CBPeripheral *currPeripheral;
 @property (nonatomic,strong) CBCharacteristic *characteristic;
 @property (nonatomic,strong) NSMutableDictionary *deviceDic;//搜索到的所有设备
 @property (nonatomic,strong) NSMutableArray *serverceArray;//设备的所有服务
@@ -78,7 +77,10 @@
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
     NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
         if ([parameter isEqualToString:peripheral.identifier.UUIDString]&&peripheral!=nil ) {
-            self.centerManager.scanForPeripherals().connectToPeripherals().begin();
+           /// self.centerManager.scanForPeripherals().connectToPeripherals().begin();
+            
+            self.centerManager.having(peripheral).and.channel(channelOnPeropheralView).then.connectToPeripherals().discoverServices().discoverCharacteristics().readValueForCharacteristic().discoverDescriptorsForCharacteristic().readValueForDescriptors().begin();
+            
             [self didConnectPeripheral];
         }else{
             NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10030",@"errMsg":@"连接 address 为空或者是格式不正确"}];
@@ -143,7 +145,7 @@
         [serverces addObject:serverceDic];
         [peripheral discoverCharacteristics:NULL forService:service];
     }
-    NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":serverces}];
+    NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"":@"获取服务失败",@"data":serverces}];
     NSLog(@"======%@",data);
     serviceCallBack(data);
 }
@@ -249,7 +251,7 @@
     //开始扫描设备
     [self.centerManager setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
         
-        if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil) {
+        if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil && peripheral.services.count > 0) {
             [weakSelf.deviceDic setObject:peripheral forKey:[[peripheral identifier] UUIDString]];
             NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
                                  NSDictionary *data = @{

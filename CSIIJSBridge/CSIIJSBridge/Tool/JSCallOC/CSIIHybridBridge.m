@@ -21,6 +21,7 @@
 #import "BLEBluetoolthManager.h"
 #import "reachabilityManager.h"
 #import "LQAFNetworkManager.h"
+#import "JYToastUtils.h"
 
 #define  KputKey  @"putKey"
 #define  REQUEST_URL_DEFAULT  @"http://183.62.118.51:10088"
@@ -29,8 +30,8 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
 @interface CSIIHybridBridge()<UIDocumentInteractionControllerDelegate,DateTimePickerViewDelegate>
 
-@property (nonatomic, strong)PhotoAlertView *photoView;
-@property (nonatomic, strong)WVJBResponseCallback responseCallback;
+@property (nonatomic, strong) PhotoAlertView *photoView;
+@property (nonatomic, strong) WVJBResponseCallback responseCallback;
 @property (nonatomic, strong) WVJBResponseCallback bluetoothCallback;
 
 @end
@@ -55,10 +56,10 @@ typedef void (^ResponseCallback)(NSString *responseData);
                 NSString *datastr = [CSIICheckObject dictionaryChangeJson:dic];
                 responseCallback(datastr);
             } failure:^(NSError *error) {
-                [MBProgressHUD showMessage:@"请求失败!"];
+                [JYToastUtils showWithStatus:@"请求失败!"];
             }];
         }else{
-            [MBProgressHUD showMessage:@"网络连接失败!"];
+            [JYToastUtils showWithStatus:@"网络连接失败!"];
         }
     }];
 }
@@ -96,9 +97,9 @@ typedef void (^ResponseCallback)(NSString *responseData);
         
         NSDictionary *diction = data;
         [[BLEBluetoolthManager shareBabyBluetooth] openBluetoothAdapter:diction];
-//        NSDictionary *diction1 = @{@"code":@"0",
-//                                  @"errMsg":@""};
-//        responseCallback([CSIICheckObject dictionaryChangeJson:diction1]);
+        NSDictionary *diction1 = @{@"code":@"0",
+                                  @"errMsg":@""};
+        responseCallback([CSIICheckObject dictionaryChangeJson:diction1]);
     }];
     
     //2,获取本机蓝牙适配器状态(监听蓝牙打开和关闭状态)
@@ -106,9 +107,6 @@ typedef void (^ResponseCallback)(NSString *responseData);
         
         [[BLEBluetoolthManager shareBabyBluetooth] getBluetoothAdapterState:^(id  _Nonnull resultState) {
             responseCallback(resultState);
-            //备用监听按钮
-            NSString *datastr = resultState;
-            [self.bridge callHandler:@"registerStateChangeListener" data:datastr responseCallback:nil];
         }];
     }];
     
@@ -122,7 +120,11 @@ typedef void (^ResponseCallback)(NSString *responseData);
         responseCallback([CSIICheckObject dictionaryChangeJson:diction]);
         //设置扫描到设备的委托
         [[BLEBluetoolthManager shareBabyBluetooth] onBluetoothDeviceFound:data_dic callBack:^(id  _Nonnull searchResult) {//扫描获取到的外围设备
-            [self.bridge callHandler:@"onFoundDevice" data:[CSIICheckObject dictionaryChangeJson:searchResult] responseCallback:^(id responseData) {}];
+            NSDictionary *searchResultdic = searchResult;
+            NSString *namestr = searchResultdic[@"name"];
+            if ([namestr containsString:@"Dana"]) {
+                [self.bridge callHandler:@"onFoundDevice" data:[CSIICheckObject dictionaryChangeJson:searchResult] responseCallback:^(id responseData) {}];
+            }
         }];
     }];
     
@@ -175,7 +177,18 @@ typedef void (^ResponseCallback)(NSString *responseData);
         
         NSString * dataStr = data;//获取的设备号
         [[BLEBluetoolthManager shareBabyBluetooth] getBLEDeviceServices:dataStr callBack:^(id  _Nonnull servicesResult) {
-            responseCallback(servicesResult);
+            //responseCallback(servicesResult);
+            NSString * jsonString = servicesResult;
+            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+
+            NSArray *serverces = dic[@"data"];
+            if (serverces.count > 0) {
+                responseCallback(servicesResult);
+            }else{
+                [JYToastUtils showWithStatus:@"获取服务失败"];
+            }
         }];
     }];
     
@@ -193,8 +206,9 @@ typedef void (^ResponseCallback)(NSString *responseData);
         
         NSDictionary *diction = (NSDictionary*)data;
         [[BLEBluetoolthManager shareBabyBluetooth] notifyBLECharacteristicValueChange:diction callBack:^(id  _Nonnull notifyCharacteristicResult) {
+            NSString *notifyCharacteristicResultdata = notifyCharacteristicResult;
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);
-            [weakSelf.bridge callHandler:@"notifyCharacteristicValueChange" data:notifyCharacteristicResult responseCallback:^(id responseData) {}];
+            [weakSelf.bridge callHandler:@"notifyCharacteristicValueChange" data:notifyCharacteristicResultdata responseCallback:^(id responseData) {}];
         }];
     }];
     
