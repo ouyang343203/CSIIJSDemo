@@ -73,64 +73,17 @@
 
 #pragma mark ----------4.连接指定蓝牙设备------------
 -(void)createBLEConnection:(NSString*)parameter callBack:(BluetoothBLEConnectCallback)ConnectCallback {
-    
-    //设置设备连接成功的委托,同一个baby对象，使用不同的channel切换委托回调
-    [self.centerManager setBlockOnConnectedAtChannel:channelOnPeropheralView block:^(CBCentralManager *central, CBPeripheral *peripheral) {
-        NSLog(@"设备：%@--连接成功",peripheral.name);
-    }];
-    
-    //设置设备连接失败的委托
-    [self.centerManager setBlockOnFailToConnectAtChannel:channelOnPeropheralView block:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
-        NSLog(@"设备：%@--连接失败",peripheral.name);
-    }];
-
-    //设置设备断开连接的委托
-    [self.centerManager setBlockOnDisconnectAtChannel:channelOnPeropheralView block:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
-        NSLog(@"设备：%@--断开连接",peripheral.name);
-    }];
-    
-    //设置发现设备的Services的委托
-    [self.centerManager setBlockOnDiscoverServicesAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, NSError *error) {
-
-    }];
-    //设置发现设service的Characteristics的委托
-    [self.centerManager setBlockOnDiscoverCharacteristicsAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
-        NSLog(@"===service name:%@",service.UUID);
-        //插入row到tableview
-    }];
-    //设置读取characteristics的委托
-    [self.centerManager setBlockOnReadValueForCharacteristicAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-        NSLog(@"characteristic name:%@ value is:%@",characteristics.UUID,characteristics.value);
-    }];
-    //设置发现characteristics的descriptors的委托
-    [self.centerManager setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
-        NSLog(@"===characteristic name:%@",characteristic.service.UUID);
-        for (CBDescriptor *d in characteristic.descriptors) {
-            NSLog(@"CBDescriptor name is :%@",d.UUID);
-        }
-    }];
-    //设置读取Descriptor的委托
-    [self.centerManager setBlockOnReadValueForDescriptorsAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) {
-        NSLog(@"Descriptor name:%@ value is:%@",descriptor.characteristic.UUID, descriptor.value);
-    }];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        self.contentCallBack = ConnectCallback;
-        self.serviceID = parameter;
-        CBPeripheral * peripheral = (CBPeripheral*)[self.deviceDic objectForKey:parameter];
-        NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
-        if ([parameter isEqualToString:peripheral.identifier.UUIDString]&&peripheral!=nil ) {
-           /// self.centerManager.scanForPeripherals().connectToPeripherals().begin();
-            
-            self.centerManager.having(peripheral).and.channel(channelOnPeropheralView).then.connectToPeripherals().discoverServices().discoverCharacteristics().readValueForCharacteristic().discoverDescriptorsForCharacteristic().readValueForDescriptors().begin();
-            
-            [self didConnectPeripheral];
-        }else{
-            NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10030",@"errMsg":@"连接 address 为空或者是格式不正确"}];
-            ConnectCallback(data);
-        }
-    });
+    self.contentCallBack = ConnectCallback;
+    self.serviceID = parameter;
+    CBPeripheral * peripheral = (CBPeripheral*)[self.deviceDic objectForKey:parameter];
+    NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
+    if ([parameter isEqualToString:peripheral.identifier.UUIDString]&&peripheral!=nil ) {
+        self.centerManager.scanForPeripherals().connectToPeripherals().begin();
+        [self didConnectPeripheral];
+    }else{
+        NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10030",@"errMsg":@"连接 address 为空或者是格式不正确"}];
+        ConnectCallback(data);
+    }
 }
 
 #pragma mark -------5.数据写入--------------
@@ -193,22 +146,6 @@
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"":@"获取服务失败",@"data":serverces}];
     NSLog(@"======%@",data);
     serviceCallBack(data);
-    
-//    self.centerManager.channel(channelOnCharacteristicView).characteristicDetails(peripheral,self.characteristic);
-//    //设置发现characteristics的descriptors的委托
-//    [self.centerManager setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:channelOnCharacteristicView block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
-//
-//        for (CBService *service in peripheral.services) {
-//            [serverceDic setValue:service.UUID.UUIDString forKey:@"uuid"];
-//            [serverceDic setValue:@(service.isPrimary) forKey:@"type"];
-//            [serverces addObject:serverceDic];
-//            [peripheral discoverCharacteristics:NULL forService:service];
-//        }
-//
-//        NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"":@"获取服务失败",@"data":serverces}];
-//
-//        serviceCallBack(data);
-//    }];
 }
 
 //8.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)
@@ -312,23 +249,19 @@
     //开始扫描设备
     [self.centerManager setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
         
-        if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil && peripheral.services.count > 0) {
+        if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil) {
             [weakSelf.deviceDic setObject:peripheral forKey:[[peripheral identifier] UUIDString]];
-            NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
-                                 NSDictionary *data = @{
-                                   @"code":@"0",
-                                   @"errMsg":@"",
-                                   @"address":peripheral.identifier.UUIDString,
-                                   @"name":peripheral.name,
-                                   @"rssi":@(RSSI.intValue)
+                 NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
+                 NSDictionary *data = @{
+                   @"code":@"0",
+                   @"errMsg":@"",
+                   @"address":peripheral.identifier.UUIDString,
+                   @"name":peripheral.name,
+                   @"rssi":@(RSSI.intValue)
             };
             weakSelf.searchResultcallBack(data);
         }
     }];
-    
-    //设置蓝牙使用的参数参数
-    NSDictionary *scanForPeripheralsWithOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey:@YES};
-    [self.centerManager setBabyOptionsWithScanForPeripheralsWithOptions:scanForPeripheralsWithOptions connectPeripheralWithOptions:nil scanForPeripheralsWithServices:nil discoverWithServices:nil discoverWithCharacteristics:nil];
 }
 
 #pragma mark -----连接成功和失败回调---------
