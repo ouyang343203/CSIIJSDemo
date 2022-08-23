@@ -285,7 +285,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
     [self.bridge registerHandler:@"checkVersion" handler:^(id data, WVJBResponseCallback responseCallback) {
         [self loadcheckVersionData];
     }];*/
-    
+
      //20.
      [self.bridge registerHandler:@"proxyGetRequest" handler:^(id data, WVJBResponseCallback responseCallback) {
          [self loadProxyGetRequestDataHandler:^(NSString *responseData) {
