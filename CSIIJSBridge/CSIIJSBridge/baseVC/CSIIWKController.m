@@ -25,15 +25,6 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 
 @implementation CSIIWKController
 
-
-// 空一行
--(instancetype)initWithPath:(NSString*)path {
-    self = [super init];
-    if (self) {
-        [self loadNativeHFive:path];
-    }
-    return self;
-}
 // 空一行
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,20 +36,6 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     self.lineView= [[progressLineView alloc]initWithFrame:CGRectMake(0,200, KScreenWidth, 3)];
     self.lineView.lineColor = [UIColor redColor];
     [self.view addSubview:self.lineView];
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-//    id bridBridge = [CSIIHybridBridge shareManager].bridge;
-//
-//    if ([bridBridge isKindOfClass:[CSIIWKHybridBridge class]]) {
-//
-//        bridBridge = (CSIIWKHybridBridge*)bridBridge;
-//
-//        [bridBridge callHandler:@"storageParams" data:[DataStorageManager shareManager].torageDic responseCallback:^(id responseData) {
-//            NSLog(@"titile点击事件");
-//        }];
-//    }
 }
 
 // 页面排版规范
@@ -187,11 +164,6 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 }
 
 #pragma mark - Public Method -- 公开方法
--(void)setNaviTitle:(NSString*)title {
-    self.titleStr = title;
-    [self setNavinavigationBar];
-}
-
 -(void)loadNativeHFive:(NSString*)path {
     if (path) {
         NSURL *webUrl = [NSURL fileURLWithPath:path];

@@ -19,6 +19,7 @@
 #import "DataStorageManager.h"
 #import "customAlertControll.h"
 #import "CSIITool.h"
+#import "JYToastUtils.h"
 
 NSString *const JGCSIIJumpSuccessfulNotification = @"JumpSuccessfulNotification"; // 跳转成功通知
 NSString *const JGCSIILoginOutNotification = @"LoginOutNotification";     // 退出登录跳转通知
@@ -127,16 +128,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
 
 #pragma mark - Private Method -- 私有方法
 -(void)jumpDownlaodjumpWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
-    MBProgressHUD *hud = [[MBProgressHUD alloc] init];
-    [hud.label setText:@"加载中..."];
-    [hud showAnimated:YES];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (20 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [hud hideAnimated:YES];
-    });
-    [[[CSIIGloballTool shareManager]csii_topViewController].view addSubview:hud];
-    
-//    NSString *version = [DataStorageManager getVersion];
-
+    [JYToastUtils showLoadingWithDuration:2];
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
                 NSLog(@"result = %d",result);
         if (result) {
@@ -156,16 +148,16 @@ projectId:972BF2811A76421BB37D5E93167EC536
                 
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
                 if (isFile) {
-                    [hud hideAnimated:YES];
+                    [JYToastUtils dismiss];
                     [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
                 }else{
                      [[LQAFNetworkManager manager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
                          NSLog(@"response - %@",response);
                          //下载成功存储版本号
                          [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
-                         [hud hideAnimated:YES];
+                         [JYToastUtils dismiss];
                       } failure:^(NSError *error) {
-                                 [hud hideAnimated:YES];
+                          [JYToastUtils dismiss];
                          NSLog(@"error - %@",error);
                             [self jumpToLocalResource:appName];
 //                       [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
@@ -175,7 +167,8 @@ projectId:972BF2811A76421BB37D5E93167EC536
                              }];
                 }
             } failure:^(NSError *error) {
-                [hud hideAnimated:YES];
+                //[hud hideAnimated:YES];
+                [JYToastUtils dismiss];
                 [self jumpToLocalResource:appName];
 //                [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
 //                    NSLog(@"没有网络");
@@ -183,7 +176,8 @@ projectId:972BF2811A76421BB37D5E93167EC536
                     NSLog(@"error = %@",error);
             }];
         }else{
-            [hud hideAnimated:YES];
+            //[hud hideAnimated:YES];
+            [JYToastUtils dismiss];
             [self jumpToLocalResource:appName];
 //            if (!kStringIsEmpty(version)) {
 //                [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:version];
