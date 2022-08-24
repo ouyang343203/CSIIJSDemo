@@ -27,6 +27,13 @@
 		304826FA28ACEA5100D2CE49 /* BabyBluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 304826E828ACEA5100D2CE49 /* BabyBluetooth.m */; };
 		304826FB28ACEA5100D2CE49 /* BabyDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 304826E928ACEA5100D2CE49 /* BabyDefine.m */; };
 		304826FC28ACEA5100D2CE49 /* BabyCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 304826EA28ACEA5100D2CE49 /* BabyCallback.h */; };
+		30D88F7728B5CC7000182C5C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D88F7028B5CC7000182C5C /* MBProgressHUD.m */; };
+		30D88F7828B5CC7000182C5C /* MBProgressHUD+MJ.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D88F7128B5CC7000182C5C /* MBProgressHUD+MJ.h */; };
+		30D88F7928B5CC7000182C5C /* JYToastUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D88F7228B5CC7000182C5C /* JYToastUtils.h */; };
+		30D88F7A28B5CC7000182C5C /* JYUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D88F7328B5CC7000182C5C /* JYUtilities.h */; };
+		30D88F7B28B5CC7000182C5C /* MBProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D88F7428B5CC7000182C5C /* MBProgressHUD.h */; };
+		30D88F7C28B5CC7000182C5C /* JYToastUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D88F7528B5CC7000182C5C /* JYToastUtils.m */; };
+		30D88F7D28B5CC7000182C5C /* MBProgressHUD+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D88F7628B5CC7000182C5C /* MBProgressHUD+MJ.m */; };
 		E22CF2B42696F5C9008FCA37 /* CSIINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22CF2B22696F5C9008FCA37 /* CSIINavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E22CF2B52696F5C9008FCA37 /* CSIINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF2B32696F5C9008FCA37 /* CSIINavigationController.m */; };
 		E236E7032800113A000F9A11 /* reachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E236E7012800113A000F9A11 /* reachabilityManager.h */; };
@@ -202,6 +209,13 @@
 		304826E828ACEA5100D2CE49 /* BabyBluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyBluetooth.m; sourceTree = "<group>"; };
 		304826E928ACEA5100D2CE49 /* BabyDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyDefine.m; sourceTree = "<group>"; };
 		304826EA28ACEA5100D2CE49 /* BabyCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyCallback.h; sourceTree = "<group>"; };
+		30D88F7028B5CC7000182C5C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		30D88F7128B5CC7000182C5C /* MBProgressHUD+MJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+MJ.h"; sourceTree = "<group>"; };
+		30D88F7228B5CC7000182C5C /* JYToastUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYToastUtils.h; sourceTree = "<group>"; };
+		30D88F7328B5CC7000182C5C /* JYUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYUtilities.h; sourceTree = "<group>"; };
+		30D88F7428B5CC7000182C5C /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		30D88F7528B5CC7000182C5C /* JYToastUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYToastUtils.m; sourceTree = "<group>"; };
+		30D88F7628B5CC7000182C5C /* MBProgressHUD+MJ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+MJ.m"; sourceTree = "<group>"; };
 		E22CF2B22696F5C9008FCA37 /* CSIINavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSIINavigationController.h; sourceTree = "<group>"; };
 		E22CF2B32696F5C9008FCA37 /* CSIINavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSIINavigationController.m; sourceTree = "<group>"; };
 		E236E7012800113A000F9A11 /* reachabilityManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reachabilityManager.h; sourceTree = "<group>"; };
@@ -399,6 +413,20 @@
 			path = BLE;
 			sourceTree = "<group>";
 		};
+		30D88F6F28B5CC7000182C5C /* JYUtils */ = {
+			isa = PBXGroup;
+			children = (
+				30D88F7028B5CC7000182C5C /* MBProgressHUD.m */,
+				30D88F7128B5CC7000182C5C /* MBProgressHUD+MJ.h */,
+				30D88F7228B5CC7000182C5C /* JYToastUtils.h */,
+				30D88F7328B5CC7000182C5C /* JYUtilities.h */,
+				30D88F7428B5CC7000182C5C /* MBProgressHUD.h */,
+				30D88F7528B5CC7000182C5C /* JYToastUtils.m */,
+				30D88F7628B5CC7000182C5C /* MBProgressHUD+MJ.m */,
+			);
+			path = JYUtils;
+			sourceTree = "<group>";
+		};
 		E22D0121278ECB1A00C218E8 /* encryption */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,6 +541,7 @@
 		E2983F002681ECD40014B6F2 /* thirdSDK */ = {
 			isa = PBXGroup;
 			children = (
+				30D88F6F28B5CC7000182C5C /* JYUtils */,
 				304826D828ACEA5100D2CE49 /* BLE */,
 				E2983F012681ECD40014B6F2 /* WebViewJavascriptBridge */,
 				E2983F0A2681ECD40014B6F2 /* AFNetworking */,
@@ -843,9 +872,11 @@
 				E2EF5EF42685DA0A0073ECBA /* CSIIWKHybridBridge.h in Headers */,
 				E2EF5EF72685DCD70073ECBA /* CSIIWKController.h in Headers */,
 				E2EF5E782683103D0073ECBA /* CSIIGloballTool.h in Headers */,
+				30D88F7B28B5CC7000182C5C /* MBProgressHUD.h in Headers */,
 				304826EB28ACEA5100D2CE49 /* BabyRhythm.h in Headers */,
 				E4273CDA26E5C09B00FAB9EB /* CSIICheckObject.h in Headers */,
 				E2983F972681ECD40014B6F2 /* mz_strm_zlib.h in Headers */,
+				30D88F7A28B5CC7000182C5C /* JYUtilities.h in Headers */,
 				E403BE7E26F08B8A005F04B9 /* PhotoAlertView.h in Headers */,
 				E22CF2B42696F5C9008FCA37 /* CSIINavigationController.h in Headers */,
 				E2A6263E2682D329000A9F56 /* GlobalMacro.h in Headers */,
@@ -868,6 +899,7 @@
 				E2983F862681ECD40014B6F2 /* ZipArchive.h in Headers */,
 				E2983F5F2681ECD40014B6F2 /* WebViewJavascriptBridgeBase.h in Headers */,
 				E2983EEE2681EC320014B6F2 /* CSIIJSBridge.h in Headers */,
+				30D88F7828B5CC7000182C5C /* MBProgressHUD+MJ.h in Headers */,
 				E2983F822681ECD40014B6F2 /* AFCompatibilityMacros.h in Headers */,
 				304826F028ACEA5100D2CE49 /* BabyDefine.h in Headers */,
 				E2983F662681ECD40014B6F2 /* AFURLRequestSerialization.h in Headers */,
@@ -879,6 +911,7 @@
 				304826D728ACDB8C00D2CE49 /* BluetoothManager.h in Headers */,
 				E446711626FB0FAE002882AF /* UIImage+colorImage.h in Headers */,
 				E2983FA52681ECD40014B6F2 /* SSZipArchive.h in Headers */,
+				30D88F7928B5CC7000182C5C /* JYToastUtils.h in Headers */,
 				E2983F6F2681ECD40014B6F2 /* WKWebView+AFNetworking.h in Headers */,
 				E4273CDB26E5C09B00FAB9EB /* UIView+UIViewController.h in Headers */,
 				E4273CE326E5C09B00FAB9EB /* SharedItem.h in Headers */,
@@ -1054,6 +1087,7 @@
 				E2983F5C2681ECD40014B6F2 /* WKWebViewJavascriptBridge.m in Sources */,
 				E2983F7E2681ECD40014B6F2 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				E2983F682681ECD40014B6F2 /* AFHTTPSessionManager.m in Sources */,
+				30D88F7D28B5CC7000182C5C /* MBProgressHUD+MJ.m in Sources */,
 				E249759D279E54E300B02D8A /* TypeConversion.m in Sources */,
 				E2983F7A2681ECD40014B6F2 /* UIImageView+AFNetworking.m in Sources */,
 				E446711726FB0FAE002882AF /* UIImage+colorImage.m in Sources */,
@@ -1093,6 +1127,7 @@
 				E2983F6E2681ECD40014B6F2 /* AFSecurityPolicy.m in Sources */,
 				304826F628ACEA5100D2CE49 /* BabySpeaker.m in Sources */,
 				E2983F672681ECD40014B6F2 /* AFURLResponseSerialization.m in Sources */,
+				30D88F7728B5CC7000182C5C /* MBProgressHUD.m in Sources */,
 				E403BE7F26F08B8A005F04B9 /* PhotoAlertView.m in Sources */,
 				E2983F8B2681ECD40014B6F2 /* mz_strm_zlib.c in Sources */,
 				E4273CD926E5C09B00FAB9EB /* CSIICheckObject.m in Sources */,
@@ -1105,6 +1140,7 @@
 				E2983F782681ECD40014B6F2 /* WKWebView+AFNetworking.m in Sources */,
 				E2983F6D2681ECD40014B6F2 /* AFNetworkReachabilityManager.m in Sources */,
 				E2983F552681ECD40014B6F2 /* LQAFNetworkManager.m in Sources */,
+				30D88F7C28B5CC7000182C5C /* JYToastUtils.m in Sources */,
 				E4273CDC26E5C09B00FAB9EB /* UIView+UIViewController.m in Sources */,
 				E2983F812681ECD40014B6F2 /* AFImageDownloader.m in Sources */,
 			);
