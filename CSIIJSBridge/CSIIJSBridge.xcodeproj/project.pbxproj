@@ -27,9 +27,6 @@
 		304826FA28ACEA5100D2CE49 /* BabyBluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 304826E828ACEA5100D2CE49 /* BabyBluetooth.m */; };
 		304826FB28ACEA5100D2CE49 /* BabyDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 304826E928ACEA5100D2CE49 /* BabyDefine.m */; };
 		304826FC28ACEA5100D2CE49 /* BabyCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 304826EA28ACEA5100D2CE49 /* BabyCallback.h */; };
-		304827CD28AE407700D2CE49 /* JYToastUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 304827CA28AE407700D2CE49 /* JYToastUtils.h */; };
-		304827CE28AE407700D2CE49 /* JYUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 304827CB28AE407700D2CE49 /* JYUtilities.h */; };
-		304827CF28AE407700D2CE49 /* JYToastUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 304827CC28AE407700D2CE49 /* JYToastUtils.m */; };
 		E22CF2B42696F5C9008FCA37 /* CSIINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22CF2B22696F5C9008FCA37 /* CSIINavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E22CF2B52696F5C9008FCA37 /* CSIINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF2B32696F5C9008FCA37 /* CSIINavigationController.m */; };
 		E236E7032800113A000F9A11 /* reachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E236E7012800113A000F9A11 /* reachabilityManager.h */; };
@@ -91,8 +88,6 @@
 		E2983F812681ECD40014B6F2 /* AFImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = E2983F2A2681ECD40014B6F2 /* AFImageDownloader.m */; };
 		E2983F822681ECD40014B6F2 /* AFCompatibilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E2983F2B2681ECD40014B6F2 /* AFCompatibilityMacros.h */; };
 		E2983F832681ECD40014B6F2 /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E2983F2C2681ECD40014B6F2 /* AFHTTPSessionManager.h */; };
-		E2983F842681ECD40014B6F2 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E2983F2E2681ECD40014B6F2 /* MBProgressHUD.m */; };
-		E2983F852681ECD40014B6F2 /* MBProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = E2983F2F2681ECD40014B6F2 /* MBProgressHUD.h */; };
 		E2983F862681ECD40014B6F2 /* ZipArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = E2983F322681ECD40014B6F2 /* ZipArchive.h */; };
 		E2983F872681ECD40014B6F2 /* mz_strm_os_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = E2983F342681ECD40014B6F2 /* mz_strm_os_posix.c */; };
 		E2983F882681ECD40014B6F2 /* mz_strm_pkcrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = E2983F352681ECD40014B6F2 /* mz_strm_pkcrypt.c */; };
@@ -170,8 +165,6 @@
 		E477551126F1A1BE00C2E780 /* CSIIDateHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = E477550F26F1A1BE00C2E780 /* CSIIDateHandle.h */; };
 		E477551526F1DD4600C2E780 /* CSIISelectItemView.h in Headers */ = {isa = PBXBuildFile; fileRef = E477551326F1DD4600C2E780 /* CSIISelectItemView.h */; };
 		E477551626F1DD4600C2E780 /* CSIISelectItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = E477551426F1DD4600C2E780 /* CSIISelectItemView.m */; };
-		E47D466426EF3C2600D2EA79 /* MBProgressHUD+MJ.h in Headers */ = {isa = PBXBuildFile; fileRef = E47D466126EF3C2600D2EA79 /* MBProgressHUD+MJ.h */; };
-		E47D466626EF3C2600D2EA79 /* MBProgressHUD+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = E47D466326EF3C2600D2EA79 /* MBProgressHUD+MJ.m */; };
 		E47D466A26EF45E000D2EA79 /* UILabel+extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E47D466826EF45E000D2EA79 /* UILabel+extension.m */; };
 		E47D466B26EF45E000D2EA79 /* UILabel+extension.h in Headers */ = {isa = PBXBuildFile; fileRef = E47D466926EF45E000D2EA79 /* UILabel+extension.h */; };
 		E47D466E26F04C1B00D2EA79 /* CSIITool.h in Headers */ = {isa = PBXBuildFile; fileRef = E47D466C26F04C1B00D2EA79 /* CSIITool.h */; };
@@ -209,9 +202,6 @@
 		304826E828ACEA5100D2CE49 /* BabyBluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyBluetooth.m; sourceTree = "<group>"; };
 		304826E928ACEA5100D2CE49 /* BabyDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BabyDefine.m; sourceTree = "<group>"; };
 		304826EA28ACEA5100D2CE49 /* BabyCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BabyCallback.h; sourceTree = "<group>"; };
-		304827CA28AE407700D2CE49 /* JYToastUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYToastUtils.h; sourceTree = "<group>"; };
-		304827CB28AE407700D2CE49 /* JYUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYUtilities.h; sourceTree = "<group>"; };
-		304827CC28AE407700D2CE49 /* JYToastUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYToastUtils.m; sourceTree = "<group>"; };
 		E22CF2B22696F5C9008FCA37 /* CSIINavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSIINavigationController.h; sourceTree = "<group>"; };
 		E22CF2B32696F5C9008FCA37 /* CSIINavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSIINavigationController.m; sourceTree = "<group>"; };
 		E236E7012800113A000F9A11 /* reachabilityManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reachabilityManager.h; sourceTree = "<group>"; };
@@ -276,8 +266,6 @@
 		E2983F2A2681ECD40014B6F2 /* AFImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageDownloader.m; sourceTree = "<group>"; };
 		E2983F2B2681ECD40014B6F2 /* AFCompatibilityMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFCompatibilityMacros.h; sourceTree = "<group>"; };
 		E2983F2C2681ECD40014B6F2 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
-		E2983F2E2681ECD40014B6F2 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		E2983F2F2681ECD40014B6F2 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		E2983F322681ECD40014B6F2 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		E2983F342681ECD40014B6F2 /* mz_strm_os_posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mz_strm_os_posix.c; sourceTree = "<group>"; };
 		E2983F352681ECD40014B6F2 /* mz_strm_pkcrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mz_strm_pkcrypt.c; sourceTree = "<group>"; };
@@ -355,8 +343,6 @@
 		E477550F26F1A1BE00C2E780 /* CSIIDateHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSIIDateHandle.h; sourceTree = "<group>"; };
 		E477551326F1DD4600C2E780 /* CSIISelectItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSIISelectItemView.h; sourceTree = "<group>"; };
 		E477551426F1DD4600C2E780 /* CSIISelectItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSIISelectItemView.m; sourceTree = "<group>"; };
-		E47D466126EF3C2600D2EA79 /* MBProgressHUD+MJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+MJ.h"; sourceTree = "<group>"; };
-		E47D466326EF3C2600D2EA79 /* MBProgressHUD+MJ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+MJ.m"; sourceTree = "<group>"; };
 		E47D466826EF45E000D2EA79 /* UILabel+extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+extension.m"; sourceTree = "<group>"; };
 		E47D466926EF45E000D2EA79 /* UILabel+extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+extension.h"; sourceTree = "<group>"; };
 		E47D466C26F04C1B00D2EA79 /* CSIITool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSIITool.h; sourceTree = "<group>"; };
@@ -411,20 +397,6 @@
 				304826EA28ACEA5100D2CE49 /* BabyCallback.h */,
 			);
 			path = BLE;
-			sourceTree = "<group>";
-		};
-		304827C928AE407700D2CE49 /* JYUtils */ = {
-			isa = PBXGroup;
-			children = (
-				304827CA28AE407700D2CE49 /* JYToastUtils.h */,
-				304827CB28AE407700D2CE49 /* JYUtilities.h */,
-				304827CC28AE407700D2CE49 /* JYToastUtils.m */,
-				E2983F2E2681ECD40014B6F2 /* MBProgressHUD.m */,
-				E2983F2F2681ECD40014B6F2 /* MBProgressHUD.h */,
-				E47D466126EF3C2600D2EA79 /* MBProgressHUD+MJ.h */,
-				E47D466326EF3C2600D2EA79 /* MBProgressHUD+MJ.m */,
-			);
-			path = JYUtils;
 			sourceTree = "<group>";
 		};
 		E22D0121278ECB1A00C218E8 /* encryption */ = {
@@ -541,7 +513,6 @@
 		E2983F002681ECD40014B6F2 /* thirdSDK */ = {
 			isa = PBXGroup;
 			children = (
-				304827C928AE407700D2CE49 /* JYUtils */,
 				304826D828ACEA5100D2CE49 /* BLE */,
 				E2983F012681ECD40014B6F2 /* WebViewJavascriptBridge */,
 				E2983F0A2681ECD40014B6F2 /* AFNetworking */,
@@ -881,16 +852,13 @@
 				E2983FA42681ECD40014B6F2 /* mz_strm_os.h in Headers */,
 				E2983F652681ECD40014B6F2 /* AFURLSessionManager.h in Headers */,
 				E4273CFC26E8567B00FAB9EB /* UIView+Extension.h in Headers */,
-				E47D466426EF3C2600D2EA79 /* MBProgressHUD+MJ.h in Headers */,
 				E2497574279E4E2200B02D8A /* BLEBluetoolthManager.h in Headers */,
 				E4273CC526E5BFB300FAB9EB /* PublicHeader.h in Headers */,
-				304827CD28AE407700D2CE49 /* JYToastUtils.h in Headers */,
 				304826EF28ACEA5100D2CE49 /* BabyPeripheralManager.h in Headers */,
 				E2983F772681ECD40014B6F2 /* UIActivityIndicatorView+AFNetworking.h in Headers */,
 				E2983F712681ECD40014B6F2 /* UIButton+AFNetworking.h in Headers */,
 				E2983F632681ECD40014B6F2 /* AFSecurityPolicy.h in Headers */,
 				304826F728ACEA5100D2CE49 /* BabyToy.h in Headers */,
-				E2983F852681ECD40014B6F2 /* MBProgressHUD.h in Headers */,
 				304826F128ACEA5100D2CE49 /* BabyBluetooth.h in Headers */,
 				E2E2C12B28003D6600CDA97B /* customAlertControll.h in Headers */,
 				E2983F622681ECD40014B6F2 /* WKWebViewJavascriptBridge.h in Headers */,
@@ -940,7 +908,6 @@
 				E47D466B26EF45E000D2EA79 /* UILabel+extension.h in Headers */,
 				E2983F992681ECD40014B6F2 /* mz_strm_pkcrypt.h in Headers */,
 				E2983F7B2681ECD40014B6F2 /* UIKit+AFNetworking.h in Headers */,
-				304827CE28AE407700D2CE49 /* JYUtilities.h in Headers */,
 				E2983F5E2681ECD40014B6F2 /* WebViewJavascriptBridge_JS.h in Headers */,
 				E2983F802681ECD40014B6F2 /* AFNetworkActivityIndicatorManager.h in Headers */,
 				E28AF39A2710359A004F2C12 /* AFNWorkManager.h in Headers */,
@@ -1079,7 +1046,6 @@
 				E2983F5B2681ECD40014B6F2 /* WebViewJavascriptBridgeBase.m in Sources */,
 				E477550D26F1935B00C2E780 /* CSIIDatePickView.m in Sources */,
 				E2983F952681ECD40014B6F2 /* mz_crypt.c in Sources */,
-				E2983F842681ECD40014B6F2 /* MBProgressHUD.m in Sources */,
 				E2983F722681ECD40014B6F2 /* UIRefreshControl+AFNetworking.m in Sources */,
 				E2983F8F2681ECD40014B6F2 /* mz_zip_rw.c in Sources */,
 				E2983F752681ECD40014B6F2 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -1107,11 +1073,9 @@
 				E2497575279E4E2200B02D8A /* BLEBluetoolthManager.m in Sources */,
 				E2983FA32681ECD40014B6F2 /* mz_strm.c in Sources */,
 				E2EF5EF82685DCD70073ECBA /* CSIIWKController.m in Sources */,
-				E47D466626EF3C2600D2EA79 /* MBProgressHUD+MJ.m in Sources */,
 				E2983F7D2681ECD40014B6F2 /* UIButton+AFNetworking.m in Sources */,
 				304826F328ACEA5100D2CE49 /* BabyCallback.m in Sources */,
 				E2983F7F2681ECD40014B6F2 /* AFAutoPurgingImageCache.m in Sources */,
-				304827CF28AE407700D2CE49 /* JYToastUtils.m in Sources */,
 				E2983F962681ECD40014B6F2 /* mz_strm_wzaes.c in Sources */,
 				E2E2C12C28003D6600CDA97B /* customAlertControll.m in Sources */,
 				E2983F592681ECD40014B6F2 /* packageManager.m in Sources */,
