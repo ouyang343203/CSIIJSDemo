@@ -42,30 +42,25 @@
     NSData *newData = [[NSData alloc] initWithBytes:bytes length:126];
     return newData;
 }
+
 +(NSString *)convertDataToHexStr:(NSData *)data {
-    BabyLog(@"我奔溃了1111%@",data);
     if (!data || [data length] == 0) {
         return @"";
     }
-    BabyLog(@"我奔溃了22222%@",data);
     NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[data length]];
-    BabyLog(@"我奔溃了33333%@",data);
     [data enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
         unsigned char *dataBytes = (unsigned char*)bytes;
-        BabyLog(@"我奔溃了444444%@",data);
         for (NSInteger i = 0; i < byteRange.length; i++) {
-            BabyLog(@"我奔溃了555555%@",data);
             NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
             if ([hexStr length] == 2) {
-                BabyLog(@"我奔溃了666666%@",data);
                 [string appendString:hexStr];
             } else {
-                BabyLog(@"我奔溃了777777%@",data);
                 [string appendFormat:@"0%@", hexStr];
             }
         }
     }];
-
+    BabyLog(@"返回的16进制字符串%@",string);
     return string;
 }
+
 @end

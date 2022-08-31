@@ -121,7 +121,11 @@
     }
     if (findService && findCharcteritic) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [peripheral writeValue: [TypeConversion hexString:dataStr] forCharacteristic:findCharcteritic type:CBCharacteristicWriteWithResponse];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [peripheral writeValue: [TypeConversion hexString:dataStr] forCharacteristic:findCharcteritic type:CBCharacteristicWriteWithResponse];
+            });
+            
         });
     }
 }
@@ -144,7 +148,7 @@
         [peripheral discoverCharacteristics:NULL forService:service];
     }
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"":@"获取服务失败",@"data":serverces}];
-    NSLog(@"======%@",data);
+    NSLog(@"======获取的所有服务%@",data);
     serviceCallBack(data);
 }
 
@@ -291,7 +295,7 @@
         NSLog(@"设备：%@--连接成功",peripheral.name);
         if (weakSelf.contentCallBack) {
             weakSelf.contentCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0",
-                                                                             @"errMsg":@"",@"data":@"2"
+                                                                             @"errMsg":@"连接成功",@"data":@"2"
                                      }]);//连接成功
         }
         [peripheral discoverServices:nil];
@@ -396,10 +400,16 @@
     ///订阅特征值变化的通知
     [self.centerManager setBlockOnDidUpdateNotificationStateForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
         NSData *data = characteristic.value;
+    
+        Byte *testByte = (Byte *)[data bytes];
+        for(int i=0;i<[data length];i++){
+            printf("testByte = %d ",testByte[i]);
+        }
+    
         NSString *dataString;
         if (data!=nil) {
-           dataString =  [TypeConversion convertDataToHexStr:data];//字符串转成16进制字符串
-            NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":dataString}];
+            dataString =  [TypeConversion convertDataToHexStr:data];//字符串转成16进制字符串
+            NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"订阅到的特征值数据",@"data":dataString}];
             if (weakSelf.characteristicCallBack) {
                 NSLog(@"获取到特征值变化数据：%@",charData);
                 weakSelf.characteristicCallBack(charData);
