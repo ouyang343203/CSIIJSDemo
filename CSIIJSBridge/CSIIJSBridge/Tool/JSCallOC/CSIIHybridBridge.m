@@ -130,7 +130,9 @@ typedef void (^ResponseCallback)(NSString *responseData);
     //复接口监听扫描到设备事件(备用)
     //4.连接蓝牙设备
     [self.bridge registerHandler:@"connect" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
+        NSDictionary *Dic = @{@"code":@"0",
+                              @"errMsg":@"",@"connet":@"连接回掉"};
+        responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
         NSString *dataStr = data;//设备号     NSLog(@"设备名称%@",dataStr);
         [[BLEBluetoolthManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
         [[BLEBluetoolthManager shareBabyBluetooth] createBLEConnection:dataStr callBack:^(id  _Nonnull connectResult) {
@@ -204,6 +206,8 @@ typedef void (^ResponseCallback)(NSString *responseData);
     [self.bridge registerHandler:@"startNotifyCharacteristicValueChange" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         NSDictionary *diction = (NSDictionary*)data;
+        NSDictionary *Dic = @{@"code":@"0",@"errMsg":@"获取特征值成功"};
+        responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
         [[BLEBluetoolthManager shareBabyBluetooth] notifyBLECharacteristicValueChange:diction callBack:^(id  _Nonnull notifyCharacteristicResult) {
             NSString *notifyCharacteristicResultdata = notifyCharacteristicResult;
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);
