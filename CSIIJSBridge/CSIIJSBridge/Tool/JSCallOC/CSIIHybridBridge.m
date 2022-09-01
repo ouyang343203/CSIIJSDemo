@@ -178,7 +178,6 @@ typedef void (^ResponseCallback)(NSString *responseData);
         
         NSString * dataStr = data;//获取的设备号
         [[BLEBluetoolthManager shareBabyBluetooth] getBLEDeviceServices:dataStr callBack:^(id  _Nonnull servicesResult) {
-            //responseCallback(servicesResult);
             NSString * jsonString = servicesResult;
             NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
             NSError *error;

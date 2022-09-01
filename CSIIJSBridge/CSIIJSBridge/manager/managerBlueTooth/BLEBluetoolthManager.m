@@ -196,6 +196,13 @@
     for (CBService *service in newServices) {
         NSArray <CBCharacteristic*> *newCharcteritic  = service.characteristics;
         for (CBCharacteristic *charcteritic in newCharcteritic) {
+            
+            NSData *data = charcteritic.value;
+            Byte *testByte = (Byte *)[data bytes];
+            for(int i=0;i<[data length];i++){
+                NSLog(@"testByte = %d ",testByte[i]);
+            }
+            
             [self.centerManager notify:peripheral characteristic:charcteritic block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
                 NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0002",@"errMsg":@"其他未知异常"}];
 //                characteristicCallBack(data);
@@ -400,7 +407,6 @@
     ///订阅特征值变化的通知
     [self.centerManager setBlockOnDidUpdateNotificationStateForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
         NSData *data = characteristic.value;
-    
         Byte *testByte = (Byte *)[data bytes];
         for(int i=0;i<[data length];i++){
             printf("testByte = %d ",testByte[i]);
@@ -411,7 +417,6 @@
             dataString =  [TypeConversion convertDataToHexStr:data];//字符串转成16进制字符串
             NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"订阅到的特征值数据",@"data":dataString}];
             if (weakSelf.characteristicCallBack) {
-                NSLog(@"获取到特征值变化数据：%@",charData);
                 weakSelf.characteristicCallBack(charData);
             }
         }else{
@@ -419,27 +424,6 @@
         }
 
     }];
-}
-
-- (NSString *)hexStringFromString:(NSString *)string{
-    NSData *myD = [string dataUsingEncoding:NSUTF8StringEncoding];
-    Byte *bytes = (Byte *)[myD bytes];
-    //下面是Byte 转换为16进制。
-    NSString *hexStr=@"";
-    for(int i=0;i<[myD length];i++)
-
-    {
-        NSString *newHexStr = [NSString stringWithFormat:@"%x",bytes[i]&0xff];///16进制数
-
-        if([newHexStr length]==1)
-
-            hexStr = [NSString stringWithFormat:@"%@0%@",hexStr,newHexStr];
-
-        else
-
-            hexStr = [NSString stringWithFormat:@"%@%@",hexStr,newHexStr];
-    }
-    return hexStr;
 }
  
 -(NSMutableDictionary*)deviceDic {
