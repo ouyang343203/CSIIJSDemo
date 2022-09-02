@@ -22,9 +22,12 @@
 #import "reachabilityManager.h"
 #import "LQAFNetworkManager.h"
 #import "JYToastUtils.h"
-
+#import <objc/runtime.h>
 #define  KputKey  @"putKey"
 #define  REQUEST_URL_DEFAULT  @"http://183.62.118.51:10088"
+
+#define kFNHybridBridgeRegisterHandlersKey @"kFNHybridBridgeRegisterHandlersKey"
+#define kFNHybridBridgeRegisterBridgeHandlersKey @"kFNHybridBridgeRegisterBridgeHandlersKey"
 
 typedef void (^ResponseCallback)(NSString *responseData);
 
@@ -32,6 +35,8 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
 @property (nonatomic, strong) PhotoAlertView *photoView;
 @property (nonatomic, strong) WVJBResponseCallback responseCallback;
+@property (nonatomic, strong, readonly, class)NSMutableDictionary<NSString*,WVJBHandler>* registerHandlers;
+@property (nonatomic, strong, readonly, class)NSMutableDictionary<NSString*,FNHybridBridgeHandler>* registerBridgeHandlers;
 
 @end
 @implementation CSIIHybridBridge
@@ -84,9 +89,535 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
 
 #pragma mark - Private Method -- 私有方法
-- (void)setBridgeAction{
-    //蓝牙
-    [self setBluetooth];
+#pragma mark 跳包
+-(void)toZipPage{
+    [self.bridge registerHandler:@"toZipPage" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSString *name = @"";
+        NSInteger type = [data[@"type"] intValue];
+        NSDictionary *parmas = @{};
+
+        if (!kStringIsEmpty(data[@"name"])) {
+            name = data[@"name"];
+        }
+        if (!kObjectIsEmpty(data[@"params"])) {
+            parmas = data[@"params"];
+        }
+
+        NSDictionary *Dic = @{@"name":name,
+                            @"navagation":[PluginUpdateManager shareManager].navDic,
+                            @"pagedata":parmas
+        };
+
+        if (name.length) {
+            if (type == 1 || type == 2 ) {
+                name = [NSString stringWithFormat:@"%@://%@",type == 1 ? @"https" : @"http",name];
+
+                Dic = @{@"name":name,
+                        @"navagation":[PluginUpdateManager shareManager].navDic,
+                        @"pagedata":parmas
+                };
+                [[PluginUpdateManager shareManager]startH5ViewControllerWithUrlParams:Dic];
+
+            }else{
+
+                [[PluginUpdateManager shareManager]startH5ViewControllerWithNebulaParams:Dic];
+            }
+        }
+        if (responseCallback) {
+            responseCallback(@"这是OC给JS的反馈哦~");
+        }
+    }];
+}
+
+#pragma mark 刷新指定模块
+-(void)refreshPage{
+    [self.bridge registerHandler:@"refreshPage" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:data[@"refreshClass"] object:nil];
+    }];
+}
+
+#pragma mark 设置标题
+-(void)setTitle{
+    [self.bridge registerHandler:@"setTitle" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        if ([data isKindOfClass:[NSDictionary class]]) {
+            [[CSIIGloballTool shareManager] findCurrentShowingViewController].title = data[@"title"];
+        } else if ([data isKindOfClass:[NSString class]]){
+            CSIIWKController *webStr = (CSIIWKController *)[[CSIIGloballTool shareManager] findCurrentShowingViewController];
+            [webStr setNaviTitle:data];
+        }
+    }];
+}
+
+#pragma mark 显示或隐藏导航栏
+- (void)showOrHideNav {
+    [self.bridge registerHandler:@"operHdNav" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        if ([data isKindOfClass:[NSDictionary class]]) {
+            
+            BOOL isShow = [data[@"isShow"] boolValue];
+            
+            CSIIWKController *webStr = (CSIIWKController *)[[CSIIGloballTool shareManager]findCurrentShowingViewController];
+            
+            if (isShow) {
+                
+                webStr.navigationController.navigationBarHidden = NO;
+                [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+                
+                webStr.wkWebView.frame = CGRectMake(0, KNavBarHeight, KScreenWidth, KScreenHeight-kTabBarBottomHeight-KNavBarHeight);
+            } else {
+                webStr.navigationController.navigationBarHidden = YES;
+                [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+                webStr.wkWebView.frame = CGRectMake(0, 0, KScreenWidth, KScreenHeight-kTabBarBottomHeight);
+            }
+        }
+    }];
+}
+
+#pragma mark 右上角按钮
+- (void)setRightNav {
+    [self.bridge registerHandler:@"setGoBack" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        CSIIWKController *webStr = (CSIIWKController *)[[CSIIGloballTool shareManager]findCurrentShowingViewController];
+        
+        if ([data isKindOfClass:[NSDictionary class]]) {
+            BOOL isShow = [data[@"isShow"] boolValue];
+            UIBarButtonItem *items1;
+            UIBarButtonItem *items2;
+            if (isShow) {
+                //初始化右侧按钮
+                if ([data[@"buttons"] isKindOfClass:[NSArray class]]) {
+                    NSArray *buttons = data[@"buttons"];
+                    if (buttons.count > 1) {
+                        //2个按钮以上
+                        NSDictionary *dic1 = buttons[0];
+                        NSDictionary *dic2 = buttons[1];
+                        if ([dic1[@"type"] isEqual:@"img"]) {
+                            NSData * imageData = [[NSData alloc]initWithBase64EncodedString:dic1[@"data"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                            UIImage *rightImage = [UIImage imageWithData:imageData];
+                            rightImage =  [rightImage originScaleToSize:CGSizeMake(20, 20)];
+                            items1 = [[UIBarButtonItem alloc] initWithImage:rightImage style:UIBarButtonItemStyleDone target:self action:@selector(rightAction:)];
+                            items1.tag = 10000;
+                        } else {
+                            items1 = [[UIBarButtonItem alloc]initWithTitle:dic1[@"data"] style:UIBarButtonItemStyleDone target:self action:@selector(rightAction:)];
+                            items1.tag = 10000;
+                        }
+                        if ([dic2[@"type"] isEqual:@"img"]) {
+                            NSData * imageData = [[NSData alloc]initWithBase64EncodedString:dic2[@"data"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                            UIImage *rightImage = [UIImage imageWithData:imageData];
+                            rightImage =  [rightImage originScaleToSize:CGSizeMake(20, 20)];
+                            items2 = [[UIBarButtonItem alloc] initWithImage:rightImage style:UIBarButtonItemStyleDone target:self action:@selector(rightAction:)];
+                            items2.tag = 10001;
+                        } else {
+                            items2 = [[UIBarButtonItem alloc]initWithTitle:dic2[@"data"] style:UIBarButtonItemStyleDone target:self action:@selector(rightAction:)];
+                            items2.tag = 10001;
+                        }
+                        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]   initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace   target:nil action:nil];
+                        negativeSpacer.width = -5;
+                        UIBarButtonItem *negativeSpacer2 = [[UIBarButtonItem alloc]   initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace   target:nil action:nil];
+                        negativeSpacer2.width = 15;
+                        
+                        webStr.navigationItem.rightBarButtonItems = @[items2,negativeSpacer2,items1,negativeSpacer];
+                        
+                    } else if(buttons.count > 0) {
+                        NSDictionary *dic1 = buttons[0];
+                        if ([dic1[@"type"] isEqual:@"img"]) {
+                            NSData * imageData = [[NSData alloc]initWithBase64EncodedString:dic1[@"data"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                            UIImage *rightImage = [UIImage imageWithData:imageData];
+                            rightImage =  [rightImage originScaleToSize:CGSizeMake(20, 20)];
+                            items1 = [[UIBarButtonItem alloc] initWithImage:rightImage style:UIBarButtonItemStyleDone target:self action:@selector(rightAction:)];
+                            items1.tag = 10000;
+                        } else {
+                            items1 = [[UIBarButtonItem alloc]initWithTitle:dic1[@"data"] style:UIBarButtonItemStyleDone target:self action:@selector(rightAction:)];
+                            items1.tag = 10000;
+                        }
+                        webStr.navigationItem.rightBarButtonItems = @[items1];
+                    }
+                } else {
+                    webStr.navigationItem.rightBarButtonItems = @[];
+                }
+            } else {
+                webStr.navigationItem.rightBarButtonItems = @[];
+            }
+        } else {
+            NSLog(@"setGoBack error");
+        }
+         
+    }];
+}
+
+#pragma mark 关掉webview
+- (void)closePage   {
+    [self.bridge registerHandler:@"closePage" handler:^(id data, WVJBResponseCallback responseCallback) {
+    
+       [[[CSIIGloballTool shareManager]findCurrentShowingViewController].navigationController popViewControllerAnimated:YES];
+    }];
+}
+
+#pragma mark 调用手机拨号
+- (void)callPhone {
+        [self.bridge registerHandler:@"callPhone" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSString *phoneStr = data[@"telephone"];
+
+        if (phoneStr.length) {
+            
+            NSString *string = [NSString stringWithFormat:@"telprompt://%@",phoneStr];
+            NSURL *url = [NSURL URLWithString:string];
+            
+            if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+            }else{
+                NSLog(@"Incorrect format of mobile phone number");
+            }
+        } else {
+            NSLog(@"Incorrect format of mobile phone number");
+        }
+    }];
+}
+
+#pragma mark 回到首页
+-(void)toMain{
+    [self.bridge registerHandler:@"toMain" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        CSIIWKController *webStr = (CSIIWKController *)[[CSIIGloballTool shareManager]findCurrentShowingViewController];
+        
+        webStr.navigationController.tabBarController.selectedIndex = 0;
+        if (webStr.navigationController.viewControllers.count) {
+            webStr.navigationController.navigationBarHidden = YES;
+            [webStr.navigationController popToViewController:webStr.navigationController.viewControllers[0] animated:YES];
+        } else {
+            [webStr.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }];
+}
+
+#pragma mark 获取一些常用信息
+-(void)getBaseInfo{
+    [self.bridge registerHandler:@"getBaseInfo" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        [dic setValue:@(KNavBarHeight) forKey:@"navHeight"];
+        [dic setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"version"];
+        NSString *userInfo = [CSIICheckObject dictionaryChangeJson:dic];
+        responseCallback(userInfo);
+        
+    }];
+}
+
+#pragma mark 系统分享，保存Pdf
+- (void)savePdf {
+    [self.bridge registerHandler:@"savePdf" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSString *titleStr = data[@"title"];
+        if (!titleStr.length) {
+            titleStr = @"pdfStream";
+        }
+        
+        NSData *pdfData = [[NSData alloc] initWithBase64EncodedString:data[@"pdfStream"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *strPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.pdf",titleStr]];
+        BOOL success = [pdfData writeToFile:strPath atomically:YES];
+        if (success) {
+           // NSURL *pathUrl1 = [[NSBundle mainBundle] URLForResource:strPath withExtension:@".pdf"];
+            NSURL *pathUrl = [NSURL fileURLWithPath:strPath];
+            if (pathUrl) {
+                UIDocumentInteractionController *documentIntertactionController = [UIDocumentInteractionController interactionControllerWithURL:pathUrl];
+                documentIntertactionController.delegate = self;
+                [documentIntertactionController presentOptionsMenuFromRect:self.wkWebView.bounds inView:self.wkWebView animated:YES];
+            }
+        } else {
+            NSLog(@"Failed to share pdf");
+        }
+        
+    }];
+}
+
+#pragma mark 系统分享图片
+- (void)downloadImage {
+    [self.bridge registerHandler:@"downloadImage" handler:^(id data, WVJBResponseCallback responseCallback) {
+        if ([data isKindOfClass:[NSDictionary class]]) {
+            //拿图片数组
+            NSArray *listArray = @[];
+            if ([data[@"list"] isKindOfClass:[NSArray class]]) {
+                listArray = data[@"list"];
+            }
+            if (listArray.count) {
+                NSMutableArray *array = [[NSMutableArray alloc]init];
+                for (int i = 0; i <8 && i<listArray.count; i++) {
+                    NSString *imageBase64Str  = listArray[i];
+                    NSData * imageData = [[NSData alloc]initWithBase64EncodedString:imageBase64Str options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                        UIImage *imagerang = [UIImage imageWithData:imageData];
+                    NSString *path_sandox = NSHomeDirectory();
+                    NSString *imagePath = [path_sandox stringByAppendingString:[NSString stringWithFormat:@"/Documents/ShareWX%d.jpg",i]];
+                    [UIImagePNGRepresentation(imagerang) writeToFile:imagePath atomically:YES];
+                    NSURL *shareobj = [NSURL fileURLWithPath:imagePath];
+                     /** 这里做个解释 imagerang : UIimage 对象  shareobj:NSURL 对象 这个方法的实际作用就是 在调起微信的分享的时候 传递给他 UIimage对象,在分享的时候 实际传递的是 NSURL对象 达到我们分享九宫格的目的 */
+                    SharedItem *item = [[SharedItem alloc] initWithData:imagerang andFile:shareobj];
+                    [array addObject:item];
+                    
+                }
+                UIActivityViewController *activityViewController =[[UIActivityViewController alloc] initWithActivityItems:array
+                                                                                                    applicationActivities:nil];
+                //尽量不显示其他分享的选项内容
+             //   activityViewController.excludedActivityTypes = @[UIActivityTypePostToFacebook,UIActivityTypePostToTwitter, UIActivityTypePostToWeibo, UIActivityTypeMessage,UIActivityTypeMail,UIActivityTypePrint,UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact,UIActivityTypeSaveToCameraRoll,UIActivityTypeAddToReadingList,UIActivityTypePostToFlickr,UIActivityTypePostToVimeo,UIActivityTypePostToTencentWeibo,UIActivityTypeAirDrop,UIActivityTypeOpenInIBooks];
+                if (activityViewController) {
+                      [self.wkWebView.superViewController presentViewController:activityViewController animated:TRUE completion:nil];
+                }
+            }
+        } else {
+            NSLog(@"downloadImage Failed");
+        }
+    }];
+}
+
+#pragma mark 获取路由和参数
+- (void)getToPageUrl {
+    [self.bridge registerHandler:@"getToPageUrl" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        [dic setValue:[PluginUpdateManager shareManager].pathUrl forKey:@"routerUrl"];
+        [dic setValue:[DataStorageManager shareManager].torageDic forKey:@"params"];
+        NSString *pageInfo = [CSIICheckObject dictionaryChangeJson:dic];
+        responseCallback(pageInfo);
+        
+    }];
+}
+#pragma mark 复制内容到剪切板
+- (void)copyToClipboard {
+    [self.bridge registerHandler:@"copyToClipboard" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        if ([data isKindOfClass:[NSDictionary class]]) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = data[@"content"];
+            
+            [MBProgressHUD showMessage:@"复制成功"];
+        } else {
+            NSLog(@"copyToClipboard Failed");
+        }
+    }];
+}
+
+#pragma mark 存储删数据
+-(void)setStorageData{
+    [self.bridge registerHandler:@"setStorageData" handler:^(id data, WVJBResponseCallback responseCallback) {
+
+        NSInteger type = [data[@"type"] integerValue];
+        NSString *key = data[@"key"];
+        
+        if (type == 1) {//存
+            NSString *params = [CSIICheckObject dictionaryChangeJson:data[@"params"]];
+            [KUserDefaults  setValue:params forKey:key];
+            [KUserDefaults synchronize];
+
+        }else if (type == 2){//取
+
+            NSString *accessText = [KUserDefaults objectForKey:key];
+            responseCallback(accessText);
+
+        }else if (type == 3){//删
+
+            [KUserDefaults  setValue:nil forKey:key];
+            [KUserDefaults synchronize];
+        }
+    }];
+}
+
+#pragma mark 系统相机相册
+-(void)getSystemCameraAlbum{
+    [self.bridge registerHandler:@"getSystemCameraAlbum" handler:^(id data, WVJBResponseCallback responseCallback) {
+
+        self.responseCallback = responseCallback;
+        
+        //0-相机 1-相册 2-相机相册
+        NSInteger type = [data[@"type"] integerValue];
+        
+        switch (type) {
+            case 0:
+                //相机
+                if (![CSIITool canCameraPermission]) {
+                    
+                    [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"系统相机授权未打开，请先去系统进行授权" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
+                    }];
+                    return;
+                }
+                [self.photoView checkCamera];
+                break;
+            case 1:
+                //相册
+                if (![CSIITool canPhotoPermission]) {
+                    [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"系统相册授权未打开，请先去系统进行授权" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
+                    }];
+                    return;
+                }
+                [self.photoView checkPhotoLibrary];
+                break;
+            default: {
+                //相机+相册
+                [self.photoView showAlertViewWithIsEdit:YES];
+            }
+                break;
+        }
+    }];
+}
+
+#pragma mark 调用系统相机相册代理
+- (void)backwithImage:(UIImage *)image withImageData:(NSData *)data {
+    NSString *imageBase64Str = @"data:image/png;base64,";
+    imageBase64Str= [imageBase64Str stringByAppendingString:[data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]];
+    NSDictionary *dic = @{@"state":@"Y",@"data":@{@"image":imageBase64Str}};
+    self.responseCallback(dic);
+}
+
+#pragma mark 时间选择器
+-(void)selectDate{
+    [self.bridge registerHandler:@"selectDate" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        //0-年  1-年月  2-年月日
+        float dateType = [data[@"dateType"] floatValue];
+        dateType= 2;
+        //0-选择选择今后日期 1-最大选择今天
+        float isCurrentDateMax = [data[@"isCurrentDateMax"] floatValue];
+        //标题
+        NSString *title = data[@"title"];
+        
+        self.responseCallback = responseCallback;
+        
+        CSIIDatePickView *dateView = [[CSIIDatePickView alloc] initIsCurrentDateMax:isCurrentDateMax == 1 ? YES : NO];
+        dateView.delegate = self;
+        dateView.currentDate =  [NSDate date];
+        dateView.pickerViewMode = dateType == 0 ? DatePickerViewDateYear : dateType == 1 ? DatePickerViewDateYearMonth : DatePickerViewDateYearMonthDay;
+        if (!kStringIsEmpty(title)) {
+            dateView.titleL.text = title;
+        }
+        [[UIApplication sharedApplication].keyWindow  addSubview:dateView];
+        
+        [dateView showDateTimePickerView];
+        
+    }];
+}
+
+- (void)didClickFinishDateTimePickerView:(NSString*)date{
+    self.responseCallback(date);
+}
+#pragma mark 普通选择器
+-(void)ItemsPickView{
+    [self.bridge registerHandler:@"ItemsPickView" handler:^(id data, WVJBResponseCallback responseCallback) {
+       
+        if ([data[@"list"] isKindOfClass:[NSArray class]]) {
+            
+            NSArray *contextArr = data[@"list"];
+
+            if (contextArr.count > 0) {
+                CSIISelectItemView *view = [[CSIISelectItemView alloc] initWithTextArray:contextArr Title:data[@"title"]];
+                [view showDateTimePickerView];
+                
+                view.FinishClick = ^(NSString * _Nonnull jsonStr) {
+                    responseCallback(jsonStr);
+                };
+            }
+        }
+        
+    }];
+}
+
+#pragma mark 返回
+- (void)setGoBack {
+    [self.bridge registerHandler:@"setGoBack" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        BOOL isHome = [data[@"home"] boolValue];
+        
+        CSIIWKController *webStr = (CSIIWKController *)[[CSIIGloballTool shareManager]findCurrentShowingViewController];
+        
+        if (isHome) {
+            webStr.isH5PopHome = YES;
+            webStr.IsH5Back = NO;
+            webStr.homePageIndex = webStr.wkWebView.backForwardList.backList.count;
+        } else {
+            webStr.IsH5Back = YES;
+            webStr.isH5PopHome = NO;
+            webStr.pageIndex = webStr.wkWebView.backForwardList.backList.count;
+            
+        }
+        
+    }];
+}
+
+#pragma mark ---请求类
+-(void)request {
+    [self.bridge  registerHandler:@"getH5RequestProxy" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSDictionary *params = (NSDictionary*)data;
+        
+        NSString *queryJson =params[@"TradeCode"];
+        NSString *url = nil;
+        if([queryJson rangeOfString:@"queryJson"].location==NSNotFound) {
+        NSLog(@"string 不存在 martin");
+            url = [NSString stringWithFormat:@"%@%@",[[PluginUpdateManager shareManager] getDomian],params[@"TradeCode"]];
+        }else{
+            NSRange range = [queryJson rangeOfString:@"queryJson"];
+            NSString *subStr = [queryJson substringToIndex:range.location];//字符串之前
+            NSString *fromStr = [queryJson substringFromIndex:range.location];
+            NSString *reportName = [fromStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"{}\""].invertedSet];
+        NSLog(@"string 包含 martin");
+            url = [NSString stringWithFormat:@"%@%@%@",[[PluginUpdateManager shareManager] getDomian],subStr,reportName];
+        }
+        NSDictionary *param = nil;
+        if ([[params allKeys]containsObject:@"Param"]) {
+            param = params[@"Param"];
+        }else{
+            param = @{};
+        }
+        [[AFNWorkManager manager]requestWithType:requestTypeGet withUrl:url params:param success:^(id  _Nonnull response) {
+            
+            if (responseCallback)
+                   {
+                    responseCallback(response);
+                   }
+                } failure:^(NSError * _Nonnull error) {
+                    
+                    if (responseCallback) {
+                        responseCallback(@"没有网络或者请求错误");
+                    }
+                }];
+    }];
+    [self.bridge  registerHandler:@"H5RequestProxy" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSDictionary *params = (NSDictionary*)data;
+        NSString *url = [NSString stringWithFormat:@"%@%@",[[PluginUpdateManager shareManager] getDomian],params[@"TradeCode"]];
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:[self dictionaryWithJsonString:params[@"Param"]]];
+
+        [[AFNWorkManager manager]requestWithType:requestTypePost withUrl:url params:param success:^(id  _Nonnull response) {
+            
+            if (responseCallback)
+                   {
+                    responseCallback(response);
+                   }
+                } failure:^(NSError * _Nonnull error) {
+                    
+                    if (responseCallback) {
+                        responseCallback(@"没有网络或者请求错误");
+                    }
+                }];
+    }];
+    //注销登录
+    [self.bridge registerHandler:@"logout" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:JGCSIILoginOutNotification object:nil];
+    }];
+}
+
+-(NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    if(err) {
+        NSLog(@"json解析失败：%@",err);
+        return nil;
+    }
+    return dic;
 }
 
 -(void)setBluetooth {
@@ -303,6 +834,89 @@ typedef void (^ResponseCallback)(NSString *responseData);
              responseCallback(responseData);
          }];
      }];
+}
+#pragma mark - 全局 jsbridge
++ (NSMutableDictionary<NSString *,WVJBHandler> *)registerHandlers{
+    NSMutableDictionary* res = objc_getAssociatedObject(self, kFNHybridBridgeRegisterHandlersKey);
+    if (!res) {
+        res = [NSMutableDictionary dictionary];
+        objc_setAssociatedObject(self, kFNHybridBridgeRegisterHandlersKey, res, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return res;
+}
++ (NSMutableDictionary<NSString *,FNHybridBridgeHandler> *)registerBridgeHandlers{
+    NSMutableDictionary* res = objc_getAssociatedObject(self, kFNHybridBridgeRegisterBridgeHandlersKey);
+    if (!res) {
+        res = [NSMutableDictionary dictionary];
+        objc_setAssociatedObject(self, kFNHybridBridgeRegisterBridgeHandlersKey, res, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return res;
+}
+
++ (void)registerHandler:(NSString *)handlerName handler:(WVJBHandler)handler{
+    self.registerHandlers[handlerName] = handler;
+}
+
++ (void)registerHandler:(NSString *)handlerName withBridgeHandler:(nonnull FNHybridBridgeHandler)handler{
+    self.registerBridgeHandlers[handlerName] = handler;
+}
+
+- (void)setBridgeAction{
+    NSDictionary* registerHandlers = self.class.registerHandlers;
+    for( NSString* handlerName in registerHandlers.allKeys){
+        [self.bridge registerHandler:handlerName handler:registerHandlers[handlerName]];
+    }
+    NSDictionary* registerBridgeHandlers = self.class.registerBridgeHandlers;
+    for( NSString* handlerName in registerBridgeHandlers.allKeys){
+        [self.bridge registerHandler:handlerName handler:^(id data, WVJBResponseCallback responseCallback) {
+            FNHybridBridgeHandler handlerBlock = registerBridgeHandlers[handlerName];
+            if (handlerBlock) {
+                handlerBlock(self, data, responseCallback);
+            }
+        }];
+    }
+    
+    // ---------------------
+    // 跳包
+    [self toZipPage];
+    // 刷新指定模块
+    [self refreshPage];
+    //设置标题
+    [self setTitle];
+    // 显示或隐藏导航栏
+    [self showOrHideNav];
+    // 右上角按钮
+    [self setRightNav];
+    // 获取一些常用信息
+    [self getBaseInfo];
+    // 关掉webview
+    [self closePage];
+    // 回到首页
+    [self toMain];
+    // 拨打电话号码
+    [self callPhone];
+    // 系统分享，保存Pdf
+    [self savePdf];
+    //系统下载并分享图片
+    [self downloadImage];
+    // 获取路由和参数
+    [self getToPageUrl];
+    // 复制内容到剪切板
+    [self copyToClipboard];
+    // 存储删数据
+    [self setStorageData];
+    // 系统相机相册
+    [self getSystemCameraAlbum];
+    // 时间选择器
+    [self selectDate];
+    // 普通选择器
+    [self ItemsPickView];
+    // 返回
+    [self setGoBack];
+    //请求
+    [self request];
+    //蓝牙
+    [self setBluetooth];
 }
 
 #pragma mark - Public Method -- 公开方法

@@ -187,6 +187,11 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     [self setNavinavigationBar];
 }
 
+-(void)setNaviTitle:(NSString*)title {
+    self.titleStr = title;
+    [self setNavinavigationBar];
+}
+
 #pragma mark - Setter/Getter -- Getter尽量写出懒加载形式
 -(WKWebView*)wkWebView{
     if (!_wkWebView) {
