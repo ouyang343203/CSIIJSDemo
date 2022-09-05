@@ -30,6 +30,8 @@
 @property (nonatomic,strong) NSMutableArray *serverceArray;//设备的所有服务
 @property (nonatomic,strong) NSMutableArray *characteristicArray;//设备的所有特性
 @property (nonatomic,strong) NSString *serviceID;
+//外设的读取UUID值
+@property (nonatomic, copy) NSString *readUUIDString;
 @property (nonatomic,strong) NSBlockOperation *operation;
 @property (nonatomic,strong) NSMutableArray *peripheralDataArray;
 
@@ -230,22 +232,22 @@
     [self.centerManager setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
         NSString *data = nil;
         switch (central.state) {
-            case CBCentralManagerStateUnknown:
+            case CBManagerStateUnknown:
                  data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0004",@"errMsg":@"状态未知",@"data":@(false)}];
               break;
-            case CBCentralManagerStateResetting:
+            case CBManagerStateResetting:
                 data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0005",@"errMsg":@"蓝牙断开即将重置",@"data":@(false)}];
               break;
-            case CBCentralManagerStateUnsupported:
+            case CBManagerStateUnsupported:
                 data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0002",@"errMsg":@"蓝牙未启",@"data":@(false)}];
               break;
-            case CBCentralManagerStateUnauthorized:
+            case CBManagerStateUnauthorized:
                 data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0003",@"errMsg":@"蓝牙未被授权",@"data":@(false)}];
               break;
-            case CBCentralManagerStatePoweredOff:
+            case CBManagerStatePoweredOff:
                 data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0001",@"errMsg":@"蓝牙未启",@"data":@(false)}];
               break;
-            case CBCentralManagerStatePoweredOn://设备打开成功
+            case CBManagerStatePoweredOn://设备打开成功
                 data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":@(true)}];
               break;
             default:

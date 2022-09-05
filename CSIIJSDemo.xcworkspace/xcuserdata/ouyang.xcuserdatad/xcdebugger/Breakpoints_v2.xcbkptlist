@@ -3,4 +3,22 @@
    uuid = "3A2BF531-156D-428A-9F9C-56309E0F818F"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3C4A8014-54D3-4F3D-90AB-3E9CAE5C6C59"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CSIIJSBridge/CSIIJSBridge/manager/managerBlueTooth/HKBabyBluetoothManager.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "-writeBLECharacteristicValue:callBack:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
