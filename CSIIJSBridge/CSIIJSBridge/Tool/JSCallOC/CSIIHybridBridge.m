@@ -950,8 +950,9 @@ typedef void (^ResponseCallback)(NSString *responseData);
     [self.bridge registerHandler:@"startNotifyCharacteristicValueChange" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         NSDictionary *diction = (NSDictionary*)data;
-        NSDictionary *Dic = @{@"code":@"0",@"errMsg":@"获取特征值成功"};
+        NSDictionary *Dic = @{@"code":@"0",@"errMsg":@"开始监听特征"};
         responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
+        //订阅特征通知
         [[HKBabyBluetoothManager shareBabyBluetooth] notifyBLECharacteristicValueChange:diction callBack:^(id  _Nonnull notifyCharacteristicResult) {
             NSString *notifyCharacteristicResultdata = notifyCharacteristicResult;
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);

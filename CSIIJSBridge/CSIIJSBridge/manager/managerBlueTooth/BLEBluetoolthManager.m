@@ -417,7 +417,7 @@
         NSString *dataString;
         if (data!=nil) {
             dataString =  [TypeConversion convertDataToHexStr:data];//字符串转成16进制字符串
-            NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"订阅到的特征值数据",@"data":dataString}];
+            NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"iOS特征值监听数据",@"data":dataString}];
             if (weakSelf.characteristicCallBack) {
                 weakSelf.characteristicCallBack(charData);
             }

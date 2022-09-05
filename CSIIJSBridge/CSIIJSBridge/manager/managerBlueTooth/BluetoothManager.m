@@ -38,29 +38,29 @@
 //只要中心管理者初始化 就会触发此代理方法 判断手机蓝牙状态
 -(void)centralManagerDidUpdateState:(CBCentralManager *)central {
     switch (central.state) {
-        case CBCentralManagerStateUnknown:
+        case CBManagerStateUnknown:
           NSLog(@"CBCentralManagerStateUnknown");
             self.stateCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0004",@"errMsg":@"状态未知",@"data":@(false)}]);
           break;
-        case CBCentralManagerStateResetting:
+        case CBManagerStateResetting:
           NSLog(@"CBCentralManagerStateResetting");
             self.stateCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0005",@"errMsg":@"蓝牙断开即将重置",@"data":@(false)}]);
           break;
-        case CBCentralManagerStateUnsupported:
+        case CBManagerStateUnsupported:
           NSLog(@"CBCentralManagerStateUnsupported");//不支持蓝牙
             self.stateCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0002",@"errMsg":@"蓝牙未启",@"data":@(false)}]);
           break;
-        case CBCentralManagerStateUnauthorized:
+        case CBManagerStateUnauthorized:
           NSLog(@"CBCentralManagerStateUnauthorized");
             self.stateCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0003",@"errMsg":@"蓝牙未被授权",@"data":@(false)}]);
           break;
-        case CBCentralManagerStatePoweredOff:
+        case CBManagerStatePoweredOff:
         {
           NSLog(@"CBCentralManagerStatePoweredOff");//蓝牙未开启
             self.stateCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0001",@"errMsg":@"蓝牙未启",@"data":@(false)}]);
         }
           break;
-        case CBCentralManagerStatePoweredOn:
+        case CBManagerStatePoweredOn:
         {
           NSLog(@"CBCentralManagerStatePoweredOn");//蓝牙已开启
             self.stateCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":@(true)}]);
