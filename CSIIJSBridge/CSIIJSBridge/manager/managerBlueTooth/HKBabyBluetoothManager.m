@@ -22,7 +22,6 @@
 @property (nonatomic, copy)   BluetoothNotifyCharacteristicCallBlock characteristicCallBack;//订阅特性改变的通知
 @property (nonatomic, copy) NSString *serviceUuid;//主服务UUID
 
-
 @end
 
 
@@ -220,7 +219,8 @@
     //serviceUuid = FFF0;
     NSString *identifier = parameter[@"mac"];
     NSString *serviceId = parameter[@"serviceUuid"];
-    
+    NSLog(@"serviceUuid:%@",serviceId);
+    self.serviceUuid = serviceId;
     NSMutableArray *charcterArray = [NSMutableArray array];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:identifier];
     NSArray<CBService*>*newServices = peripheral.services;
@@ -342,7 +342,7 @@
         {
             if ([[service UUID] isEqual:[CBUUID UUIDWithString:@"FFF0"]])
             {
-                NSLog(@"UUID:%@",service.UUID);
+                NSLog(@"发现设备的Services服务:%@",service.UUID);
                 findService = service;
             }
         }
@@ -363,7 +363,7 @@
         
         if (service.characteristics.count > 0) {
             NSString *serviceUUID = [NSString stringWithFormat:@"%@",service.UUID];
-            if ([serviceUUID isEqualToString:@"FFF0"]) {
+            if ([serviceUUID isEqualToString:weakSelf.serviceUuid]) {
                 for (CBCharacteristic *ch in service.characteristics) {
                     NSString *chUUID = [NSString stringWithFormat:@"%@",ch.UUID];
                     NSLog(@"chUUID:%@",chUUID);
