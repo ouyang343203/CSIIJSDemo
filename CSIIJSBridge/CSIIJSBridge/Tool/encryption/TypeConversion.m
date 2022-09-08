@@ -12,40 +12,22 @@
 +(NSData *)hexString:(NSString *)hexString {
  
     NSLog(@"写入的16进制字符串原始数据:%@",hexString);
-    hexString = [hexString uppercaseString];
-    if (!hexString || [hexString length] == 0) { return nil; }
-    
-    if (hexString.length % 2 != 0) {
-        hexString = [NSString stringWithFormat:@"0%@",hexString];
-    }
-
-    NSMutableData *hexData = [[NSMutableData alloc] initWithCapacity:20];
-    NSRange range;
-    
-    if ([hexString length] % 2 == 0) {
-        range = NSMakeRange(0, 2);
-    } else {
-        range = NSMakeRange(0, 1);
-    }
-    
-    for (NSInteger i = range.location; i < [hexString length]; i += 2) {
-        unsigned int anInt;
-        NSString *hexCharStr = [hexString substringWithRange:range];
-        NSScanner *scanner = [[NSScanner alloc] initWithString:hexCharStr];
-
-        [scanner scanHexInt:&anInt];
-        NSData *entity = [[NSData alloc] initWithBytes:&anInt length:1];
-        [hexData appendData:entity];
-
-        range.location += range.length;
-        range.length = 2;
-    }
-    Byte *testByte = (Byte *)[hexData bytes];
-    for(int i=0;i<[hexData length];i++){
-       printf("testByte = %d ",testByte[i]);
-    }
-    NSLog(@"hexdata: %@", hexData);
-       return hexData;
+    NSMutableData *data = [NSMutableData dataWithCapacity:hexString.length/2];
+      signed char whole_byte;
+      char byte_chars[3]={'\0','\0','\0'};
+      
+      for (int i=0; i<hexString.length/2; i++) {
+          byte_chars[0]=[hexString characterAtIndex:i*2];
+          byte_chars[1]=[hexString characterAtIndex:i*2+1];
+          whole_byte=strtol(byte_chars,NULL,16);
+          [data appendBytes:&whole_byte length:1];
+      }
+      
+      Byte *testByte = (Byte *)[data bytes];
+      for(int i=0;i<[data length];i++){
+         printf("testByte = %d ",testByte[i]);
+      }
+      return data;
 }
 
 +(NSString *)convertDataToHexStr:(NSData *)data {

@@ -113,7 +113,7 @@
                      NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
                      NSDictionary *data = @{
                        @"code":@"0",
-                       @"errMsg":@"",
+                       @"errMsg":@"扫描d扫设备",
                        @"address":peripheral.identifier.UUIDString,
                        @"name":peripheral.name,
                        @"rssi":@(RSSI.intValue)
@@ -205,7 +205,7 @@
         [serverceDic setValue:service.UUID.UUIDString forKey:@"uuid"];
         [serverceDic setValue:@(service.isPrimary) forKey:@"type"];
         [serverces addObject:serverceDic];
-        [peripheral discoverCharacteristics:NULL forService:service];
+        [peripheral discoverCharacteristics:nil forService:service];
     }
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"":@"获取服务失败",@"data":serverces}];
     NSLog(@"======获取的所有服务%@",data);
@@ -342,7 +342,7 @@
         {
             if ([[service UUID] isEqual:[CBUUID UUIDWithString:@"FFF0"]])
             {
-                NSLog(@"发现设备的Services服务:%@",service.UUID);
+                NSLog(@"发现设备的Services服务:%@",service.UUID.UUIDString);
                 findService = service;
             }
         }
@@ -350,7 +350,7 @@
             if (findService) {
                 [peripheral discoverCharacteristics:NULL forService:findService];
             }
-          
+
         }else{
             weakSelf.contentCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"4",@"errMsg":@"没有找到指定服务"}]);
         }
