@@ -308,9 +308,9 @@
                                      }]);//连接成功
         }
         [peripheral discoverServices:nil];
+        [weakSelf discoverCharacteristicsBy:peripheral];//查找获取特征
         //停止扫描
         [weakSelf.centerManager  cancelScan];
-
     }];
     
     ///设置设备连接失败的委托
@@ -341,7 +341,96 @@
         NSLog(@"设备：%@--断开连接",peripheral.name);
     }];
     
-    ///设置查找服务回叫
+//    ///设置查找服务回调
+//    [self.centerManager setBlockOnDiscoverServices:^(CBPeripheral *peripheral, NSError *error) {
+//        CBService * __nullable findService = nil;
+//        for (CBService *service in peripheral.services)
+//        {
+//            NSLog(@"UUID:%@",service.UUID);
+//            if ([[service UUID] isEqual:[CBUUID UUIDWithString:@"FFF0"]])
+//            {
+//                NSLog(@"UUID:%@",service.UUID);
+//                findService = service;
+//            }
+//        }
+//        if (peripheral.services.count> 0) {
+//            // 遍历服务
+//            [weakSelf.serverceArray addObjectsFromArray:peripheral.services];//保存服务ID的对象
+//            if (findService) {
+//                [peripheral discoverCharacteristics:NULL forService:findService];
+//            }
+//
+//        }else{
+//            weakSelf.contentCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"4",@"errMsg":@"没有找到指定服务"}]);
+//        }
+//
+//    }];
+//
+//    ///设置发现设service的Characteristics的委托
+//    [self.centerManager setBlockOnDiscoverCharacteristics:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
+//        if (service.characteristics.count> 0) {
+//            [weakSelf.characteristicArray addObjectsFromArray:service.characteristics];
+//        }else{
+//            weakSelf.contentCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"10005",@"errMsg":@"没有找到指定特征"}]);
+//        }
+//
+//    }];
+//
+//    ///设置发现characteristics的descriptors的委托
+//    [self.centerManager setBlockOnDiscoverDescriptorsForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
+//       NSLog(@"===characteristic name:%@",characteristic.service.UUID);
+//       for (CBDescriptor *d in characteristic.descriptors) {
+//           NSLog(@"CBDescriptor name is :%@",d.UUID);
+//       }
+//    }];
+//
+//    ///设置读取Descriptor的委托
+//    [self.centerManager setBlockOnReadValueForDescriptors:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) {
+//       NSLog(@"Descriptor name:%@ value is:%@",descriptor.characteristic.UUID, descriptor.value);
+//    }];
+//
+//     ///写入特征值成功
+//    [self.centerManager setBlockOnDidWriteValueForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
+//        if (error)
+//        {
+//          NSLog(@"Discovered services for %@ with error: %@", characteristic.UUID.UUIDString, [error localizedDescription]);
+//          return;
+//        }else{
+//            NSLog(@"characteristic = %@",characteristic.value);
+//            NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",
+//                                   @"errMsg":@"",
+//                                   @"data":@"1"}];
+//            if (weakSelf.wiriteBLECallBlack) {
+//                weakSelf.wiriteBLECallBlack(data);
+//            }
+//        }
+//    }];
+//
+//    ///订阅特征值变化的通知
+//    [self.centerManager setBlockOnDidUpdateNotificationStateForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
+//        NSData *data = characteristic.value;
+//        Byte *testByte = (Byte *)[data bytes];
+//        for(int i=0;i<[data length];i++){
+//            printf("testByte = %d ",testByte[i]);
+//        }
+//
+//        NSString *dataString;
+//        if (data!=nil) {
+//            dataString =  [TypeConversion convertDataToHexStr:data];//字符串转成16进制字符串
+//            NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"iOS特征值监听数据",@"data":dataString}];
+//            if (weakSelf.characteristicCallBack) {
+//                weakSelf.characteristicCallBack(charData);
+//            }
+//        }else{
+//            dataString =@"";
+//        }
+//
+//    }];
+}
+ 
+-(void)discoverCharacteristicsBy:(CBPeripheral*)peripheral{
+    __weak typeof(self) weakSelf = self;
+    ///设置查找服务回调
     [self.centerManager setBlockOnDiscoverServices:^(CBPeripheral *peripheral, NSError *error) {
         CBService * __nullable findService = nil;
         for (CBService *service in peripheral.services)
@@ -427,7 +516,8 @@
 
     }];
 }
- 
+
+
 -(NSMutableDictionary*)deviceDic {
     if (_deviceDic == nil) {
         _deviceDic = [NSMutableDictionary dictionary];

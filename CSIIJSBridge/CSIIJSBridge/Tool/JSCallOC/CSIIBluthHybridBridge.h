@@ -1,24 +1,25 @@
 //
-//  CSIIHybridBridge.h
-//  CSIIPluginDownLoadDemo1
+//  CSIIBluthHybridBridge.h
+//  CSIIJSBridge
 //
-//  Created by Song on 2021/6/25.
+//  Created by ouyang on 2022/9/5.
 //
 
 #import <Foundation/Foundation.h>
 #import "WKWebViewJavascriptBridge.h"
-
 NS_ASSUME_NONNULL_BEGIN
-@class WKWebView,CSIIWKHybridBridge;
-@interface CSIIHybridBridge : NSObject
 
-typedef void(^FNHybridBridgeHandler)(CSIIHybridBridge* bridge,id data, WVJBResponseCallback responseCallback);
+@class WKWebView,CSIIWKHybridBridge;
+
+@interface CSIIBluthHybridBridge : NSObject
 
 @property (nonatomic, strong) CSIIWKHybridBridge *bridge;
 @property (nonatomic, strong) WKWebView *wkWebView;
 
+
 + (instancetype)shareManager;
 - (void)bridgeForWebView:(WKWebView*)webView;
+
 
 @end
 

@@ -9,38 +9,43 @@
 #import "BabyDefine.h"
 
 @implementation TypeConversion
-+(NSData *)hexString:(NSString *)hexString
-{
-    int j=0;
-    Byte bytes[128];
-    ///3ds key的Byte 数组， 128位
-    for(int i=0; i<[hexString length]; i++)
-    {
-        int int_ch;  /// 两位16进制数转化后的10进制数
-        unichar hex_char1 = [hexString characterAtIndex:i]; ////两位16进制数中的第一位(高位*16)
-        int int_ch1;
-        if(hex_char1 >= '0' && hex_char1 <='9')
-            int_ch1 = (hex_char1-48)*16;   //// 0 的Ascll - 48
-        else if(hex_char1 >= 'A' && hex_char1 <='F')
-            int_ch1 = (hex_char1-55)*16; //// A 的Ascll - 65
-        else
-            int_ch1 = (hex_char1-87)*16; //// a 的Ascll - 97
-        i++;
-        unichar hex_char2 = [hexString characterAtIndex:i]; ///两位16进制数中的第二位(低位)
-        int int_ch2;
-        if(hex_char2 >= '0' && hex_char2 <='9')
-            int_ch2 = (hex_char2-48); //// 0 的Ascll - 48
-        else if(hex_char1 >= 'A' && hex_char1 <='F')
-            int_ch2 = hex_char2-55; //// A 的Ascll - 65
-        else
-            int_ch2 = hex_char2-87; //// a 的Ascll - 97
-        int_ch = int_ch1+int_ch2;
-        NSLog(@"int_ch=%d",int_ch);
-        bytes[j] = int_ch;  ///将转化后的数放入Byte数组里
-        j++;
++(NSData *)hexString:(NSString *)hexString {
+ 
+    NSLog(@"写入的16进制字符串原始数据:%@",hexString);
+    hexString = [hexString uppercaseString];
+    if (!hexString || [hexString length] == 0) { return nil; }
+    
+    if (hexString.length % 2 != 0) {
+        hexString = [NSString stringWithFormat:@"0%@",hexString];
     }
-    NSData *newData = [[NSData alloc] initWithBytes:bytes length:126];
-    return newData;
+
+    NSMutableData *hexData = [[NSMutableData alloc] initWithCapacity:20];
+    NSRange range;
+    
+    if ([hexString length] % 2 == 0) {
+        range = NSMakeRange(0, 2);
+    } else {
+        range = NSMakeRange(0, 1);
+    }
+    
+    for (NSInteger i = range.location; i < [hexString length]; i += 2) {
+        unsigned int anInt;
+        NSString *hexCharStr = [hexString substringWithRange:range];
+        NSScanner *scanner = [[NSScanner alloc] initWithString:hexCharStr];
+
+        [scanner scanHexInt:&anInt];
+        NSData *entity = [[NSData alloc] initWithBytes:&anInt length:1];
+        [hexData appendData:entity];
+
+        range.location += range.length;
+        range.length = 2;
+    }
+    Byte *testByte = (Byte *)[hexData bytes];
+    for(int i=0;i<[hexData length];i++){
+       printf("testByte = %d ",testByte[i]);
+    }
+    NSLog(@"hexdata: %@", hexData);
+       return hexData;
 }
 
 +(NSString *)convertDataToHexStr:(NSData *)data {

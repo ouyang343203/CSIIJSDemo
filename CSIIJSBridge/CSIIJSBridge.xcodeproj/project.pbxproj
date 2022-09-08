@@ -11,6 +11,8 @@
 		304826D728ACDB8C00D2CE49 /* BluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 304826D528ACDB8C00D2CE49 /* BluetoothManager.h */; };
 		305816C228C1E3CF00C1B306 /* HKBabyBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 305816C028C1E3CF00C1B306 /* HKBabyBluetoothManager.h */; };
 		305816C328C1E3CF00C1B306 /* HKBabyBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 305816C128C1E3CF00C1B306 /* HKBabyBluetoothManager.m */; };
+		30C7029F28C638BF009F9445 /* CSIIBluthHybridBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 30C7029D28C638BF009F9445 /* CSIIBluthHybridBridge.h */; };
+		30C702A028C638BF009F9445 /* CSIIBluthHybridBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C7029E28C638BF009F9445 /* CSIIBluthHybridBridge.m */; };
 		30D88F7728B5CC7000182C5C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D88F7028B5CC7000182C5C /* MBProgressHUD.m */; };
 		30D88F7828B5CC7000182C5C /* MBProgressHUD+MJ.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D88F7128B5CC7000182C5C /* MBProgressHUD+MJ.h */; };
 		30D88F7928B5CC7000182C5C /* JYToastUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D88F7228B5CC7000182C5C /* JYToastUtils.h */; };
@@ -195,6 +197,8 @@
 		304826D528ACDB8C00D2CE49 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothManager.h; sourceTree = "<group>"; };
 		305816C028C1E3CF00C1B306 /* HKBabyBluetoothManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKBabyBluetoothManager.h; sourceTree = "<group>"; };
 		305816C128C1E3CF00C1B306 /* HKBabyBluetoothManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKBabyBluetoothManager.m; sourceTree = "<group>"; };
+		30C7029D28C638BF009F9445 /* CSIIBluthHybridBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSIIBluthHybridBridge.h; sourceTree = "<group>"; };
+		30C7029E28C638BF009F9445 /* CSIIBluthHybridBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSIIBluthHybridBridge.m; sourceTree = "<group>"; };
 		30D88F7028B5CC7000182C5C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		30D88F7128B5CC7000182C5C /* MBProgressHUD+MJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+MJ.h"; sourceTree = "<group>"; };
 		30D88F7228B5CC7000182C5C /* JYToastUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYToastUtils.h; sourceTree = "<group>"; };
@@ -737,6 +741,8 @@
 				E2EF5EEC2685DA0A0073ECBA /* CSIIHybridBridge.m */,
 				E2EF5EEE2685DA0A0073ECBA /* CSIIWKHybridBridge.h */,
 				E2EF5EEB2685DA0A0073ECBA /* CSIIWKHybridBridge.m */,
+				30C7029D28C638BF009F9445 /* CSIIBluthHybridBridge.h */,
+				30C7029E28C638BF009F9445 /* CSIIBluthHybridBridge.m */,
 			);
 			path = JSCallOC;
 			sourceTree = "<group>";
@@ -941,6 +947,7 @@
 				E477551526F1DD4600C2E780 /* CSIISelectItemView.h in Headers */,
 				E4273CF726E8542300FAB9EB /* progressLineView.h in Headers */,
 				E2983F9A2681ECD40014B6F2 /* mz_zip_rw.h in Headers */,
+				30C7029F28C638BF009F9445 /* CSIIBluthHybridBridge.h in Headers */,
 				E2983F692681ECD40014B6F2 /* AFURLResponseSerialization.h in Headers */,
 				E2983F832681ECD40014B6F2 /* AFHTTPSessionManager.h in Headers */,
 				E2983F892681ECD40014B6F2 /* mz_strm_wzaes.h in Headers */,
@@ -1084,6 +1091,7 @@
 				E4273CE426E5C09B00FAB9EB /* SharedItem.m in Sources */,
 				E2983FA72681ECD40014B6F2 /* SSZipArchive.m in Sources */,
 				E2983F5B2681ECD40014B6F2 /* WebViewJavascriptBridgeBase.m in Sources */,
+				30C702A028C638BF009F9445 /* CSIIBluthHybridBridge.m in Sources */,
 				E477550D26F1935B00C2E780 /* CSIIDatePickView.m in Sources */,
 				E2983F952681ECD40014B6F2 /* mz_crypt.c in Sources */,
 				E2983F722681ECD40014B6F2 /* UIRefreshControl+AFNetworking.m in Sources */,
