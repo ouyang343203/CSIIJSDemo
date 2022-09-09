@@ -864,21 +864,18 @@ typedef void (^ResponseCallback)(NSString *responseData);
         responseCallback([CSIICheckObject dictionaryChangeJson:diction]);
         //设置扫描到设备的委托
         [[HKBabyBluetoothManager shareBabyBluetooth] onBluetoothDeviceFound:data_dic callBack:^(id  _Nonnull searchResult) {//扫描获取到的外围设备
-            NSDictionary *searchResultdic = searchResult;
-            NSString *namestr = searchResultdic[@"name"];
-            if ([namestr containsString:@"Dana"]) {
-                [self.bridge callHandler:@"onFoundDevice" data:[CSIICheckObject dictionaryChangeJson:searchResult] responseCallback:^(id responseData) {}];
-            }
+
+            [self.bridge callHandler:@"onFoundDevice" data:[CSIICheckObject dictionaryChangeJson:searchResult] responseCallback:^(id responseData) {}];
         }];
     }];
     
     //复接口监听扫描到设备事件(备用)
     //4.连接蓝牙设备
     [self.bridge registerHandler:@"connect" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSDictionary *Dic = @{@"code":@"0",
-                              @"errMsg":@"",@"connet":@"连接回掉"};
+        
+        NSDictionary *Dic = @{@"code":@"0",@"errMsg":@"",@"connet":@"连接回调"};
         responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
-        NSString *dataStr = data;//设备号     NSLog(@"设备名称%@",dataStr);
+        NSString *dataStr = data;//设备号6FDA7EE6-27C5-6161-D32A-867D6E0E9B1D NSLog(@"设备名称%@",dataStr);
         [[HKBabyBluetoothManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
         [[HKBabyBluetoothManager shareBabyBluetooth] createBLEConnection:dataStr callBack:^(id  _Nonnull connectResult) {
             //监听连接状态

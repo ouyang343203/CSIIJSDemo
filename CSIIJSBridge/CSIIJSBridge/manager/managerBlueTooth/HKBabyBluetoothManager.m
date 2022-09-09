@@ -159,7 +159,7 @@
     CBCharacteristic *findCharcteritic = nil;
     for (CBService *service in newServices)
     {
-        if ([service.UUID.UUIDString isEqualToString:serviceId])
+        if ([service.UUID.UUIDString isEqualToString:serviceId])//找到主服务id
         {
             findService = service;
             [peripheral discoverCharacteristics:NULL forService:service];
@@ -169,7 +169,7 @@
             
             for (CBCharacteristic *charcteritic in service.characteristics)
             {
-                if ([[[charcteritic UUID] UUIDString] isEqualToString:characteristicId])
+                if ([[[charcteritic UUID] UUIDString] isEqualToString:characteristicId])//找到主服务下特征
                 {
                     findCharcteritic = charcteritic;
                     [peripheral discoverDescriptorsForCharacteristic:charcteritic];
@@ -179,7 +179,7 @@
     }
     if (findService && findCharcteritic) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            
+            //向主要服务特征写入数据
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [peripheral writeValue: [TypeConversion hexString:dataStr] forCharacteristic:findCharcteritic type:CBCharacteristicWriteWithResponse];
                 NSString *datastr = [CSIICheckObject dictionaryChangeJson:@{@"code":@"2",@"errMsg":[NSString stringWithFormat:@"%@ 写入的原始数据",dataStr]}];
@@ -215,10 +215,8 @@
 #pragma mark --------8.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)----------
 -(void)getBLEDeviceCharacteristics:(NSDictionary*)parameter callBack:(BluetoothCharacteristicsCallback)characteristics {
     
-    //mac = "6FDA7EE6-27C5-6161-D32A-867D6E0E9B1D";
-    //serviceUuid = FFF0;
-    NSString *identifier = parameter[@"mac"];
-    NSString *serviceId = parameter[@"serviceUuid"];
+    NSString *identifier = parameter[@"mac"];//6FDA7EE6-27C5-6161-D32A-867D6E0E9B1D
+    NSString *serviceId = parameter[@"serviceUuid"];//FFF0
     NSLog(@"serviceUuid:%@",serviceId);
     self.serviceUuid = serviceId;
     NSMutableArray *charcterArray = [NSMutableArray array];
@@ -229,22 +227,24 @@
         if ([service.UUID.UUIDString isEqualToString:serviceId]) {
             
             NSArray <CBCharacteristic*> *newCharcteritic  = service.characteristics;
-            if (newCharcteritic.count == 0) {
+            if (newCharcteritic.count > 0) {
+                for (CBCharacteristic *charcteritic in service.characteristics) {
+                    NSMutableDictionary *charcteriticDic = [NSMutableDictionary dictionary];
+                    [charcteriticDic setValue:charcteritic.UUID.UUIDString forKey:@"uuid"];
+                    [charcterArray addObject:charcteriticDic];
+                }
+                NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":charcterArray}];
+                characteristics(data);
+            }else{
                 NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10005",@"errMsg":@"没有找到指定特征"}];
-                characteristics(data); return;
+                characteristics(data);
             }
-            for (CBCharacteristic *charcteritic in service.characteristics) {
-                NSMutableDictionary *charcteriticDic = [NSMutableDictionary dictionary];
-                [charcteriticDic setValue:charcteritic.UUID.UUIDString forKey:@"uuid"];
-                [charcterArray addObject:charcteriticDic];
-            }
+        
         }else{
             NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10004",@"errMsg":@"没有找到服务"}];
-            characteristics(data); return;
+            characteristics(data);
         }
     }
-    NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":charcterArray}];
-    characteristics(data);
 }
 
 #pragma mark --------9.监听特征值变化(添加特征值变化的通知NotifyValue)----------
@@ -429,7 +429,8 @@
     // 10-设置读取characteristics的委托
     [self.babyBluetooth setBlockOnReadValueForCharacteristicAtChannel:channelOnPeropheralView
                                                                 block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-                                                                   
+        
+        NSLog(@"蓝牙发来的characteristic = %@",characteristics.value);
                                                     
                                                                 }];
 
