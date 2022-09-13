@@ -2,13 +2,15 @@
 //  TypeConversion.m
 //  BallMachine
 //
-//  Created by 李佛军 on 2022/1/17.
+//  Created by  on 2022/1/17.
 //
 
 #import "TypeConversion.h"
 #import "BabyDefine.h"
 
 @implementation TypeConversion
+
+//16进制字符串转data
 +(NSData *)hexString:(NSString *)hexString {
  
     NSLog(@"写入的16进制字符串原始数据:%@",hexString);
@@ -30,6 +32,7 @@
       return data;
 }
 
+//data转16进制字符串
 +(NSString *)convertDataToHexStr:(NSData *)data {
     if (!data || [data length] == 0) {
         return @"";
