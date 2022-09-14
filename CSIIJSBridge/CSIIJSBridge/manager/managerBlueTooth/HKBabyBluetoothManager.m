@@ -54,6 +54,21 @@
         }
         return NO;
     }];
+    
+    // 查找的规则
+    [self.babyBluetooth setFilterOnDiscoverPeripheralsAtChannel:channelOnPeropheralView filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
+         // 最常用的场景是查找某一个前缀开头的设备
+         if ([peripheralName hasPrefix:kMyDevicePrefix]) {
+             return YES;
+         }
+         return NO;
+    }];
+    
+    //设置连接规则
+    [self.babyBluetooth setFilterOnConnectToPeripheralsAtChannel:channelOnPeropheralView filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
+        return NO;
+    }];
+    
 }
 
 #pragma mark --------2.获取蓝牙状态（是否开启或者关闭）--------
@@ -94,15 +109,6 @@
 
 #pragma mark --------3.搜索蓝牙设备--------
 -(void)onBluetoothDeviceFound:(NSDictionary*)parameter callBack:(BluetoothSearchResultCallback)searchResultcallBack {
-    // 查找的规则
-    [self.babyBluetooth setFilterOnDiscoverPeripheralsAtChannel:channelOnPeropheralView filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-         // 最常用的场景是查找某一个前缀开头的设备
-         if ([peripheralName hasPrefix:kMyDevicePrefix]) {
-             return YES;
-         }
-         return NO;
-    }];
-    
     __weak typeof(self) weakSelf = self;
     self.babyBluetooth.scanForPeripherals().begin(30);
     //3-设置扫描到设备的委托
@@ -295,12 +301,6 @@
 //连接成功和失败回调
 -(void)didConnectPeripheral{
     __weak typeof(self) weakSelf = self;
-    //设置连接规则
-    [self.babyBluetooth setFilterOnConnectToPeripheralsAtChannel:channelOnPeropheralView filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-        return NO;
-    }];
-    
-    
     BabyRhythm *rhythm = [[BabyRhythm alloc]init];
     //1-设置设备连接成功的委托,同一个baby对象，使用不同的channel切换委托回调
     [self.babyBluetooth setBlockOnConnectedAtChannel:channelOnPeropheralView block:^(CBCentralManager *central, CBPeripheral *peripheral) {

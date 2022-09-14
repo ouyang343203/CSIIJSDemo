@@ -876,7 +876,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
         NSDictionary *Dic = @{@"code":@"0",@"errMsg":@"",@"connet":@"连接回调"};
         responseCallback([CSIICheckObject dictionaryChangeJson:Dic]);
         NSString *dataStr = data;//设备号6FDA7EE6-27C5-6161-D32A-867D6E0E9B1D NSLog(@"设备名称%@",dataStr);
-        [[HKBabyBluetoothManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
+        [[HKBabyBluetoothManager shareBabyBluetooth] cancelAllPeripheralsConnection];
         [[HKBabyBluetoothManager shareBabyBluetooth] createBLEConnection:dataStr callBack:^(id  _Nonnull connectResult) {
             //监听连接状态
             NSLog(@"监听连接状态 = connectResult%@",connectResult);

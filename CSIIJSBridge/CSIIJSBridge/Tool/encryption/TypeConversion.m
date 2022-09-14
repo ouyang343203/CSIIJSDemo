@@ -14,22 +14,22 @@
 +(NSData *)hexString:(NSString *)hexString {
  
     NSLog(@"写入的16进制字符串原始数据:%@",hexString);
-    NSMutableData *data = [NSMutableData dataWithCapacity:hexString.length/2];
-      signed char whole_byte;
-      char byte_chars[3]={'\0','\0','\0'};
-      
-      for (int i=0; i<hexString.length/2; i++) {
-          byte_chars[0]=[hexString characterAtIndex:i*2];
-          byte_chars[1]=[hexString characterAtIndex:i*2+1];
-          whole_byte=strtol(byte_chars,NULL,16);
-          [data appendBytes:&whole_byte length:1];
+    NSMutableData* data = [NSMutableData data];
+      int idx;
+      for (idx = 0; idx+2 <= hexString.length; idx+=2) {
+          NSRange range = NSMakeRange(idx, 2);
+          NSString* hexStr = [hexString substringWithRange:range];
+          NSScanner* scanner = [NSScanner scannerWithString:hexStr];
+          unsigned int intValue;
+          [scanner scanHexInt:&intValue];
+
+          [data appendBytes:&intValue length:1];
       }
-      
-      Byte *testByte = (Byte *)[data bytes];
-      for(int i=0;i<[data length];i++){
-         printf("testByte = %d ",testByte[i]);
-      }
-      return data;
+    Byte *testByte = (Byte *)[data bytes];
+    for(int i=0;i<[data length];i++){
+       printf("testByte = %d ",testByte[i]);
+    }
+    return data;
 }
 
 //data转16进制字符串
