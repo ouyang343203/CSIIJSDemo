@@ -115,11 +115,11 @@
     [self.babyBluetooth setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil) {
-                [weakSelf.deviceDic setObject:peripheral forKey:[[peripheral identifier] UUIDString]];
+                [weakSelf.deviceDic setObject:peripheral forKey:peripheral.identifier.UUIDString];
                      NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
                      NSDictionary *data = @{
                        @"code":@"0",
-                       @"errMsg":@"扫描d扫设备",
+                       @"errMsg":@"扫描到设备",
                        @"address":peripheral.identifier.UUIDString,
                        @"name":peripheral.name,
                        @"rssi":@(RSSI.intValue)
@@ -185,10 +185,10 @@
     }
     if (findService && findCharcteritic) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            //向主要服务特征写入数据
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //向主服务特征写入数据
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [peripheral writeValue: [TypeConversion hexString:dataStr] forCharacteristic:findCharcteritic type:CBCharacteristicWriteWithResponse];
-                NSString *datastr = [CSIICheckObject dictionaryChangeJson:@{@"code":@"2",@"errMsg":[NSString stringWithFormat:@"%@ 写入的原始数据",dataStr]}];
+                NSString *datastr = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":[NSString stringWithFormat:@"%@ 写入的原始数据",dataStr]}];
                 writeCallBack(datastr);
             });
             
@@ -213,7 +213,7 @@
         [serverces addObject:serverceDic];
         [peripheral discoverCharacteristics:nil forService:service];
     }
-    NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"":@"获取服务失败",@"data":serverces}];
+    NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"获取服务成功":@"获取服务失败",@"data":serverces}];
     NSLog(@"======获取的所有服务%@",data);
     serviceCallBack(data);
 }
@@ -239,7 +239,7 @@
                     [charcteriticDic setValue:charcteritic.UUID.UUIDString forKey:@"uuid"];
                     [charcterArray addObject:charcteriticDic];
                 }
-                NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":charcterArray}];
+                NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"获取到的服务特征",@"data":charcterArray}];
                 characteristics(data);
             }else{
                 NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10005",@"errMsg":@"没有找到指定特征"}];
@@ -378,17 +378,26 @@
         }
      }];
     
-    //6-设置发现characteristics的descriptors的委托
+    
+    // 6-设置读取characteristics的委托
+    [self.babyBluetooth setBlockOnReadValueForCharacteristicAtChannel:channelOnPeropheralView
+                                                                block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
+        
+        NSLog(@"蓝牙发来的characteristic = %@",characteristics.value);
+                                                    
+                                                                }];
+    
+    //7-设置发现characteristics的descriptors的委托
     [self.babyBluetooth setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
         NSString *UUID = [NSString stringWithFormat:@"characteristic.UUID:%@",characteristic.UUID];
         NSLog(@"UUID:%@",UUID);
     }];
     
     
-    //7-设置读取Descriptor的委托
+    //8-设置读取Descriptor的委托
     [self.babyBluetooth setBlockOnReadValueForDescriptorsAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) { }];
     
-    //8-写入特征值成功的委托
+    //9-写入特征值成功的委托
     [self.babyBluetooth setBlockOnDidWriteValueForCharacteristicAtChannel:channelOnPeropheralView block:^(CBCharacteristic *characteristic, NSError *error) {
         if (error)
         {
@@ -398,21 +407,16 @@
             NSLog(@"characteristic = %@",characteristic.value);
             NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",
                                    @"errMsg":@"写入特征成功",
-                                   @"data":@"1"}];
+                                   @"data":@"0"}];
             if (weakSelf.wiriteBLECallBlack) {
                 weakSelf.wiriteBLECallBlack(data);
             }
         }
     }];
     
-   //9订阅特征值变化的通知
+   //10订阅特征值变化的通知
     [self.babyBluetooth setBlockOnDidUpdateNotificationStateForCharacteristicAtChannel:channelOnPeropheralView block:^(CBCharacteristic *characteristic, NSError *error) {
-        NSData *data = characteristic.value;
-        Byte *testByte = (Byte *)[data bytes];
-        for(int i=0;i<[data length];i++){
-            printf("testByte = %d ",testByte[i]);
-        }
-    
+        NSData *data = characteristic.value;    
         NSString *dataString;
         if (data!=nil) {
             dataString =  [TypeConversion convertDataToHexStr:data];//data转成16进制字符串
@@ -425,15 +429,6 @@
         }
     }];
     
-    
-    // 10-设置读取characteristics的委托
-    [self.babyBluetooth setBlockOnReadValueForCharacteristicAtChannel:channelOnPeropheralView
-                                                                block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-        
-        NSLog(@"蓝牙发来的characteristic = %@",characteristics.value);
-                                                    
-                                                                }];
-
     // 读取rssi的委托d
     [self.babyBluetooth setBlockOnDidReadRSSI:^(NSNumber *RSSI, NSError *error) { }];
     

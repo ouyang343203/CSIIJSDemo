@@ -27,7 +27,7 @@
       }
     Byte *testByte = (Byte *)[data bytes];
     for(int i=0;i<[data length];i++){
-       printf("testByte = %d ",testByte[i]);
+        printf("testByte = %d ",testByte[i]);
     }
     return data;
 }

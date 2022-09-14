@@ -869,7 +869,6 @@ typedef void (^ResponseCallback)(NSString *responseData);
         }];
     }];
     
-    //复接口监听扫描到设备事件(备用)
     //4.连接蓝牙设备
     [self.bridge registerHandler:@"connect" handler:^(id data, WVJBResponseCallback responseCallback) {
         
@@ -884,7 +883,35 @@ typedef void (^ResponseCallback)(NSString *responseData);
         }];
     }];
     
-    //5.向蓝牙低功耗设备特征值中写入二进制数据
+    //5.获取蓝牙低功耗设备所有服务(需要已经通过 createBLEConnection 建立连接)
+    [self.bridge registerHandler:@"getBLEDeviceServices" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSString * dataStr = data;//获取的设备号
+        [[HKBabyBluetoothManager shareBabyBluetooth] getBLEDeviceServices:dataStr callBack:^(id  _Nonnull servicesResult) {
+            NSString * jsonString = servicesResult;
+            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+
+            NSArray *serverces = dic[@"data"];
+            if (serverces.count > 0) {
+                responseCallback(servicesResult);
+            }else{
+                [JYToastUtils showWithStatus:@"获取服务失败"];
+            }
+        }];
+    }];
+    
+    //6.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)
+    [self.bridge registerHandler:@"getBLEDeviceCharacteristics" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSDictionary *diction = (NSDictionary*)data;
+        [[HKBabyBluetoothManager shareBabyBluetooth] getBLEDeviceCharacteristics:diction callBack:^(id  _Nonnull characteristicsResult) {
+            responseCallback(characteristicsResult);
+        }];
+    }];
+    
+    //7.向蓝牙低功耗设备特征值中写入二进制数据
     [self.bridge registerHandler:@"writeCharacteristic" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         NSDictionary *diction = (NSDictionary*)data;
@@ -909,40 +936,12 @@ typedef void (^ResponseCallback)(NSString *responseData);
         }];
     }];
     
-    //6.停止蓝牙搜索(建立连接后需要断开搜索)
+    //8.停止蓝牙搜索(建立连接后需要断开搜索)
     [self.bridge registerHandler:@"stopLeScan" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         [[HKBabyBluetoothManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
     }];
-    
-    //7.获取蓝牙低功耗设备所有服务(需要已经通过 createBLEConnection 建立连接)
-    [self.bridge registerHandler:@"getBLEDeviceServices" handler:^(id data, WVJBResponseCallback responseCallback) {
         
-        NSString * dataStr = data;//获取的设备号
-        [[HKBabyBluetoothManager shareBabyBluetooth] getBLEDeviceServices:dataStr callBack:^(id  _Nonnull servicesResult) {
-            NSString * jsonString = servicesResult;
-            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-            NSError *error;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-
-            NSArray *serverces = dic[@"data"];
-            if (serverces.count > 0) {
-                responseCallback(servicesResult);
-            }else{
-                [JYToastUtils showWithStatus:@"获取服务失败"];
-            }
-        }];
-    }];
-    
-    //8.获取蓝牙低功耗设备某个服务中所有特征(createBLEConnection 建立连接,需要先调用 getBLEDeviceServices 获取)
-    [self.bridge registerHandler:@"getBLEDeviceCharacteristics" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
-        NSDictionary *diction = (NSDictionary*)data;
-        [[HKBabyBluetoothManager shareBabyBluetooth] getBLEDeviceCharacteristics:diction callBack:^(id  _Nonnull characteristicsResult) {
-            responseCallback(characteristicsResult);
-        }];
-    }];
-    
     //9.开启特征值变化
     [self.bridge registerHandler:@"startNotifyCharacteristicValueChange" handler:^(id data, WVJBResponseCallback responseCallback) {
         
@@ -954,6 +953,8 @@ typedef void (^ResponseCallback)(NSString *responseData);
             NSString *notifyCharacteristicResultdata = notifyCharacteristicResult;
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);
             [weakSelf.bridge callHandler:@"notifyCharacteristicValueChange" data:notifyCharacteristicResultdata responseCallback:^(id responseData) {}];
+            
+            [weakSelf.bridge callHandler:@"characteristicChangedListener" data:notifyCharacteristicResultdata responseCallback:^(id responseData) {}];
         }];
     }];
     
@@ -983,8 +984,10 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
     //13.关闭蓝牙连接
     [self.bridge registerHandler:@"closeBluetooth" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSDictionary *diction = (NSDictionary*)data;
-        [[HKBabyBluetoothManager shareBabyBluetooth] closeBLEConnection:diction];
+        NSURL *url = [NSURL URLWithString:@"App-Prefs:root=Bluetooth"];
+        if ([[UIApplication sharedApplication]canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url options:nil completionHandler:nil];
+        }
     }];
 
     //14.询问蓝牙是否打开
