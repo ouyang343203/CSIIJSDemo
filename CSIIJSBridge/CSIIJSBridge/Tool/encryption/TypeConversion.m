@@ -50,7 +50,7 @@
         }
     }];
     BabyLog(@"返回的16进制字符串%@",string);
-    return string;
+    return string.uppercaseString;
 }
 
 @end

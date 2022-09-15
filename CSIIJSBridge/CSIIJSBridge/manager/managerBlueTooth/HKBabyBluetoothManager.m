@@ -21,6 +21,7 @@
 @property (nonatomic, copy)   BluetoothWriteBLECallback wiriteBLECallBlack;//数据写入
 @property (nonatomic, copy)   BluetoothNotifyCharacteristicCallBlock characteristicCallBack;//订阅特性改变的通知
 @property (nonatomic, copy) NSString *serviceUuid;//主服务UUID
+@property (nonatomic, copy) NSString *writeCharacterStr;
 
 @end
 
@@ -73,6 +74,7 @@
 
 #pragma mark --------2.获取蓝牙状态（是否开启或者关闭）--------
 -(void)getBluetoothAdapterState:(BluetoothStateCallback)stateCallBack {
+    
     //初始化蓝牙中心
     [[BluetoothManager manager]initBluetooth:^(id  _Nonnull resultState) {
         stateCallBack(resultState);
@@ -109,6 +111,7 @@
 
 #pragma mark --------3.搜索蓝牙设备--------
 -(void)onBluetoothDeviceFound:(NSDictionary*)parameter callBack:(BluetoothSearchResultCallback)searchResultcallBack {
+    
     __weak typeof(self) weakSelf = self;
     self.babyBluetooth.scanForPeripherals().begin(30);
     //3-设置扫描到设备的委托
@@ -132,6 +135,7 @@
 
 #pragma mark --------4.连接指定蓝牙设备---------
 -(void)createBLEConnection:(NSString*)parameter callBack:(BluetoothBLEConnectCallback)ConnectCallback {
+    
     self.contentCallBack = ConnectCallback;
     CBPeripheral * peripheral = (CBPeripheral*)[self.deviceDic objectForKey:parameter];//parameter 当前的蓝牙设备
     if ([parameter isEqualToString:peripheral.identifier.UUIDString]&&peripheral!=nil ) {
@@ -152,6 +156,7 @@
 
 #pragma mark --------5.数据写入---------
 -(void)writeBLECharacteristicValue:(NSDictionary*)parameter callBack:(BluetoothWriteBLECallback)writeCallBack {
+    
     self.wiriteBLECallBlack = writeCallBack;
     NSString *dataStr = parameter[@"data"];
     NSString *address = parameter[@"mac"];
@@ -165,7 +170,7 @@
     CBCharacteristic *findCharcteritic = nil;
     for (CBService *service in newServices)
     {
-        if ([service.UUID.UUIDString isEqualToString:serviceId])//找到主服务id
+        if ([service.UUID.UUIDString isEqualToString:serviceId])//找到主服务id FFF0
         {
             findService = service;
             [peripheral discoverCharacteristics:NULL forService:service];
@@ -175,7 +180,7 @@
             
             for (CBCharacteristic *charcteritic in service.characteristics)
             {
-                if ([[[charcteritic UUID] UUIDString] isEqualToString:characteristicId])//找到主服务下特征
+                if ([[[charcteritic UUID] UUIDString] isEqualToString:characteristicId])//找到主服务下特征 FFF1
                 {
                     findCharcteritic = charcteritic;
                     [peripheral discoverDescriptorsForCharacteristic:charcteritic];
@@ -188,8 +193,7 @@
             //向主服务特征写入数据
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [peripheral writeValue: [TypeConversion hexString:dataStr] forCharacteristic:findCharcteritic type:CBCharacteristicWriteWithResponse];
-                NSString *datastr = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":[NSString stringWithFormat:@"%@ 写入的原始数据",dataStr]}];
-                writeCallBack(datastr);
+                self.writeCharacterStr = dataStr;
             });
             
         });
@@ -203,6 +207,7 @@
 
 #pragma mark --------7.获取蓝牙低功耗设备所有服务(需要已经通过 createBLEConnection 建立连接)----------
 -(void)getBLEDeviceServices:(NSString*)parameter callBack:(BluetoothServicesCallback)serviceCallBack {
+    
     NSMutableArray *serverces = [NSMutableArray array];
     NSMutableDictionary *serverceDic = [NSMutableDictionary dictionary];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
@@ -255,6 +260,7 @@
 
 #pragma mark --------9.监听特征值变化(添加特征值变化的通知NotifyValue)----------
 -(void)notifyBLECharacteristicValueChange:(NSDictionary*)parameter callBack:(BluetoothNotifyCharacteristicCallBlock)characteristicCallBack {
+    
     self.characteristicCallBack = characteristicCallBack;
     NSString *identifier = parameter[@"address"];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:identifier];
@@ -274,7 +280,6 @@
                 NSLog(@"testByte = %d ",testByte[i]);
             }
            //开启 characteristic的notify
-            
             [self.babyBluetooth notify:peripheral characteristic:charcteritic block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
                 NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0002",@"errMsg":@"其他未知异常"}];
 //                characteristicCallBack(data);
@@ -285,12 +290,14 @@
 
 #pragma mark --------10-断开所有连接----------
 -(void)cancelAllPeripheralsConnection {
+    
     [self.babyBluetooth cancelScan];
     [self.babyBluetooth cancelAllPeripheralsConnection];
 }
 
 #pragma mark ----------11.断开蓝牙连接--------
 -(void)closeBLEConnection:(NSDictionary*)parameter{
+    
     [self.babyBluetooth cancelScan];
     NSString *identifier = parameter[@"address"];
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:identifier];
@@ -300,6 +307,7 @@
 #pragma mark - Private Method -- 私有方法
 //连接成功和失败回调
 -(void)didConnectPeripheral{
+    
     __weak typeof(self) weakSelf = self;
     BabyRhythm *rhythm = [[BabyRhythm alloc]init];
     //1-设置设备连接成功的委托,同一个baby对象，使用不同的channel切换委托回调
@@ -367,7 +375,7 @@
                 for (CBCharacteristic *ch in service.characteristics) {
                     NSString *chUUID = [NSString stringWithFormat:@"%@",ch.UUID];
                     NSLog(@"chUUID:%@",chUUID);
-                    // 写数据的特征值
+                    // 读数据的特征值
                     if ([chUUID isEqualToString:@"FFF1"]) {
                         [peripheral setNotifyValue:YES forCharacteristic:ch];
                     }
@@ -382,8 +390,9 @@
     // 6-设置读取characteristics的委托
     [self.babyBluetooth setBlockOnReadValueForCharacteristicAtChannel:channelOnPeropheralView
                                                                 block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-        
-        NSLog(@"蓝牙发来的characteristic = %@",characteristics.value);
+        NSData *data = characteristics.value;
+        [TypeConversion convertDataToHexStr:data];
+        NSLog(@"蓝牙发来的characteristic = %@",[TypeConversion convertDataToHexStr:data]);
                                                     
                                                                 }];
     
@@ -406,7 +415,7 @@
         }else{
             NSLog(@"characteristic = %@",characteristic.value);
             NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",
-                                   @"errMsg":@"写入特征成功",
+                                   @"errMsg":[NSString stringWithFormat:@"%@写入服务原始征数据特成功",weakSelf.writeCharacterStr],
                                    @"data":@"0"}];
             if (weakSelf.wiriteBLECallBlack) {
                 weakSelf.wiriteBLECallBlack(data);
@@ -416,6 +425,7 @@
     
    //10订阅特征值变化的通知
     [self.babyBluetooth setBlockOnDidUpdateNotificationStateForCharacteristicAtChannel:channelOnPeropheralView block:^(CBCharacteristic *characteristic, NSError *error) {
+        NSLog(@"===uid:%@,isNotifying:%@",characteristic.UUID,characteristic.isNotifying?@"on":@"off");
         NSData *data = characteristic.value;    
         NSString *dataString;
         if (data!=nil) {

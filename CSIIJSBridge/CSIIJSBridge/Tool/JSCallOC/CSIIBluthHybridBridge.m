@@ -109,10 +109,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
     [self.bridge registerHandler:@"scanLeDevice" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         NSDictionary *data_dic = (NSDictionary*)data;
-        NSDictionary *diction = @{@"code":@"0",
-                                  @"errMsg":@""};
         [[HKBabyBluetoothManager shareBabyBluetooth] cancelAllPeripheralsConnection];
-        responseCallback([CSIICheckObject dictionaryChangeJson:diction]);
         //设置扫描到设备的委托
         [[HKBabyBluetoothManager shareBabyBluetooth] onBluetoothDeviceFound:data_dic callBack:^(id  _Nonnull searchResult) {//扫描获取到的外围设备
             NSDictionary *searchResultdic = searchResult;
@@ -120,6 +117,9 @@ typedef void (^ResponseCallback)(NSString *responseData);
             if ([namestr containsString:@"Dana"]) {
                 [self.bridge callHandler:@"onFoundDevice" data:[CSIICheckObject dictionaryChangeJson:searchResult] responseCallback:^(id responseData) {}];
             }
+            NSDictionary *diction = @{@"code":@"0",
+                                      @"errMsg":@""};
+            responseCallback([CSIICheckObject dictionaryChangeJson:diction]);
         }];
     }];
     

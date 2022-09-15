@@ -78,10 +78,10 @@ typedef void (^ResponseCallback)(NSString *responseData);
                 NSString *datastr = [CSIICheckObject dictionaryChangeJson:dic];
                 responseCallback(datastr);
             } failure:^(NSError *error) {
-                [MBProgressHUD showMessage:@"请求失败!"];
+                [JYToastUtils showWithStatus:@"请求失败!"];
             }];
         }else{
-            [MBProgressHUD showMessage:@"网络连接失败!"];
+            [JYToastUtils showWithStatus:@"网络连接失败!"];
         }
     }];
 }
@@ -90,6 +90,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
 
 #pragma mark - Private Method -- 私有方法
+
 #pragma mark 跳包
 -(void)toZipPage{
     [self.bridge registerHandler:@"toZipPage" handler:^(id data, WVJBResponseCallback responseCallback) {
@@ -888,17 +889,9 @@ typedef void (^ResponseCallback)(NSString *responseData);
         
         NSString * dataStr = data;//获取的设备号
         [[HKBabyBluetoothManager shareBabyBluetooth] getBLEDeviceServices:dataStr callBack:^(id  _Nonnull servicesResult) {
-            NSString * jsonString = servicesResult;
-            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-            NSError *error;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-
+            NSDictionary *dic = [self dictionaryWithJsonString:servicesResult];
             NSArray *serverces = dic[@"data"];
-            if (serverces.count > 0) {
-                responseCallback(servicesResult);
-            }else{
-                [JYToastUtils showWithStatus:@"获取服务失败"];
-            }
+            serverces.count > 0 ? responseCallback(servicesResult) : [JYToastUtils showWithStatus:@"获取服务失败"];
         }];
     }];
     
@@ -920,11 +913,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
         // 打印当前线程
         [[HKBabyBluetoothManager shareBabyBluetooth] writeBLECharacteristicValue:diction callBack:^(id  _Nonnull writeValueResult) {
             
-            NSString *writestr = writeValueResult;
-            NSString * jsonString = writestr;
-            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-            NSError *error;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+            NSDictionary *dic = [self dictionaryWithJsonString:writeValueResult];
             NSString *states = dic[@"data"];
             NSLog(@"writeValueResult =====%@",states);
             //回传写入成功的和失败的状态
@@ -953,8 +942,6 @@ typedef void (^ResponseCallback)(NSString *responseData);
             NSString *notifyCharacteristicResultdata = notifyCharacteristicResult;
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);
             [weakSelf.bridge callHandler:@"notifyCharacteristicValueChange" data:notifyCharacteristicResultdata responseCallback:^(id responseData) {}];
-            
-            [weakSelf.bridge callHandler:@"characteristicChangedListener" data:notifyCharacteristicResultdata responseCallback:^(id responseData) {}];
         }];
     }];
     
