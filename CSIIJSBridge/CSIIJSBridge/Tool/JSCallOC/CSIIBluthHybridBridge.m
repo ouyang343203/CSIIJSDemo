@@ -48,6 +48,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
 // 页面排版规范
 #pragma mark - HTTP Method -- 网络请求
 - (void)loadProxyGetRequestDataHandler:(ResponseCallback)responseCallback {
+    
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
         NSLog(@"result = %d",result);
         if (result) {
@@ -65,6 +66,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
 }
 
 - (void)loadProxyPostRequestDataBy:(NSString*)param responseCallback:(ResponseCallback)responseCallback{
+    
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
         NSLog(@"result = %d",result);
         if (result) {
