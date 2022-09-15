@@ -75,10 +75,10 @@ typedef void (^ResponseCallback)(NSString *responseData);
                 NSString *datastr = [CSIICheckObject dictionaryChangeJson:dic];
                 responseCallback(datastr);
             } failure:^(NSError *error) {
-                [MBProgressHUD showMessage:@"请求失败!"];
+                [JYToastUtils showWithStatus:@"请求失败!"];
             }];
         }else{
-            [MBProgressHUD showMessage:@"网络连接失败!"];
+            [JYToastUtils showWithStatus:@"网络连接失败!"];
         }
     }];
 }
