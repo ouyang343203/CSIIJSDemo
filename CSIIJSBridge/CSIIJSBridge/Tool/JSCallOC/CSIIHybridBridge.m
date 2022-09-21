@@ -36,8 +36,6 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
 @property (nonatomic, strong) PhotoAlertView *photoView;
 @property (nonatomic, strong) WVJBResponseCallback responseCallback;
-@property (nonatomic, strong, readonly, class)NSMutableDictionary<NSString*,WVJBHandler>* registerHandlers;
-@property (nonatomic, strong, readonly, class)NSMutableDictionary<NSString*,FNHybridBridgeHandler>* registerBridgeHandlers;
 
 @end
 @implementation CSIIHybridBridge
@@ -925,13 +923,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
         }];
     }];
     
-    //8.停止蓝牙搜索(建立连接后需要断开搜索)
-    [self.bridge registerHandler:@"stopLeScan" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
-        [[HKBabyBluetoothManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
-    }];
-        
-    //9.开启特征值变化
+    //8.开启特征值变化
     [self.bridge registerHandler:@"startNotifyCharacteristicValueChange" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         NSDictionary *diction = (NSDictionary*)data;
@@ -943,6 +935,12 @@ typedef void (^ResponseCallback)(NSString *responseData);
             NSLog(@"notifyBLECharacteristicValueChange =%@",notifyCharacteristicResult);
             [weakSelf.bridge callHandler:@"notifyCharacteristicValueChange" data:notifyCharacteristicResultdata responseCallback:^(id responseData) {}];
         }];
+    }];
+    
+    //9.停止蓝牙搜索(建立连接后需要断开搜索)
+    [self.bridge registerHandler:@"stopLeScan" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        [[HKBabyBluetoothManager shareBabyBluetooth] stopBluetoothDevicesDiscovery];
     }];
     
     //10.断开所有蓝牙连接(关闭蓝牙连接)
@@ -1039,47 +1037,7 @@ typedef void (^ResponseCallback)(NSString *responseData);
   
 }
 #pragma mark - 全局 jsbridge
-+ (NSMutableDictionary<NSString *,WVJBHandler> *)registerHandlers{
-    NSMutableDictionary* res = objc_getAssociatedObject(self, kFNHybridBridgeRegisterHandlersKey);
-    if (!res) {
-        res = [NSMutableDictionary dictionary];
-        objc_setAssociatedObject(self, kFNHybridBridgeRegisterHandlersKey, res, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return res;
-}
-+ (NSMutableDictionary<NSString *,FNHybridBridgeHandler> *)registerBridgeHandlers{
-    NSMutableDictionary* res = objc_getAssociatedObject(self, kFNHybridBridgeRegisterBridgeHandlersKey);
-    if (!res) {
-        res = [NSMutableDictionary dictionary];
-        objc_setAssociatedObject(self, kFNHybridBridgeRegisterBridgeHandlersKey, res, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return res;
-}
-
-+ (void)registerHandler:(NSString *)handlerName handler:(WVJBHandler)handler{
-    self.registerHandlers[handlerName] = handler;
-}
-
-+ (void)registerHandler:(NSString *)handlerName withBridgeHandler:(nonnull FNHybridBridgeHandler)handler{
-    self.registerBridgeHandlers[handlerName] = handler;
-}
-
 - (void)setBridgeAction{
-    NSDictionary* registerHandlers = self.class.registerHandlers;
-    for( NSString* handlerName in registerHandlers.allKeys){
-        [self.bridge registerHandler:handlerName handler:registerHandlers[handlerName]];
-    }
-    NSDictionary* registerBridgeHandlers = self.class.registerBridgeHandlers;
-    for( NSString* handlerName in registerBridgeHandlers.allKeys){
-        [self.bridge registerHandler:handlerName handler:^(id data, WVJBResponseCallback responseCallback) {
-            FNHybridBridgeHandler handlerBlock = registerBridgeHandlers[handlerName];
-            if (handlerBlock) {
-                handlerBlock(self, data, responseCallback);
-            }
-        }];
-    }
-    
-    // ---------------------
     // 跳包
     [self toZipPage];
     // 刷新指定模块

@@ -47,7 +47,7 @@
 -(void)openBluetoothAdapter:(NSDictionary*)parameter {
 
     self.babyBluetooth = [BabyBluetooth shareBabyBluetooth];
-    // 2-设置查找设备的过滤器
+//    // 2-设置查找设备的过滤器
     [self.babyBluetooth setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
         // 最常用的场景是查找某一个前缀开头的设备
         if ([peripheralName hasPrefix:kMyDevicePrefix]) {
@@ -55,7 +55,7 @@
         }
         return NO;
     }];
-    
+
     // 查找的规则
     [self.babyBluetooth setFilterOnDiscoverPeripheralsAtChannel:channelOnPeropheralView filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
          // 最常用的场景是查找某一个前缀开头的设备
@@ -64,7 +64,7 @@
          }
          return NO;
     }];
-    
+
     //设置连接规则
     [self.babyBluetooth setFilterOnConnectToPeripheralsAtChannel:channelOnPeropheralView filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
         return NO;
@@ -116,7 +116,8 @@
     self.babyBluetooth.scanForPeripherals().begin(30);
     //3-设置扫描到设备的委托
     [self.babyBluetooth setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    
+        dispatch_async(dispatch_get_main_queue(), ^{//将扫描到的设备给到回传给前端
             if (![weakSelf.deviceDic objectForKey:[peripheral name]]&&peripheral!=nil&&peripheral.name!=nil) {
                 [weakSelf.deviceDic setObject:peripheral forKey:peripheral.identifier.UUIDString];
                      NSLog(@"UUIDString:%@",peripheral.identifier.UUIDString);
@@ -160,8 +161,8 @@
     self.wiriteBLECallBlack = writeCallBack;
     NSString *dataStr = parameter[@"data"];
     NSString *address = parameter[@"mac"];
-    NSString *serviceId = parameter[@"serviceUuid"];
-    NSString *characteristicId  = parameter[@"characteristicUuid"];
+    NSString *serviceId = parameter[@"serviceUuid"];//FFF0
+    NSString *characteristicId  = parameter[@"characteristicUuid"];//FFF1
     CBPeripheral *peripheral = [_deviceDic objectForKey:address];
     NSString *data_10002 = [CSIICheckObject dictionaryChangeJson:@{@"code":@"10002",@"errMsg":@"没有找到指定设备"}];
     if (peripheral == nil) {writeCallBack(data_10002); return;}
@@ -213,10 +214,13 @@
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:parameter];
     NSArray<CBService*>*newServices = peripheral.services;
     for (CBService *service in newServices) {
-        [serverceDic setValue:service.UUID.UUIDString forKey:@"uuid"];
-        [serverceDic setValue:@(service.isPrimary) forKey:@"type"];
-        [serverces addObject:serverceDic];
-        [peripheral discoverCharacteristics:nil forService:service];
+        NSLog(@"serviceUUID:%@",service.UUID.UUIDString);
+        if([service.UUID isEqual:[CBUUID UUIDWithString:@"FFF0"]]){
+            [serverceDic setValue:service.UUID.UUIDString forKey:@"uuid"];
+            [serverceDic setValue:@(service.isPrimary) forKey:@"type"];
+            [serverces addObject:serverceDic];
+            [peripheral discoverCharacteristics:nil forService:service];//查找服务的特征
+        }
     }
     NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":serverces.count > 0 ? @"获取服务成功":@"获取服务失败",@"data":serverces}];
     NSLog(@"======获取的所有服务%@",data);
@@ -234,8 +238,8 @@
     CBPeripheral * peripheral = (CBPeripheral*)[_deviceDic objectForKey:identifier];
     NSArray<CBService*>*newServices = peripheral.services;
     for (CBService *service in newServices) {
-        NSLog(@"service.UUID.UUIDString:%@",service.UUID.UUIDString);        
-        if ([service.UUID.UUIDString isEqualToString:serviceId]) {
+        
+        if ([service.UUID.UUIDString isEqualToString:serviceId]) {//获取FFF0服务下的所有特征
             
             NSArray <CBCharacteristic*> *newCharcteritic  = service.characteristics;
             if (newCharcteritic.count > 0) {
@@ -314,13 +318,13 @@
     [self.babyBluetooth setBlockOnConnectedAtChannel:channelOnPeropheralView block:^(CBCentralManager *central, CBPeripheral *peripheral) {
         
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        [peripheral discoverServices:nil];
+        //停止扫描
+        [weakSelf.babyBluetooth  cancelScan];
         NSLog(@"设备：%@--连接成功",peripheral.name);
         if (weakSelf.contentCallBack) {
             weakSelf.contentCallBack([CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"连接成功",@"data":@"2"}]);//连接成功
         }
-        [peripheral discoverServices:nil];
-        //停止扫描
-        [weakSelf.babyBluetooth  cancelScan];
     }];
     
     // 2-设置设备连接失败的委托
@@ -376,7 +380,7 @@
                     NSString *chUUID = [NSString stringWithFormat:@"%@",ch.UUID];
                     NSLog(@"chUUID:%@",chUUID);
                     // 读数据的特征值
-                    if ([chUUID isEqualToString:@"FFF1"]) {
+                    if ([chUUID isEqualToString:@"FFF1"] && ![ch isNotifying]) {
                         [peripheral setNotifyValue:YES forCharacteristic:ch];
                     }
                 }
@@ -393,8 +397,7 @@
         NSData *data = characteristics.value;
         [TypeConversion convertDataToHexStr:data];
         NSLog(@"蓝牙发来的characteristic = %@",[TypeConversion convertDataToHexStr:data]);
-                                                    
-                                                                }];
+    }];
     
     //7-设置发现characteristics的descriptors的委托
     [self.babyBluetooth setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:channelOnPeropheralView block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
@@ -415,7 +418,7 @@
         }else{
             NSLog(@"characteristic = %@",characteristic.value);
             NSString *data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",
-                                   @"errMsg":[NSString stringWithFormat:@"%@写入服务原始征数据特成功",weakSelf.writeCharacterStr],
+                                   @"errMsg":[NSString stringWithFormat:@"%@写入服务原始征数据成功",weakSelf.writeCharacterStr],
                                    @"data":@"0"}];
             if (weakSelf.wiriteBLECallBlack) {
                 weakSelf.wiriteBLECallBlack(data);
@@ -428,7 +431,7 @@
         NSLog(@"===uid:%@,isNotifying:%@",characteristic.UUID,characteristic.isNotifying?@"on":@"off");
         NSData *data = characteristic.value;    
         NSString *dataString;
-        if (data!=nil) {
+        if (data!=nil && [characteristic.UUID isEqual:[CBUUID UUIDWithString:@"FFF1"]]) {
             dataString =  [TypeConversion convertDataToHexStr:data];//data转成16进制字符串
             NSString *charData = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"iOS监听返回特征值",@"data":dataString}];
             if (weakSelf.characteristicCallBack) {

@@ -7,6 +7,7 @@
 
 #import "CSIIWKController.h"
 #import "CSIIHybridBridge.h"
+#import "CSIIBluthHybridBridge.h"
 #import "GlobalMacro.h"
 #import "CSIIWKHybridBridge.h"
 #import "CSIIGloballTool.h"
@@ -173,6 +174,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     }
 
     [[CSIIHybridBridge shareManager] bridgeForWebView:self.wkWebView];
+//    [[CSIIBluthHybridBridge shareManager] bridgeForWebView:self.wkWebView];
     [self setNavinavigationBar];
 }
 
