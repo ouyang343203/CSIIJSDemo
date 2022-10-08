@@ -7,9 +7,7 @@
 
 #import "CSIIWKController.h"
 #import "CSIIHybridBridge.h"
-#import "CSIIBluthHybridBridge.h"
 #import "GlobalMacro.h"
-#import "CSIIWKHybridBridge.h"
 #import "CSIIGloballTool.h"
 #import "DataStorageManager.h"
 typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
@@ -114,48 +112,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 }
 
 #pragma mark - Action
--(void)titleClickEvent {
-    id bridBridge = [CSIIHybridBridge shareManager].bridge;
-    if ([bridBridge isKindOfClass:[CSIIWKHybridBridge class]])
-    {
-        bridBridge = (CSIIWKHybridBridge*)bridBridge;
-        
-        [bridBridge callHandler:@"titleClick" data:@{} responseCallback:^(id responseData) {
-            NSLog(@"titile点击事件");
-        }];
-    }
-}
 
--(void)backBarButtonItemClicked {
-    id bridBridge = [CSIIHybridBridge shareManager].bridge;
-    if ([bridBridge isKindOfClass:[CSIIWKHybridBridge class]])
-    {
-        bridBridge = (CSIIWKHybridBridge*)bridBridge;
-        [[CSIIGloballTool shareManager]closVC];
-        [bridBridge callHandler:@"back" data:@{} responseCallback:^(id responseData) {
-            NSLog(@"titile点击事件");
-            [[CSIIGloballTool shareManager]closVC];
-        }];
-    }
-}
-
--(void)rightButtonItemClicked {
-    id bridBridge = [CSIIHybridBridge shareManager].bridge;
-    
-    if ([bridBridge isKindOfClass:[CSIIWKHybridBridge class]]) {
-        
-        bridBridge = (CSIIWKHybridBridge*)bridBridge;
-        
-        [bridBridge callHandler:@"optionMenu" data:@{} responseCallback:^(id responseData) {
-            NSLog(@"titile点击事件");
-        }];
-    }
-}
-
-//-(void)back
-//{
-//    [[CSIIGloballTool shareManager]closVC];
-//}
 -(void)back{
     if ([self.wkWebView canGoBack]) {
            [self.wkWebView goBack];
@@ -168,13 +125,10 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 -(void)loadNativeHFive:(NSString*)path {
     if (path) {
         NSURL *webUrl = [NSURL fileURLWithPath:path];
-//        NSURL *webUrl = [NSURL URLWithString:@"http://172.30.100.13:8081"];
         [self.wkWebView loadRequest:[NSURLRequest requestWithURL:webUrl]];
         [self.wkWebView reload];
     }
-
     [[CSIIHybridBridge shareManager] bridgeForWebView:self.wkWebView];
-//    [[CSIIBluthHybridBridge shareManager] bridgeForWebView:self.wkWebView];
     [self setNavinavigationBar];
 }
 
