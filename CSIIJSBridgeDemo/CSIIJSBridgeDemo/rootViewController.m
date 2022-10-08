@@ -35,6 +35,7 @@
 
 
 #pragma mark - Private Method -- 私有方法
+
 -(void)initWXwebView {
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"pluginDown" ofType:@"html"];
     NSURL *webUrl = [NSURL fileURLWithPath:htmlPath];

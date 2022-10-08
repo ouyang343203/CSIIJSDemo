@@ -14,21 +14,48 @@
 +(NSData *)hexString:(NSString *)hexString {
  
     NSLog(@"写入的16进制字符串原始数据:%@",hexString);
-    NSMutableData* data = [NSMutableData data];
-      int idx;
-      for (idx = 0; idx+2 <= hexString.length; idx+=2) {
-          NSRange range = NSMakeRange(idx, 2);
-          NSString* hexStr = [hexString substringWithRange:range];
-          NSScanner* scanner = [NSScanner scannerWithString:hexStr];
-          unsigned int intValue;
-          [scanner scanHexInt:&intValue];
-
-          [data appendBytes:&intValue length:1];
-      }
-    Byte *testByte = (Byte *)[data bytes];
-    for(int i=0;i<[data length];i++){
-        printf("testByte = %d ",testByte[i]);
+//    NSMutableData* data = [NSMutableData data];
+//      int idx;
+//      for (idx = 0; idx+2 <= hexString.length; idx+=2) {
+//          NSRange range = NSMakeRange(idx, 2);
+//          NSString* hexStr = [hexString substringWithRange:range];
+//          NSScanner* scanner = [NSScanner scannerWithString:hexStr];
+//          unsigned int intValue;
+//          [scanner scanHexInt:&intValue];
+//
+//          [data appendBytes:&intValue length:1];
+//      }
+//    Byte *testByte = (Byte *)[data bytes];
+//    for(int i=0;i<[data length];i++){
+//        printf("testByte = %d ",testByte[i]);
+//    }
+//    return data;
+    if(hexString.length % 2 != 0) {
+        return nil;
     }
+    char *myBuffer = (char *)malloc((int)[hexString length] / 2);
+    bzero(myBuffer, [hexString length] / 2);
+    for (int i = 0; i < [hexString length] - 1; i += 2) {
+        unsigned int anInt;
+        NSString * hexCharStr = [hexString substringWithRange:NSMakeRange(i, 1)];
+        NSScanner * scanner = [[NSScanner alloc] initWithString:hexCharStr];
+        [scanner scanHexInt:&anInt];
+        
+        unsigned int anInt2;
+        NSString * hexCharStr2 = [hexString substringWithRange:NSMakeRange(i+1, 1)];
+        NSScanner * scanner2 = [[NSScanner alloc] initWithString:hexCharStr2];
+        [scanner2 scanHexInt:&anInt2];
+        char res = (char)(anInt << 4 | anInt2);
+        myBuffer[i >> 1] = res;
+        NSLog(@"%d", res);
+    }
+    NSLog(@"%s",myBuffer);
+
+    for(int i=0;i<[hexString length] / 2;i++){
+        BabyLog(@"testByte111111 = %d ",myBuffer[i]);
+    }
+    
+    NSData *data = [NSData dataWithBytes:myBuffer length:[hexString length] / 2];
     return data;
 }
 

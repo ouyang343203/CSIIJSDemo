@@ -11,6 +11,8 @@
 		304826D728ACDB8C00D2CE49 /* BluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 304826D528ACDB8C00D2CE49 /* BluetoothManager.h */; };
 		305816C228C1E3CF00C1B306 /* HKBabyBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 305816C028C1E3CF00C1B306 /* HKBabyBluetoothManager.h */; };
 		305816C328C1E3CF00C1B306 /* HKBabyBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 305816C128C1E3CF00C1B306 /* HKBabyBluetoothManager.m */; };
+		3073698428E1481B0006EAF3 /* XFBleBlueManger.h in Headers */ = {isa = PBXBuildFile; fileRef = 3073698228E1481B0006EAF3 /* XFBleBlueManger.h */; };
+		3073698528E1481B0006EAF3 /* XFBleBlueManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3073698328E1481B0006EAF3 /* XFBleBlueManger.m */; };
 		30C7029F28C638BF009F9445 /* CSIIBluthHybridBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 30C7029D28C638BF009F9445 /* CSIIBluthHybridBridge.h */; };
 		30C702A028C638BF009F9445 /* CSIIBluthHybridBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C7029E28C638BF009F9445 /* CSIIBluthHybridBridge.m */; };
 		30D88F7728B5CC7000182C5C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D88F7028B5CC7000182C5C /* MBProgressHUD.m */; };
@@ -197,6 +199,8 @@
 		304826D528ACDB8C00D2CE49 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothManager.h; sourceTree = "<group>"; };
 		305816C028C1E3CF00C1B306 /* HKBabyBluetoothManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKBabyBluetoothManager.h; sourceTree = "<group>"; };
 		305816C128C1E3CF00C1B306 /* HKBabyBluetoothManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKBabyBluetoothManager.m; sourceTree = "<group>"; };
+		3073698228E1481B0006EAF3 /* XFBleBlueManger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XFBleBlueManger.h; sourceTree = "<group>"; };
+		3073698328E1481B0006EAF3 /* XFBleBlueManger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XFBleBlueManger.m; sourceTree = "<group>"; };
 		30C7029D28C638BF009F9445 /* CSIIBluthHybridBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSIIBluthHybridBridge.h; sourceTree = "<group>"; };
 		30C7029E28C638BF009F9445 /* CSIIBluthHybridBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSIIBluthHybridBridge.m; sourceTree = "<group>"; };
 		30D88F7028B5CC7000182C5C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
@@ -454,6 +458,8 @@
 				304826D428ACDB8C00D2CE49 /* BluetoothManager.m */,
 				305816C028C1E3CF00C1B306 /* HKBabyBluetoothManager.h */,
 				305816C128C1E3CF00C1B306 /* HKBabyBluetoothManager.m */,
+				3073698228E1481B0006EAF3 /* XFBleBlueManger.h */,
+				3073698328E1481B0006EAF3 /* XFBleBlueManger.m */,
 			);
 			path = managerBlueTooth;
 			sourceTree = "<group>";
@@ -877,6 +883,7 @@
 				E2EF5EF02685DA0A0073ECBA /* CSIIHybridBridge.h in Headers */,
 				E47D466E26F04C1B00D2EA79 /* CSIITool.h in Headers */,
 				E28AF3AA2710574A004F2C12 /* DataManager.h in Headers */,
+				3073698428E1481B0006EAF3 /* XFBleBlueManger.h in Headers */,
 				E236E7032800113A000F9A11 /* reachabilityManager.h in Headers */,
 				E2A626362682CE44000A9F56 /* PluginUpdateManager.h in Headers */,
 				30FB1C2A28C1E1D20087941D /* BabyToy.h in Headers */,
@@ -1117,6 +1124,7 @@
 				E2983F6A2681ECD40014B6F2 /* AFURLSessionManager.m in Sources */,
 				30FB1C2728C1E1D20087941D /* BabyPeripheralManager.m in Sources */,
 				E47D466F26F04C1B00D2EA79 /* CSIITool.m in Sources */,
+				3073698528E1481B0006EAF3 /* XFBleBlueManger.m in Sources */,
 				E2983F982681ECD40014B6F2 /* mz_compat.c in Sources */,
 				E2497575279E4E2200B02D8A /* BLEBluetoolthManager.m in Sources */,
 				E2983FA32681ECD40014B6F2 /* mz_strm.c in Sources */,
