@@ -158,16 +158,15 @@ projectId:972BF2811A76421BB37D5E93167EC536
                          [JYToastUtils dismiss];
                       } failure:^(NSError *error) {
                           [JYToastUtils dismiss];
-                         NSLog(@"error - %@",error);
-                            [self jumpToLocalResource:appName];
-//                       [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
+                          NSLog(@"error - %@",error);
+                          [self jumpToLocalResource:appName];
+//                        [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
 //                        NSLog(@"没有网络");
 //            }];
-                        NSLog(@"不存在");
+                         NSLog(@"不存在");
                              }];
                 }
             } failure:^(NSError *error) {
-                //[hud hideAnimated:YES];
                 [JYToastUtils dismiss];
                 [self jumpToLocalResource:appName];
 //                [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
@@ -176,7 +175,6 @@ projectId:972BF2811A76421BB37D5E93167EC536
                     NSLog(@"error = %@",error);
             }];
         }else{
-            //[hud hideAnimated:YES];
             [JYToastUtils dismiss];
             [self jumpToLocalResource:appName];
 //            if (!kStringIsEmpty(version)) {
@@ -243,13 +241,6 @@ projectId:972BF2811A76421BB37D5E93167EC536
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:JGCSIIJumpSuccessfulNotification object:nil];
     [new_wxWebCV loadNativeHFive:filePath];
-    
-//    id webCV  = [[CSIIGloballTool shareManager] findCurrentShowingViewController];
-//    CSIIWKController *wxWebCV = (CSIIWKController*)webCV;
-//    CSIIWKController *new_wxWebCV = [[CSIIWKController alloc] init];
-//    UINavigationController *native = [[CSIIGloballTool shareManager] navigationControllerFromView:wxWebCV.view];
-//    [new_wxWebCV loadNativeHFive:nil];
-//    [native pushViewController:new_wxWebCV animated:YES];
 }
 
 +(void)h5_urlPushViewControllerUrl:(NSString*)url{

@@ -98,22 +98,22 @@
     [[NSNotificationCenter defaultCenter]postNotificationName:BabyNotificationAtCentralManagerDidUpdateState object:@{@"central":central}];
     
     switch (central.state) {
-        case CBCentralManagerStateUnknown:
+        case CBManagerStateUnknown:
             BabyLog(@">>>CBCentralManagerStateUnknown");
             break;
-        case CBCentralManagerStateResetting:
+        case CBManagerStateResetting:
             BabyLog(@">>>CBCentralManagerStateResetting");
             break;
-        case CBCentralManagerStateUnsupported:
+        case CBManagerStateUnsupported:
             BabyLog(@">>>CBCentralManagerStateUnsupported");
             break;
-        case CBCentralManagerStateUnauthorized:
+        case CBManagerStateUnauthorized:
             BabyLog(@">>>CBCentralManagerStateUnauthorized");
             break;
-        case CBCentralManagerStatePoweredOff:
+        case CBManagerStatePoweredOff:
             BabyLog(@">>>CBCentralManagerStatePoweredOff");
             break;
-        case CBCentralManagerStatePoweredOn:
+        case CBManagerStatePoweredOn:
             BabyLog(@">>>CBCentralManagerStatePoweredOn");
             [[NSNotificationCenter defaultCenter]postNotificationName:BabyNotificationAtCentralManagerEnable object:@{@"central":central}];
             break;
@@ -260,6 +260,7 @@
     }
 }
 
+#pragma mark - CBPeripheralDelegate委托方法
 //发现服务的Characteristics
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
 

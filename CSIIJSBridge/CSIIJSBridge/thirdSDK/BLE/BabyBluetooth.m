@@ -381,7 +381,7 @@
 
 //私有方法，扫描或连接设备
 - (void)start:(CBPeripheral *)cachedPeripheral {
-    if (babyCentralManager->centralManager.state == CBCentralManagerStatePoweredOn) {
+    if (babyCentralManager->centralManager.state == CBManagerStatePoweredOn) {
         CENTRAL_MANAGER_INIT_WAIT_TIMES = 0;
         //扫描后连接
         if (babyCentralManager->needScanForPeripherals) {

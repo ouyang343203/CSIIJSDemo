@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)loadNativeHFive:(NSString*)path;
 -(void)loadUrl:(NSString*)url;
-
+-(void)setNaviTitle:(NSString*)title;
 
 @end
 
