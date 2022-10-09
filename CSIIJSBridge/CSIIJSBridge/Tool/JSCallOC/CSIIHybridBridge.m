@@ -16,13 +16,14 @@
 #import "PluginUpdateManager.h"
 #import "CSIIWKController.h"
 #import "SharedItem.h"
-#import "AFNWorkManager.h"
 #import "DataManager.h"
 #import "reachabilityManager.h"
 #import "LQAFNetworkManager.h"
 #import "JYToastUtils.h"
 #import <objc/runtime.h>
 #import "XFBleBlueManger.h"
+#import "LQAFNetManager.h"
+#import "CSIITool.h"
 
 #define  KputKey  @"putKey"
 #define  REQUEST_URL_DEFAULT  @"http://183.62.118.51:10088"
@@ -30,12 +31,13 @@
 #define kFNHybridBridgeRegisterHandlersKey @"kFNHybridBridgeRegisterHandlersKey"
 #define kFNHybridBridgeRegisterBridgeHandlersKey @"kFNHybridBridgeRegisterBridgeHandlersKey"
 
-typedef void (^ResponseCallback)(NSString *responseData);
+typedef void (^ResponseCallback)(NSDictionary *responseData);
 
 @interface CSIIHybridBridge()<UIDocumentInteractionControllerDelegate,DateTimePickerViewDelegate>
 
 @property (nonatomic, strong) PhotoAlertView *photoView;
 @property (nonatomic, strong) WVJBResponseCallback responseCallback;
+@property (nonatomic, strong) ResponseCallback requstCallback;
 
 @end
 @implementation CSIIHybridBridge
@@ -50,34 +52,42 @@ typedef void (^ResponseCallback)(NSString *responseData);
 }
 // 页面排版规范
 #pragma mark - HTTP Method -- 网络请求
-- (void)loadProxyGetRequestDataHandler:(ResponseCallback)responseCallback {
+- (void)loadProxyGetRequestDataWithUrl:(NSString*)url Params:(NSDictionary*)param DataHandler:(ResponseCallback)responseCallback {
+    __block NSString *requsturl;
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
         NSLog(@"result = %d",result);
         if (result) {
-            [[LQAFNetworkManager manager] requestGetWithUrl:REQUEST_URL_DEFAULT success:^(id response) {
-                NSDictionary *dic = (NSDictionary*)response[@"data"];
-                NSString *datastr = [CSIICheckObject dictionaryChangeJson:dic];
-                responseCallback(datastr);
-            } failure:^(NSError *error) {
+            requsturl = [NSString stringWithFormat:@"%@%@",REQUEST_URL_DEFAULT,url];
+            [[LQAFNetManager manager]getWithUrl:requsturl params:param mapper:nil showHUD:NO success:^(BaseModel * _Nonnull response) {
+                
+                NSDictionary *dic = response.data;
+                responseCallback(dic);
+        
+            } failure:^(NSError * _Nonnull error) {
                 [JYToastUtils showWithStatus:@"请求失败!"];
             }];
+            
         }else{
             [JYToastUtils showWithStatus:@"网络连接失败!"];
         }
     }];
 }
 
-- (void)loadProxyPostRequestDataBy:(NSString*)param responseCallback:(ResponseCallback)responseCallback{
+- (void)loadProxyPostRequestDataWithUrl:(NSString*)url Params:(NSDictionary*)param responseCallback:(ResponseCallback)responseCallback{
+    __block NSString *requsturl;
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
         NSLog(@"result = %d",result);
         if (result) {
-            [[LQAFNetworkManager manager]requestPostStrparamsWithUrl:REQUEST_URL_DEFAULT params:param success:^(id response) {
-                NSDictionary *dic = (NSDictionary*)response[@"data"];
-                NSString *datastr = [CSIICheckObject dictionaryChangeJson:dic];
-                responseCallback(datastr);
-            } failure:^(NSError *error) {
+            requsturl = [NSString stringWithFormat:@"%@%@",REQUEST_URL_DEFAULT,url];
+            [[LQAFNetManager manager]postWithUrl:requsturl params:param mapper:nil showHUD:NO success:^(BaseModel * _Nonnull response) {
+                
+                NSDictionary *dic = response.data;
+                responseCallback(dic);
+        
+            } failure:^(NSError * _Nonnull error) {
                 [JYToastUtils showWithStatus:@"请求失败!"];
             }];
+            
         }else{
             [JYToastUtils showWithStatus:@"网络连接失败!"];
         }
@@ -279,16 +289,25 @@ typedef void (^ResponseCallback)(NSString *responseData);
 
      //20.
      [self.bridge registerHandler:@"proxyGetRequest" handler:^(id data, WVJBResponseCallback responseCallback) {
-         [self loadProxyGetRequestDataHandler:^(NSString *responseData) {
-             responseCallback(responseData);
+         
+         NSDictionary *responsedic = (NSDictionary*)data;
+         NSString *reqPath = responsedic[@"reqPath"];
+         NSString *jsonstr = responsedic[@"reqParams"];
+         NSDictionary *reqParams = (NSDictionary*)[CSIICheckObject jsontoObject:jsonstr];
+         [self loadProxyGetRequestDataWithUrl:reqPath Params:reqParams DataHandler:^(NSDictionary *responseData) {
+             responseCallback([CSIICheckObject dictionaryChangeJson:responseData]);
          }];
      }];
      
      //21.
      [self.bridge registerHandler:@"proxyPostRequest" handler:^(id data, WVJBResponseCallback responseCallback) {
-         NSString *datastr = data;
-         [self loadProxyPostRequestDataBy:datastr responseCallback:^(NSString *responseData) {
-             responseCallback(responseData);
+         
+         NSDictionary *responsedic = (NSDictionary*)data;
+         NSString *reqPath = responsedic[@"reqPath"];
+         NSString *jsonstr = responsedic[@"reqParams"];
+         NSDictionary *reqParams = (NSDictionary*)[CSIICheckObject jsontoObject:jsonstr];
+         [self loadProxyPostRequestDataWithUrl:reqPath Params:reqParams responseCallback:^(NSDictionary *responseData) {
+             responseCallback([CSIICheckObject dictionaryChangeJson:responseData]);
          }];
      }];
 }

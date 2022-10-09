@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "3A2BF531-156D-428A-9F9C-56309E0F818F"
+   uuid = "B13162E5-BF30-4EB5-BDA9-B5FC7F539075"
    type = "0"
    version = "2.0">
-<<<<<<< HEAD
-=======
    <Breakpoints>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
-            uuid = "930D172F-5643-442A-AC07-00BD6B57E682"
+            uuid = "B8A70BBA-1FD9-4230-B96A-7118625C88C8"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -21,67 +19,18 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CC052C62-C9CA-48D6-A94D-642CAAEDF4F0"
+            uuid = "32C85123-27BC-44C2-8AC4-9AA2895857FD"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CSIIJSBridge/CSIIJSBridge/manager/managerBlueTooth/XFBleBlueManger.m"
+            filePath = "CSIIJSBridge/CSIIJSBridge/PluginUpdateManager.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
-            landmarkName = "-stopPeripheral"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0526C1F2-90DB-48FA-8558-B408B7BE8F13"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CSIIJSBridge/CSIIJSBridge/Tool/JSCallOC/CSIIHybridBridge.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "620"
-            endingLineNumber = "620"
-            landmarkName = "-setBluetooth"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F492DE39-3125-4277-AD7A-77ADD9F428D0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CSIIJSBridge/CSIIJSBridge/Tool/JSCallOC/CSIIHybridBridge.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "626"
-            endingLineNumber = "626"
-            landmarkName = "-setBluetooth"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DE276672-8E6A-4CE2-9BAE-0CD7D46A0FBD"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CSIIJSBridge/CSIIJSBridge/Tool/JSCallOC/CSIIHybridBridge.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "645"
-            endingLineNumber = "645"
-            landmarkName = "-setBluetooth"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "-jumpDownlaodjumpWithAappName:withParams:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
->>>>>>> dev-oriang
 </Bucket>

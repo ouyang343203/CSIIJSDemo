@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E22CF28F26945A2E008FCA37 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF28E26945A2E008FCA37 /* AppDelegate.m */; };
-		E22CF29526945A2E008FCA37 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22CF29426945A2E008FCA37 /* ViewController.m */; };
 		E22CF29826945A2E008FCA37 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E22CF29626945A2E008FCA37 /* Main.storyboard */; };
 		E22CF29A26945A2E008FCA37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E22CF29926945A2E008FCA37 /* Assets.xcassets */; };
 		E22CF29D26945A2E008FCA37 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E22CF29B26945A2E008FCA37 /* LaunchScreen.storyboard */; };
@@ -24,8 +23,6 @@
 		E22CF28A26945A2E008FCA37 /* CSIIJSBridgeDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CSIIJSBridgeDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E22CF28D26945A2E008FCA37 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E22CF28E26945A2E008FCA37 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E22CF29326945A2E008FCA37 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		E22CF29426945A2E008FCA37 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E22CF29726945A2E008FCA37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E22CF29926945A2E008FCA37 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E22CF29C26945A2E008FCA37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -78,8 +75,6 @@
 				E48CE30526D4D373004F1E54 /* pluginDown.html */,
 				E22CF28D26945A2E008FCA37 /* AppDelegate.h */,
 				E22CF28E26945A2E008FCA37 /* AppDelegate.m */,
-				E22CF29326945A2E008FCA37 /* ViewController.h */,
-				E22CF29426945A2E008FCA37 /* ViewController.m */,
 				E22CF2A826959080008FCA37 /* rootViewController.h */,
 				E22CF2A926959080008FCA37 /* rootViewController.m */,
 				E22CF29626945A2E008FCA37 /* Main.storyboard */,
@@ -171,7 +166,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E22CF29526945A2E008FCA37 /* ViewController.m in Sources */,
 				E22CF28F26945A2E008FCA37 /* AppDelegate.m in Sources */,
 				E22CF2AA26959080008FCA37 /* rootViewController.m in Sources */,
 				E22CF2A026945A2E008FCA37 /* main.m in Sources */,

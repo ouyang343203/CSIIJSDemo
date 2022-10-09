@@ -8,7 +8,7 @@
 #import "AppDelegate.h"
 #import <CSIIJSBridge/CSIIJSBridge.h>
 #import "rootViewController.h"
-#import "ViewController.h"
+
 @interface AppDelegate ()
 
 @end

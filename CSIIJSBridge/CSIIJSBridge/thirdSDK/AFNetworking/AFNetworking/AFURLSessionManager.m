@@ -400,7 +400,6 @@ static NSString * const AFNSURLSessionTaskDidSuspendNotification = @"com.alamofi
         }
         
         [localDataTask cancel];
-        
         [session finishTasksAndInvalidate];
     }
 }
