@@ -27,11 +27,6 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 // 空一行
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    if (self.naviBarColor==0) {
-//        self.naviBarColor = #E6E6FA;
-//        self.navigationController.navigationBar.barTintColor = kCSIIRGBHex(@"#E6E6FA");
-    }
     self.lineView= [[progressLineView alloc]initWithFrame:CGRectMake(0,200, KScreenWidth, 3)];
     self.lineView.lineColor = [UIColor redColor];
     [self.view addSubview:self.lineView];
@@ -87,26 +82,30 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     }
     if (self.naviBarColor) {
         self.navigationController.navigationBar.barTintColor = self.naviBarColor;
+        self.view.backgroundColor = self.naviBarColor;
     }
+    if (self.homePageIndex==1) {
+        self.naviBarColor = kCSIIRGBHex(0x1F1F27);
+        self.wkWebView.frame = CGRectMake(0, KStatusBarHeight, KScreenWidth, KScreenHeight-KStatusBarHeight);
+        self.view.backgroundColor =kCSIIRGBHex(0x1F1F27);
+    }
+    
     if (self.titlefont) {
         [button.titleLabel setFont:[UIFont systemFontOfSize:self.titlefont]];
     }
     if (self.titleColor) {
-        
         [button setTitleColor:self.titleColor forState:UIControlStateNormal];
-
     }
     if (self.left_back_icon||self.left_text) {
         self.navigationItem.hidesBackButton = true;
         UIBarButtonItem *backItem = [self createLeftAndRight:leftBtn];
         UIBarButtonItem *spaceItem = [self createSpaceItem];
         self.navigationItem.leftBarButtonItems = @[spaceItem,backItem];
-      
     }
     if (self.right_icon||self.right_text) {
         UIBarButtonItem *rightItem = [self createLeftAndRight:rightBtn];
         UIBarButtonItem *spaceItem = [self createSpaceItem];
-        
+
         self.navigationItem.rightBarButtonItems = @[spaceItem,rightItem];
     }
 }
@@ -151,7 +150,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 #pragma mark - Setter/Getter -- Getter尽量写出懒加载形式
 -(WKWebView*)wkWebView{
     if (!_wkWebView) {
-        _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, KNavBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT-KNavBarHeight)];
+        _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, KNavBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT -KNavBarHeight)];
         _wkWebView.navigationDelegate = self;
         _wkWebView.UIDelegate = self;
         [_wkWebView backForwardList];

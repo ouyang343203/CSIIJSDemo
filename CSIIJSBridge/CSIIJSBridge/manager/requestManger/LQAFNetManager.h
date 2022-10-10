@@ -9,6 +9,8 @@
 #import "AFNetworking.h"
 #import "LQAFNetManager.h"
 #import "BaseModel.h"
+#import "MBProgressHUD.h"
+#import "SSZipArchive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -43,6 +45,13 @@ typedef NS_ENUM(NSUInteger, RequestMethod) {
  *  mapper:映射的Model对象
  */
 - (void)deleteWithUrl:(NSString *)url params:(NSDictionary *)params mapper:(id)mapper showHUD:(BOOL)showHUD success:(void (^)(BaseModel* response))success failure:(void (^)(NSError *error))failure;
+
+/** 下载zip文件
+ *  url:下载地址
+ *  packageName:文件名称
+ *  versionName:版本名称
+ */
+-(void)downlaodTaskWithUrl:(NSString*)url Progress:(MBProgressHUD*)progress packageName:(NSString*)packageName versionName:(NSString*)versionName success:(void(^)(id response))success failure:(void(^)(NSError *error))failure;
 
 @end
 

@@ -7,6 +7,7 @@
 
 #import "LQAFNetManager.h"
 #import "MJExtension.h"
+#import "packageManager.h"
 
 static LQAFNetManager *_manager = nil;
 static const int kRequestTimeoutInterval = 20;
@@ -96,6 +97,48 @@ static const int kRequestTimeoutInterval = 20;
         }];
         return sessionDataTask;
     }
+}
+
+/** 下载zip文件
+ *  url:下载地址
+ *  packageName:文件名称
+ *  versionName:版本名称
+ */
+-(void)downlaodTaskWithUrl:(NSString*)url Progress:(MBProgressHUD*)progress packageName:(NSString*)packageName versionName:(NSString*)versionName success:(void(^)(id response))success failure:(void(^)(NSError *error))failure {
+    
+    NSURLSessionDownloadTask *sessionDataTask = [[LQAFNetManager sharedManager]downloadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]] progress:^(NSProgress * _Nonnull downloadProgress) {
+      
+        NSLog(@"%f",1.0 * downloadProgress.completedUnitCount / downloadProgress.totalUnitCount);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+           progress.progress = 1.0 *downloadProgress.completedUnitCount / downloadProgress.totalUnitCount;
+            if (progress.progress ==1.0) {
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [progress setHidden:YES];
+                });
+            }
+            progress.label.text = [NSString stringWithFormat:@"%.0f%%",(float)downloadProgress.completedUnitCount / downloadProgress.totalUnitCount*100];
+         });
+        
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        
+        NSString *fileName = [packageManager createFilePackageName:packageName versionNumber:versionName];
+        NSURL *fileUrl = [NSURL fileURLWithPath:fileName];
+        return fileUrl;
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+        NSString *path = [filePath path];
+        //解压文件
+        BOOL isUnzip = [self unzipFileAtPath:path  toFilePaht:[packageManager getFilePackageName:packageName versionNumber:versionName]];
+        BOOL isDelete = [self zipFileDelete:path];
+        if (isUnzip && isDelete) {
+
+            success(versionName);
+        }else{
+            failure(error);
+        }
+    }];
+    [sessionDataTask resume];
 }
 
 /* 处理HTTP RESPONSE */
@@ -278,6 +321,15 @@ static const int kRequestTimeoutInterval = 20;
             return @"服务错误，请稍后重试";;
             break;
     }
+}
+
+//解压文件是否成功
+-(BOOL)unzipFileAtPath:(NSString*)name toFilePaht:(NSString*)toName {
+    return [SSZipArchive unzipFileAtPath:name toDestination:toName];
+}
+
+-(BOOL)zipFileDelete:(NSString*)name {
+    return [packageManager fileDelete:name];
 }
 
 @end

@@ -109,9 +109,9 @@ projectId:972BF2811A76421BB37D5E93167EC536
     [diction setValue:params[@"area"] forKey:@"area"];
     [DataStorageManager shareManager].torageDic = params[@"pagedata"];
     [PluginUpdateManager shareManager].navDic = params[@"navagation"];
-    if (!dicIsEmpty)
-    {
-        [self jumpDownlaodjumpWithAappName:appName withParams:diction];
+    if (!dicIsEmpty){
+      //  [self jumpDownlaodjumpWithAappName:appName withParams:diction];
+        [self jumpDownlaodWithAappName:appName withParams:diction];
     }
 }
 
@@ -192,83 +192,39 @@ projectId:972BF2811A76421BB37D5E93167EC536
 //    [PluginUpdateManager h5_PackagepushViewControllerAppName:nil withVersionName:nil];
 }
 
-/*-(void)jumpDownlaodjumpWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
+-(void)jumpDownlaodWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
     [JYToastUtils showLoadingWithDuration:2];
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
                 NSLog(@"result = %d",result);
         if (result) {
-//            [[LQAFNetworkManager manager] requestPostWithUrl:self.postUrl params:params success:^(id response) {
-//                NSDictionary *data = (NSDictionary*)response[@"data"];
-//                NSLog(@"msg = %@",response[@"msg"]);
-//                NSString *resourceUrl = nil;
-//                if (self.domainName) {
-//                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"resourceUrl"]];
-//                }
-//                NSString *versionName = data[@"versionName"];
-//                [PluginUpdateManager shareManager].pathUrl = data[@"packageRootUrl"];
-//                //存储版本号
-//                [DataStorageManager setVersion:versionName];
-//                //存packageRootUrl地址
-//                [DataStorageManager seteRootUrl:data[@"packageRootUrl"]];
-//
-//                BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
-//                if (isFile) {
-//                    [JYToastUtils dismiss];
-//                    [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
-//                }else{
-//                     [[LQAFNetworkManager manager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
-//                         NSLog(@"response - %@",response);
-//                         //下载成功存储版本号
-//                         [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
-//                         [JYToastUtils dismiss];
-//                      } failure:^(NSError *error) {
-//                          [JYToastUtils dismiss];
-//                          NSLog(@"error - %@",error);
-//                          [self jumpToLocalResource:appName];
-////                        [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
-////                        NSLog(@"没有网络");
-////            }];
-//                         NSLog(@"不存在");
-//                             }];
-//                }
-//            } failure:^(NSError *error) {
-//                [JYToastUtils dismiss];
-//                [self jumpToLocalResource:appName];
-////                [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络请切换到内网模式" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
-////                    NSLog(@"没有网络");
-////                }];
-//                    NSLog(@"error = %@",error);
-//            }];
-            
-            
             [[LQAFNetManager sharedManager]postWithUrl:self.postUrl params:params mapper:nil showHUD:NO success:^(BaseModel * _Nonnull response) {
                 
                 NSDictionary *data = response.data;
                 NSString *resourceUrl = nil;
                 if (self.domainName) {
-                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"resourceUrl"]];
+                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"data"][@"resourceUrl"]];
                 }
-                NSString *versionName = data[@"versionName"];
-                [PluginUpdateManager shareManager].pathUrl = data[@"packageRootUrl"];
+                NSString *versionName = data[@"data"][@"versionName"];
+                [PluginUpdateManager shareManager].pathUrl = data[@"data"][@"packageRootUrl"];
                 //存储版本号
                 [DataStorageManager setVersion:versionName];
                 //存packageRootUrl地址
-                [DataStorageManager seteRootUrl:data[@"packageRootUrl"]];
+                [DataStorageManager seteRootUrl:data[@"data"][@"packageRootUrl"]];
                 
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
                 if (isFile) {
                     [JYToastUtils dismiss];
                     [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
                 }else{
-                     [[LQAFNetworkManager manager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
+                     [[LQAFNetManager sharedManager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
                          NSLog(@"response - %@",response);
                          //下载成功存储版本号
                          [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
                          [JYToastUtils dismiss];
                       } failure:^(NSError *error) {
-                          [JYToastUtils dismiss];
-                          NSLog(@"error - %@",error);
-                          [self jumpToLocalResource:appName];
+                         [JYToastUtils dismiss];
+                         NSLog(@"error - %@",error);
+                         [self jumpToLocalResource:appName];
              
                      }];
                 }
@@ -279,30 +235,10 @@ projectId:972BF2811A76421BB37D5E93167EC536
         }else{
             [JYToastUtils dismiss];
             [self jumpToLocalResource:appName];
-//            if (!kStringIsEmpty(version)) {
-//                [PluginUpdateManager h5_PackagepushViewControllerAppName:appName withVersionName:version];
-//                [hud hideAnimated:YES];
-//            }else{
-//                [hud hideAnimated:YES];
-//                [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"没有网络检查一下你的网络" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
-//                  NSLog(@"没有网络");
-//                }];
-//            }
         }
     }];
-//    [PluginUpdateManager h5_PackagepushViewControllerAppName:nil withVersionName:nil];
-}*/
+}
 
-/**
- titleStr;//标题
- titleColor; //标题颜色(0x111110)(NSInteger)
- titlefont;//标题大小（float）
- naviBarColor;//导航栏颜色
- left_back_icon;//左侧按钮--修改返回按钮
- left_text;//左侧按钮文字
- right_icon;//右侧按钮
- right_text;//右侧按钮文字
- */
 +(void)h5_PackagepushViewControllerAppName:(NSString*)appName
                            withVersionName:(NSString*)versionName {
     NSString *pathUrl = [PluginUpdateManager shareManager].pathUrl;
@@ -310,8 +246,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
     if (kStringIsEmpty(pathUrl)) {
         pathUrl = rootUrl;
     }
-    if (kStringIsEmpty(pathUrl)&&kStringIsEmpty(rootUrl))
-    {
+    if (kStringIsEmpty(pathUrl)&&kStringIsEmpty(rootUrl)){
         [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"你的资源包没有下载成功，请连接内网下载资源包之后在试" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
         }];
     }
@@ -320,8 +255,7 @@ projectId:972BF2811A76421BB37D5E93167EC536
     CSIIWKController *wxWebCV = (CSIIWKController*)webCV;
     CSIIWKController *new_wxWebCV = [[CSIIWKController alloc] init];
     NSDictionary *navDiction = [PluginUpdateManager shareManager].navDic;
-     if(!kArrayIsEmpty(navDiction))
-     {
+     if(!kArrayIsEmpty(navDiction)){
          UIColor *naviBarColor = navDiction[@"naviBarColor"];
          UIColor *titleColor = navDiction[@"titleColor"];
          NSString *titlefont = navDiction[@"titlefont"];
@@ -336,8 +270,8 @@ projectId:972BF2811A76421BB37D5E93167EC536
      }
     UINavigationController *native = [[CSIIGloballTool shareManager] navigationControllerFromView:wxWebCV.view];
     if (native!=nil) {
+        new_wxWebCV.homePageIndex = 1;
         [native pushViewController:new_wxWebCV animated:YES];
-        
     }else{
         [[[CSIIGloballTool shareManager]findCurrentShowingViewController] presentViewController:webCV animated:YES completion:nil];
     }
