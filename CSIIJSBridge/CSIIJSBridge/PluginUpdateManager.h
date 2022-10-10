@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CSIIJSBridge/CSIIJSBridge.h>
 
 NS_ASSUME_NONNULL_BEGIN
 extern NSString *const JGCSIIJumpSuccessfulNotification; // 跳转成功通知
@@ -33,42 +34,31 @@ extern NSString *const JGCSIILoginOutNotification;     // 退出登录跳转通�
 
 //跳转离线包 appName包名 params参数名
 +(instancetype)shareManager;
-/*
- *@params
-    {
-    versionNumber
-    area
-    }
- *
- */
-//----在AppDelegate置好 projectId、postUrl、domainName
+
+#pragma mark - HTTP Method -- 网络请求
+
+// 方法和方法之间空一行
+#pragma mark - Delegate Method -- 代理方法
+
+
+#pragma mark - Private Method -- 私有方法
+
+
+#pragma mark - Action
+
+
+#pragma mark - Public Method -- 公开方法
+
 //离线包
 - (void)startH5ViewControllerWithNebulaParams:(NSDictionary *)params;
+//离线包
+- (void)startH5ViewControllerWithNebulaParams:(NSDictionary *)params withController:(CSIIWKController*)controller;
+
 //在线
 - (void)startH5ViewControllerWithUrlParams:(NSDictionary *)params;
 
-/*
- {
-name:myMessage,
-versionNumber:0,
-area:广东省深圳市
-projectId:972BF2811A76421BB37D5E93167EC536
- postUrl:
- navagation:
- {
- webPath
- titleStr;//标题
- titleColor; //标题颜色(0x111110)(NSInteger)
- titlefont;//标题大小（float）
- naviBarColor;//导航栏颜色
- left_back_icon;//左侧按钮--修改返回按钮
- left_text;//左侧按钮文字
- right_icon;//右侧按钮
- right_text;//右侧按钮文字
- }
- */
--(void)startupParams:(NSDictionary*)params;
 -(NSString*)getDomian;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 // 空一行
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = kCSIIRGBHex(0x1F1F27);
+    self.navigationController.navigationBar.hidden = YES;
     self.lineView= [[progressLineView alloc]initWithFrame:CGRectMake(0,200, KScreenWidth, 3)];
     self.lineView.lineColor = [UIColor redColor];
     [self.view addSubview:self.lineView];
@@ -84,12 +86,6 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
         self.navigationController.navigationBar.barTintColor = self.naviBarColor;
         self.view.backgroundColor = self.naviBarColor;
     }
-    if (self.homePageIndex==1) {
-        self.naviBarColor = kCSIIRGBHex(0x1F1F27);
-        self.wkWebView.frame = CGRectMake(0, KStatusBarHeight, KScreenWidth, KScreenHeight-KStatusBarHeight);
-        self.view.backgroundColor =kCSIIRGBHex(0x1F1F27);
-    }
-    
     if (self.titlefont) {
         [button.titleLabel setFont:[UIFont systemFontOfSize:self.titlefont]];
     }
@@ -150,7 +146,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 #pragma mark - Setter/Getter -- Getter尽量写出懒加载形式
 -(WKWebView*)wkWebView{
     if (!_wkWebView) {
-        _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, KNavBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT -KNavBarHeight)];
+        _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, KStatusBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT-KStatusBarHeight)];
         _wkWebView.navigationDelegate = self;
         _wkWebView.UIDelegate = self;
         [_wkWebView backForwardList];
@@ -176,8 +172,6 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     UIButton *buttion = nil;
     if (state ==leftBtn) {
         buttion = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
-        
-        [buttion addTarget:self action:@selector(backBarButtonItemClicked) forControlEvents:UIControlEventTouchUpInside];
         [buttion setTitle:self.left_text forState:UIControlStateNormal];
         [buttion.titleLabel setTextColor:[UIColor blackColor]];
         [buttion setImage:[UIImage imageNamed:self.left_back_icon] forState:UIControlStateNormal];

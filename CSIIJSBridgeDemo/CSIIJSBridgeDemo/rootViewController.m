@@ -49,7 +49,7 @@
                            @"versionNumber":@"0.0.1",
                            @"systemType":@"0"
                           };
-    [[PluginUpdateManager shareManager]startH5ViewControllerWithNebulaParams:Dic];
+    [[PluginUpdateManager shareManager] startH5ViewControllerWithNebulaParams:Dic withController:self];
 }
 #pragma mark - Public Method -- 公开方法
 
