@@ -90,7 +90,6 @@ static const int kRequestTimeoutInterval = 20;
                 success(responseModel);
             }
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"***** urlRequest %@ *****", task.currentRequest.URL.absoluteString);
             NSString *errorMsg = [self returnErrorMsgWithCode:error.code];
             NSError *falerror = [NSError errorWithDomain:errorMsg code:502 userInfo:nil];
             failure(falerror);

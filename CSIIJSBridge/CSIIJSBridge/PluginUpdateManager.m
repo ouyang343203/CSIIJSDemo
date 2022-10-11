@@ -59,7 +59,7 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
 #pragma mark - Private Method -- 私有方法
 
 -(void)jumpDownlaodWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
-    [JYToastUtils showLoadingWithDuration:2];
+    [JYToastUtils showLoading];
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
                 NSLog(@"result = %d",result);
         if (result) {
@@ -76,7 +76,7 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                 [DataStorageManager setVersion:versionName];
                 //存packageRootUrl地址
                 [DataStorageManager seteRootUrl:data[@"data"][@"packageRootUrl"]];
-                NSLog(@"response - %@",response);
+                NSLog(@"packageRootUrl - %@",data[@"data"][@"packageRootUrl"]);
                 
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
                 if (isFile) {
@@ -96,12 +96,15 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                      }];
                 }
             } failure:^(NSError * _Nonnull error) {
+                NSString *mesg = error.domain;
                 [JYToastUtils dismiss];
+                [JYToastUtils showWithStatus:mesg];
                 [self jumpToLocalResource:appName];
             }];
             
         }else{
             [JYToastUtils dismiss];
+            [JYToastUtils showWithStatus:@"请求失败"];
             [self jumpToLocalResource:appName];
         }
     }];
