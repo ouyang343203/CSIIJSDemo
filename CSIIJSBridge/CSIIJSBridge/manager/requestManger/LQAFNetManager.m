@@ -18,7 +18,9 @@ static const int kRequestTimeoutInterval = 20;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _manager = [[self alloc] init];
-        [_manager.requestSerializer setTimeoutInterval:kRequestTimeoutInterval];
+        [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+        _manager.requestSerializer.timeoutInterval = kRequestTimeoutInterval;
+        [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
         _manager.requestSerializer = [AFJSONRequestSerializer serializer];
         _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"text/html", @"application/json", @"text/json",@"application/octet-stream", nil];

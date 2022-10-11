@@ -59,7 +59,7 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
 #pragma mark - Private Method -- 私有方法
 
 -(void)jumpDownlaodWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
-    [JYToastUtils showLoading];
+    [JYToastUtils showLoadingWithDuration:50];
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
                 NSLog(@"result = %d",result);
         if (result) {
