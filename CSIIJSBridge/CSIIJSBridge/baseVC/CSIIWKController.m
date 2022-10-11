@@ -34,6 +34,15 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     [self.view addSubview:self.lineView];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+  if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+  }
+}
+   
+-(void)viewWillDisappear:(BOOL)animated{
+  self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
 // 页面排版规范
 #pragma mark - HTTP Method -- 网络请求
 
@@ -147,6 +156,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
 -(WKWebView*)wkWebView{
     if (!_wkWebView) {
         _wkWebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, KStatusBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT-KStatusBarHeight)];
+        _wkWebView.backgroundColor = [UIColor clearColor];
         _wkWebView.navigationDelegate = self;
         _wkWebView.UIDelegate = self;
         [_wkWebView backForwardList];
@@ -196,7 +206,7 @@ typedef NS_ENUM(NSInteger, leftBtnAndRightBtn)
     button.frame =  CGRectMake(x, y, width, height);
     button.titleLabel.text = self.title;
     self.navigationItem.titleView = button;
-    [button addTarget:self action:@selector(titleClickEvent) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setFont:[UIFont systemFontOfSize:18]];
     return button;
 }

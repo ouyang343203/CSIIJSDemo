@@ -76,6 +76,7 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                 [DataStorageManager setVersion:versionName];
                 //存packageRootUrl地址
                 [DataStorageManager seteRootUrl:data[@"data"][@"packageRootUrl"]];
+                NSLog(@"response - %@",response);
                 
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
                 if (isFile) {
@@ -139,36 +140,6 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
     [new_wxWebCV loadNativeHFive:filePath];
 }
 
--(void)h5_urlPushViewControllerUrl:(NSString*)url{
-    id webCV  = [[CSIIGloballTool shareManager] findCurrentShowingViewController];
-     CSIIWKController *wxWebCV = (CSIIWKController*)webCV;
-     CSIIWKController *new_wxWebCV = [[CSIIWKController alloc] init];
-     
-     NSDictionary *navDiction = [PluginUpdateManager shareManager].navDic;
-    
-     if(!kArrayIsEmpty(navDiction)){
-         UIColor *naviBarColor = navDiction[@"naviBarColor"];
-         UIColor *titleColor = navDiction[@"titleColor"];
-         NSString *titlefont = navDiction[@"titlefont"];
-         new_wxWebCV.naviBarColor = naviBarColor;
-         new_wxWebCV.titleColor =  titleColor;
-         new_wxWebCV.titlefont = [titlefont floatValue];
-         new_wxWebCV.titleStr = navDiction[@"titleStr"];
-         new_wxWebCV.left_back_icon = navDiction[@"left_back_icon"];
-         new_wxWebCV.left_text = navDiction[@"left_text"];
-         new_wxWebCV.right_icon = navDiction[@"right_icon"];
-         new_wxWebCV.right_text = navDiction[@"right_text"];
-     }
-   UINavigationController *native = [[CSIIGloballTool shareManager] navigationControllerFromView:wxWebCV.view];
-    if (native!=nil) {
-        [native pushViewController:new_wxWebCV animated:YES];
-    }else{
-        [[[CSIIGloballTool shareManager]findCurrentShowingViewController] presentViewController:webCV animated:YES completion:nil];
-    }
-    
-    [new_wxWebCV loadUrl:url];
-}
-
 //跳转到本地资源包
 -(void)jumpToLocalResource:(NSString*)appName {
     NSString *version = [DataStorageManager getVersion];
@@ -216,24 +187,6 @@ projectId:972BF2811A76421BB37D5E93167EC536
  *
  */
 //native测试用
-//----在原有的包上配置好 projectId、postUrl 、appName
-- (void)startH5ViewControllerWithNebulaParams:(NSDictionary *)params {
-    BOOL dicIsEmpty = kDictIsEmpty(params);
-    NSMutableDictionary *diction = [NSMutableDictionary dictionary];
-    NSString *appName = params[@"name"];
-    [diction setValue:appName forKey:@"name"];
-    [diction setValue:self.projectId forKey:@"projectId"];
-    [diction setValue:params[@"userId"] forKey:@"userId"];
-    [diction setValue:[CSIIKeychainTool getDeviceType]  forKey:@"deviceType"];
-    [diction setValue:params[@"versionNumber"] forKey:@"versionNumber"];
-    [diction setValue:params[@"area"] forKey:@"area"];
-    [DataStorageManager shareManager].torageDic = params[@"pagedata"];
-    [PluginUpdateManager shareManager].navDic = params[@"navagation"];
-    if (!dicIsEmpty){
-        [self jumpDownlaodWithAappName:appName withParams:diction];
-    }
-}
-
 //离线包
 - (void)startH5ViewControllerWithNebulaParams:(NSDictionary *)params withController:(CSIIWKController*)controller {
     self.controller = controller;
@@ -251,13 +204,6 @@ projectId:972BF2811A76421BB37D5E93167EC536
     if (!dicIsEmpty){
         [self jumpDownlaodWithAappName:appName withParams:diction];
     }
-}
-//在线
-- (void)startH5ViewControllerWithUrlParams:(NSDictionary *)params{
-    [DataStorageManager shareManager].torageDic = params[@"pagedata"];
-    [PluginUpdateManager shareManager].navDic = params[@"navagation"];
-    [PluginUpdateManager shareManager].pathUrl = params[@"name"];
-    [self h5_urlPushViewControllerUrl:params[@"name"]];
 }
 
 -(NSString*)getDomian {

@@ -48,14 +48,8 @@ extern NSString *const JGCSIILoginOutNotification;     // 退出登录跳转通�
 
 
 #pragma mark - Public Method -- 公开方法
-
-//离线包
-- (void)startH5ViewControllerWithNebulaParams:(NSDictionary *)params;
 //离线包
 - (void)startH5ViewControllerWithNebulaParams:(NSDictionary *)params withController:(CSIIWKController*)controller;
-
-//在线
-- (void)startH5ViewControllerWithUrlParams:(NSDictionary *)params;
 
 -(NSString*)getDomian;
 
