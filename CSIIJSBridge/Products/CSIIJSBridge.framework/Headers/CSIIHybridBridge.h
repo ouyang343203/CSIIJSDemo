@@ -6,16 +6,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WKWebViewJavascriptBridge.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class WKWebView,CSIIWKHybridBridge;
 @interface CSIIHybridBridge : NSObject
-@property (nonatomic, strong)CSIIWKHybridBridge *bridge;
-@property (nonatomic,strong) WKWebView *wkWebView;
-+(instancetype)shareManager;
 
--(void)bridgeForWebView:(WKWebView*)webView;
-- (void)setBridgeAction;
+@property (nonatomic, strong) CSIIWKHybridBridge *bridge;
+@property (nonatomic, strong) WKWebView *wkWebView;
+
++ (instancetype)shareManager;
+- (void)bridgeForWebView:(WKWebView*)webView;
+
 @end
 
 NS_ASSUME_NONNULL_END
