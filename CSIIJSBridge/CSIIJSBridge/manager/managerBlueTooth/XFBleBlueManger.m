@@ -70,7 +70,9 @@
             data = [CSIICheckObject dictionaryChangeJson:@{@"code":@"0",@"errMsg":@"",@"data":@(false)}];
             break;
     }
-    self.stateCallBack(data);
+    if(self.stateCallBack){
+        self.stateCallBack(data);
+    }
 }
 
 // 扫描到外设

@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/CSIIHybridBridge.h</key>
 		<data>
-		B7q3eSSops+XsjP1zBvREo0qGpQ=
+		bD5Gj2AlBev9g4N+PfKDGk0mHJc=
 		</data>
 		<key>Headers/CSIIJSBridge.h</key>
 		<data>
@@ -22,11 +22,7 @@
 		</data>
 		<key>Headers/CSIIWKController.h</key>
 		<data>
-		wuS9Z2hK8Eeg7P3SDzP7/ZuhWAQ=
-		</data>
-		<key>Headers/CSIIWKHybridBridge.h</key>
-		<data>
-		ezwsccFIJ7sD6vJXl8t66B4m6mg=
+		GK0kSzvZMwFmGnjZ8tH2jA8IDJ4=
 		</data>
 		<key>Headers/DataManager.h</key>
 		<data>
@@ -34,11 +30,11 @@
 		</data>
 		<key>Headers/PluginUpdateManager.h</key>
 		<data>
-		76Gc42JVjNv4Xa434p3r+vMaxhA=
+		NHuCAu1+RwebHvabwlESRlzSQzA=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		ss72D7xXshJUEZD8yBAzXQ+l50I=
+		LqJqXrk1XErNPMktsTw+gK6r7Vo=
 		</data>
 		<key>LICENSE</key>
 		<data>
@@ -66,11 +62,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			B7q3eSSops+XsjP1zBvREo0qGpQ=
+			bD5Gj2AlBev9g4N+PfKDGk0mHJc=
 			</data>
 			<key>hash2</key>
 			<data>
-			7Fi64TMG4BCm9XlxD5b1HeWgXAH56sXgamQQBu9Gd+4=
+			Kr29nGzVX2Mh9jnjDHmjzOtg4ygaLslEejfrvnlmPVM=
 			</data>
 		</dict>
 		<key>Headers/CSIIJSBridge.h</key>
@@ -99,22 +95,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			wuS9Z2hK8Eeg7P3SDzP7/ZuhWAQ=
+			GK0kSzvZMwFmGnjZ8tH2jA8IDJ4=
 			</data>
 			<key>hash2</key>
 			<data>
-			FHGu9YqV705DXkcFYFMOGa9fl2fb7OAewmbAguz01vI=
-			</data>
-		</dict>
-		<key>Headers/CSIIWKHybridBridge.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			ezwsccFIJ7sD6vJXl8t66B4m6mg=
-			</data>
-			<key>hash2</key>
-			<data>
-			AUyJrOx/iy43aJPy/BieW4geOmOnCGPbDXbwjEaMI34=
+			zrtKG6uk/40XtkuOArqdfnYfwVBEdcfCcheOHCYMhlk=
 			</data>
 		</dict>
 		<key>Headers/DataManager.h</key>
@@ -132,11 +117,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			76Gc42JVjNv4Xa434p3r+vMaxhA=
+			NHuCAu1+RwebHvabwlESRlzSQzA=
 			</data>
 			<key>hash2</key>
 			<data>
-			3HEl7d4QIzJGldqKGxmvCEcDC8QW5qjc8c3A4QZwztE=
+			Cz3dnE9VeP6H+ODJsbL3kYiXodzL6mPJc9gWdZw2rO0=
 			</data>
 		</dict>
 		<key>LICENSE</key>
