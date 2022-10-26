@@ -61,7 +61,8 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
 -(void)jumpDownlaodWithAappName:(NSString*) appName withParams:(NSDictionary*)params{
     [JYToastUtils showLoadingWithDuration:20];
     [[reachabilityManager manager]monitoringNetWork:^(bool result) {
-                NSLog(@"result = %d",result);
+        NSLog(@"result = %d",result);
+        NSLog(@"postUrl = %@",self.postUrl);
         if (result) {
             [[LQAFNetManager sharedManager]postWithUrl:self.postUrl params:params mapper:nil showHUD:NO success:^(BaseModel * _Nonnull response) {
                 
@@ -114,8 +115,8 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                            withVersionName:(NSString*)versionName {
     
     NSString *pathUrl = [PluginUpdateManager shareManager].pathUrl;
-    NSString *rootUrl =  [DataStorageManager getRootUrl];
-    if (kStringIsEmpty(pathUrl)) {
+    NSString *rootUrl = [DataStorageManager getRootUrl];//获取存储的资源包地址
+    if (kStringIsEmpty(pathUrl)) {//如果资源包地址存在直接使用资源包
         pathUrl = rootUrl;
     }
     if (kStringIsEmpty(pathUrl)&&kStringIsEmpty(rootUrl)){

@@ -44,10 +44,15 @@
 #pragma mark - Action
 // 空一行
 -(void)clickButtons {
+    NSDictionary *navagation = @{
+                               @"titleColor":[UIColor blackColor],
+                               @"titleStr":@"",
+                               @"left_back_icon":@"back"};
     NSDictionary *Dic = @{ @"area":@"广东省深圳市",
                            @"name":@"BallMachine",
                            @"versionNumber":@"0.0.1",
-                           @"systemType":@"0"
+                           @"systemType":@"0",
+                           @"navagation":navagation,
                           };
     [[PluginUpdateManager shareManager] startH5ViewControllerWithNebulaParams:Dic withController:self];
 }
