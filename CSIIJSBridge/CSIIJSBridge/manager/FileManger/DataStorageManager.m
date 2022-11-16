@@ -20,17 +20,13 @@
 
 +(void)setPackage:(NSString*)key withVule:(NSString*)packageName {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
     [userDefaults setObject:packageName forKey:key];
-
     [userDefaults synchronize];
 }
 
 +(NSString*)getPackage:(NSString*)key {
     NSUserDefaults*userDefaults=[NSUserDefaults standardUserDefaults];
-    
     NSString*package=[userDefaults objectForKey:key];
-    
     return package;
 }
 //清楚所有的本地数据慎用
@@ -46,8 +42,8 @@
 //存储版本号的名字(记录上一次登陆过的版本号)
 +(void)setVersion:(NSString*)versionName {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
     [userDefaults setObject:versionName forKey:oldVersion];
+    [userDefaults synchronize];
 }
 
 //获取版本号名字
@@ -59,8 +55,8 @@
 //缓存首页地址
 +(void)seteRootUrl:(NSString*)rootUrl {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
     [userDefaults setObject:rootUrl forKey:roodIndexUrl];
+    [userDefaults synchronize];
 }
 
 +(NSString*)getRootUrl {

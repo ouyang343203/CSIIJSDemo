@@ -20,7 +20,7 @@ extern NSString *const JGCSIILoginOutNotification;     // 退出登录跳转通�
 @property (nonatomic,strong) NSString *postUrl;
 //导航栏的配置信息
 @property (nonatomic,strong) NSDictionary *navDic;
-//域名地址
+//下载离线包的域名地址
 @property (nonatomic,strong) NSString *domainName;
 
 @property (nonatomic,strong) NSString *pathUrl;

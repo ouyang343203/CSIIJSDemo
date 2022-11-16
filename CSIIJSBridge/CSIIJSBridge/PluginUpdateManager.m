@@ -77,8 +77,8 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                 [DataStorageManager setVersion:versionName];
                 //存packageRootUrl地址
                 [DataStorageManager seteRootUrl:data[@"data"][@"packageRootUrl"]];
-                NSLog(@"packageRootUrl - %@",data[@"data"][@"packageRootUrl"]);
-                
+                NSLog(@"packageRootUrl - %@",[DataStorageManager getRootUrl]);
+        
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
                 if (isFile) {
                     [JYToastUtils dismiss];
@@ -105,7 +105,6 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
             
         }else{
             [JYToastUtils dismiss];
-            [JYToastUtils showWithStatus:@"请求失败"];
             [self jumpToLocalResource:appName];
         }
     }];
@@ -116,13 +115,12 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
     
     NSString *pathUrl = [PluginUpdateManager shareManager].pathUrl;
     NSString *rootUrl = [DataStorageManager getRootUrl];//获取存储的资源包地址
-    if (kStringIsEmpty(pathUrl)) {//如果资源包地址存在直接使用资源包
-        pathUrl = rootUrl;
-    }
     if (kStringIsEmpty(pathUrl)&&kStringIsEmpty(rootUrl)){
         [CSIITool showSystemSingleWithTitle:@"温馨提示" withContent:@"你的资源包没有下载成功，请连接内网下载资源包之后在试" withSureText:@"确定" withState:^(id  _Nonnull responseObject) {
         }];
+        return;
     }
+    pathUrl = kStringIsEmpty(pathUrl) ? rootUrl : pathUrl;//如果服务器当前未返回了资源包 使用上次保存的在本地的资源包地址
     NSString *filePath = [NSString stringWithFormat:@"%@/%@",[packageManager getFilePackageName:appName versionNumber:versionName],pathUrl];
     CSIIWKController *new_wxWebCV = [[CSIIWKController alloc] init];
     NSDictionary *navDiction = [PluginUpdateManager shareManager].navDic;

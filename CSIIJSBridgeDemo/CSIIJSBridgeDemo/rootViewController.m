@@ -26,7 +26,9 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
+
 // 页面排版规范
 #pragma mark - HTTP Method -- 网络请求
 

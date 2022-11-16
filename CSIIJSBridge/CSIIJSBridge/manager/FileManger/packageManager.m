@@ -44,7 +44,7 @@
 
 //判断历史文件夹文件是否存在
 +(BOOL)getHistoryPackage:(NSString*)packageName versionNumber:(NSString*)versionNumber {
-  NSString *historyFile = [kDocumentPath(packageName) stringByAppendingPathComponent:versionNumber];
+    NSString *historyFile = [kDocumentPath(packageName) stringByAppendingPathComponent:versionNumber];
     if ([FILEMANAGER fileExistsAtPath:historyFile]) {
         return YES;
     }else{
