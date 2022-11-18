@@ -78,24 +78,18 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                 //存packageRootUrl地址
                 [DataStorageManager seteRootUrl:data[@"data"][@"packageRootUrl"]];
                 NSLog(@"packageRootUrl - %@",[DataStorageManager getRootUrl]);
-        
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
-                if (isFile) {
-                    [JYToastUtils dismiss];
+                [[LQAFNetManager sharedManager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
+                    NSLog(@"response - %@",response);
+                    //下载成功存储版本号
                     [self h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
-                }else{
-                     [[LQAFNetManager sharedManager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
-                         NSLog(@"response - %@",response);
-                         //下载成功存储版本号
-                         [self h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
-                         [JYToastUtils dismiss];
-                      } failure:^(NSError *error) {
-                         [JYToastUtils dismiss];
-                         NSLog(@"error - %@",error);
-                         [self jumpToLocalResource:appName];
-             
-                     }];
-                }
+                    [JYToastUtils dismiss];
+                 } failure:^(NSError *error) {
+                    [JYToastUtils dismiss];
+                    NSLog(@"error - %@",error);
+                    [self jumpToLocalResource:appName];
+        
+                 }];
             } failure:^(NSError * _Nonnull error) {
                 NSString *mesg = error.domain;
                 [JYToastUtils dismiss];
@@ -122,6 +116,7 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
     }
     pathUrl = kStringIsEmpty(pathUrl) ? rootUrl : pathUrl;//如果服务器当前未返回了资源包 使用上次保存的在本地的资源包地址
     NSString *filePath = [NSString stringWithFormat:@"%@/%@",[packageManager getFilePackageName:appName versionNumber:versionName],pathUrl];
+    NSLog(@"请求的本地地址：%@",filePath);
     CSIIWKController *new_wxWebCV = [[CSIIWKController alloc] init];
     NSDictionary *navDiction = [PluginUpdateManager shareManager].navDic;
      if(!kArrayIsEmpty(navDiction)){

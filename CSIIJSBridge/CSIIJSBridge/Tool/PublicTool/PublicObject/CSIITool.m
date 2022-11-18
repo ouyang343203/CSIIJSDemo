@@ -192,4 +192,5 @@
     [self.updateWindow removeFromSuperview];
     self.updateWindow = nil;
 }
+
 @end
