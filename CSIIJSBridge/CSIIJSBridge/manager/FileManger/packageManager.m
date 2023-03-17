@@ -29,14 +29,14 @@
     return [kDocumentPath(packageName) stringByAppendingPathComponent:versionNumber];
 }
 
-//根据离线包名，找到对应的版本号的离线包
+//根据离线包名，找到对应的版本号的离线包地址
 +(NSString*)createFilePackageName:(NSString*)packageName versionNumber:(NSString*)versionNumber{
     NSString *pathname = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
     pathname =  [pathname stringByAppendingPathComponent:packageName];
     BOOL isExists = [packageManager fileExists:pathname];
     BOOL isSuccess = NO;
     if (!isExists) {
-        isSuccess =  [packageManager isFilewasGreatedSuccess:pathname];
+        isSuccess =  [packageManager isFilewasGreatedSuccess:pathname];//判断文件夹是否创建成功
     }
     pathname = [pathname stringByAppendingFormat:@"/%@.zip",versionNumber];
     return pathname;
@@ -44,7 +44,7 @@
 
 //判断历史文件夹文件是否存在
 +(BOOL)getHistoryPackage:(NSString*)packageName versionNumber:(NSString*)versionNumber {
-    NSString *historyFile = [kDocumentPath(packageName) stringByAppendingPathComponent:versionNumber];
+    NSString *historyFile = [kDocumentPath(packageName) stringByAppendingPathComponent:versionNumber];//获取沙盒文件下的项目文件文件
     if ([FILEMANAGER fileExistsAtPath:historyFile]) {
         return YES;
     }else{
@@ -66,9 +66,7 @@
 //判断文件夹是否创建成功
 +(BOOL)isFilewasGreatedSuccess:(NSString*)packageName {
     NSError *error = nil;
-    
     BOOL isSucces=NO;
-    
     isSucces=[FILEMANAGER createDirectoryAtPath:packageName withIntermediateDirectories:YES attributes:nil error:&error];
     if (error != nil) {
         NSLog(@"创建出错:%@", [error localizedDescription]);

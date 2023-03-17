@@ -287,7 +287,7 @@ typedef void (^ResponseCallback)(NSDictionary *responseData);
         [self loadcheckVersionData];
     }];  */
 
-     //20.
+     //20.固件升级get方法
      [self.bridge registerHandler:@"proxyGetRequest" handler:^(id data, WVJBResponseCallback responseCallback) {
          
          NSDictionary *responsedic = (NSDictionary*)data;
@@ -299,7 +299,7 @@ typedef void (^ResponseCallback)(NSDictionary *responseData);
          }];
      }];
      
-     //21.
+     //21.固件升级post方法
      [self.bridge registerHandler:@"proxyPostRequest" handler:^(id data, WVJBResponseCallback responseCallback) {
          
          NSDictionary *responsedic = (NSDictionary*)data;

@@ -69,7 +69,7 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                 NSDictionary *data = response.data;
                 NSString *resourceUrl = nil;
                 if (self.domainName) {
-                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"data"][@"resourceUrl"]];
+                    resourceUrl = [NSString stringWithFormat:@"%@%@",self.domainName,data[@"data"][@"resourceUrl"]];//下载离线包的地址
                 }
                 NSString *versionName = data[@"data"][@"versionName"];
                 [PluginUpdateManager shareManager].pathUrl = data[@"data"][@"packageRootUrl"];
@@ -77,19 +77,22 @@ NSString *const JGCSIIBackBarButtonItemNotification = @"backNotification";//H5�
                 [DataStorageManager setVersion:versionName];
                 //存packageRootUrl地址
                 [DataStorageManager seteRootUrl:data[@"data"][@"packageRootUrl"]];
-                NSLog(@"packageRootUrl - %@",[DataStorageManager getRootUrl]);
                 BOOL isFile = [packageManager getHistoryPackage:appName versionNumber:versionName];
-                [[LQAFNetManager sharedManager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
-                    NSLog(@"response - %@",response);
-                    //下载成功存储版本号
-                    [self h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
-                    [JYToastUtils dismiss];
-                 } failure:^(NSError *error) {
-                    [JYToastUtils dismiss];
-                    NSLog(@"error - %@",error);
-                    [self jumpToLocalResource:appName];
-        
-                 }];
+                if (isFile) {
+                     [JYToastUtils dismiss];
+                     [self h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
+                }else{
+                     [[LQAFNetworkManager manager]downlaodTaskWithUrl:resourceUrl Progress:nil packageName:appName versionName:versionName success:^(id response) {
+                         NSLog(@"response - %@",response);
+                         //下载成功存储版本号
+                         [self h5_PackagepushViewControllerAppName:appName withVersionName:versionName];
+                         [JYToastUtils dismiss];
+                      } failure:^(NSError *error) {
+                         [JYToastUtils dismiss];
+                         NSLog(@"error - %@",error);
+                         [self jumpToLocalResource:appName];
+                    }];
+                }
             } failure:^(NSError * _Nonnull error) {
                 NSString *mesg = error.domain;
                 [JYToastUtils dismiss];

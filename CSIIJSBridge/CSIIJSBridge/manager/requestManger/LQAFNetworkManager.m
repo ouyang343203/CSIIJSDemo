@@ -181,11 +181,10 @@
    
     } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
         
-        NSString *fileName = [packageManager createFilePackageName:packageName versionNumber:versionName];
-       
+        NSString *fileName = [packageManager createFilePackageName:packageName versionNumber:versionName];//创建离线包的的地址
         NSURL *fileUrl = [NSURL fileURLWithPath:fileName];
-        
         return fileUrl;
+        
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         NSLog(@"completionHandler filePath = %@",filePath);
         NSString *path = [filePath path];
@@ -194,22 +193,20 @@
         BOOL isUnzip = [self unzipFileAtPath:path  toFilePaht:[packageManager getFilePackageName:packageName versionNumber:versionName]];
         BOOL isDelete = [self zipFileDelete:path];
         if (isUnzip && isDelete) {
-
             success(versionName);
         }else{
             failure(error);
         }
-
     }];
     [dataTask resume];
 }
+
 //解压文件是否成功
--(BOOL)unzipFileAtPath:(NSString*)name toFilePaht:(NSString*)toName
-{
+-(BOOL)unzipFileAtPath:(NSString*)name toFilePaht:(NSString*)toName{
     return [SSZipArchive unzipFileAtPath:name toDestination:toName];
 }
--(BOOL)zipFileDelete:(NSString*)name
-{
+
+-(BOOL)zipFileDelete:(NSString*)name{
     return [packageManager fileDelete:name];
 }
 @end

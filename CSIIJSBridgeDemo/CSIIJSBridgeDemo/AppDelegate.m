@@ -26,9 +26,15 @@
     self.window.rootViewController = navigation;
     [self.window makeKeyAndVisible];
     
-    [PluginUpdateManager shareManager].postUrl = @"http://192.168.101.3:8888/app/resource/getTheNewestIssueStaticPackageDetailByCondition";
-    [PluginUpdateManager shareManager].domainName = @"http://192.168.101.3:8091";
-    [PluginUpdateManager shareManager].projectId = @"145";
+//本地地址
+//    [PluginUpdateManager shareManager].postUrl = @"http://192.168.101.3:8888/app/resource/getTheNewestIssueStaticPackageDetailByCondition";
+//    [PluginUpdateManager shareManager].domainName = @"http://192.168.101.3:8091";
+//    [PluginUpdateManager shareManager].projectId = @"145";
+ 
+//生产地址
+    [PluginUpdateManager shareManager].postUrl = @"http://183.62.118.51:10088/app/resource/getTheNewestIssueStaticPackageDetailByCondition";
+    [PluginUpdateManager shareManager].projectId =@"145";
+    [PluginUpdateManager shareManager].domainName = @"http://183.62.118.51:18091";
     return YES;
 }
 
